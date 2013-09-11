@@ -1,0 +1,8 @@
+Maintainer: zzzzzzzzzzz <zzzzzzzzzzzgg@gmail.com>
+Installed-Size: 1560
+Depends: libgtkmm-2.4-1c2a, libglademm-2.4-1c2a, libgtksourceviewmm-2.0-2, libwebkit-1.0-2
+Section: zhscript
+Priority: optional
+Homepage: http://code.google.com/p/zhscript/
+Description: 中文脚本
+ 实现一种不像计算机语言的脚本语言。按照中文语法习惯去书写分析执行语句。通过简单文字接口便可调用标准库（如libstdc）、第三方库、自己扩展的库。 

@@ -1,0 +1,24 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src=1.js></script>
+<script>
+var friend_uin;
+function on_set_friend(uin) {
+	friend_uin = uin;
+}
+function on_new_msg(from, msg, time) {
+	$("msg").innerHTML = from + " " + time + "<pre>" + msg + "</pre>";
+}
+function close() {
+	z$('使提示窗、关闭');
+}
+
+window.setTimeout("close()", 10000);
+document.onclick = function(ev) {
+	var x = ev.pageX, y = ev.pageY;
+	z$("进行聊天" + friend_uin);
+	close();
+};
+</script>
+<body style="background-color:yellow">
+<div id=msg></div>
+</body>

@@ -1,0 +1,28 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+
+如果存在a并且‘a’等于x那么先
+	调用‘跳出【mongoose4】’。
+	退出。
+了。
+
+如果存在file1并且‘file1’那么显示存放在‘file1’<br>。
+如果存在file2并且‘file2’那么显示存放在‘file2’<br>。
+如果存在file3并且‘file3’那么显示存放在‘file3’<br>。
+显示下原样
+<form method="POST" enctype="multipart/form-data">
+文件1：<input type="file" name="file1"><br>
+文件2：<input type="file" name="file2"><br>
+文件3：<input type="file" name="file3"><br>
+<input type="submit" value="上传">
+</form><hr>
+<a href="?a=x"> 关闭服务器 </a><hr>
+上原样。
+
+显示
+<table>
+先迭代解释下代码
+	别名名以参数1。
+	<tr><td>‘名’</td><td>先头文字‘名’了</td></tr>↙。
+上代码、
+Accept、Accept-Encoding、Accept-Language、Cache-Control、Connection、Host、Referer、User-Agent了
+</table><hr>↙。

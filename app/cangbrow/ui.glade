@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">&#x6536;&#x85CF;&#x6D4F;&#x89C8;</property>
+    <property name="default_width">674</property>
+    <property name="default_height">410</property>
+    <property name="icon">icon.png</property>
+    <child>
+      <object class="GtkScrolledWindow" id="sw">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">automatic</property>
+        <property name="vscrollbar_policy">automatic</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

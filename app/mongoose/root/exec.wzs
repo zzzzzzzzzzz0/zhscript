@@ -1,0 +1,45 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+
+如果存在xdg-open【上】那么先
+	加载limitip.zs。
+	执行“xdg-open ‘xdg-open’&”。
+	显示看服务器屏幕上‘xdg-open’有没有打开<script>window.close()</script>。
+	退出。
+了。
+
+如果存在id【上】那么先
+	当‘id’先
+		等于-1那么先
+			加载limitip.zs。
+			隧道终止。
+			退出。
+		了。
+		等于-2那么先
+			加载limitip.zs。
+			隧道点击、stop。
+			隧道点击、play。
+			退出。
+		了。
+	了。
+	调用‘得表格’、下代码
+		别名值以参数1。
+		别名用以参数2。
+		如果‘用’等于4那么
+			加载limitip.zs。
+		显示<!--↙‘值’↙-->。
+		解释‘值’。
+	上代码、‘设置库’、“select value_,use_ from setting__ where id_=‘id’”。
+	退出。
+了。
+
+显示
+“<link rel="stylesheet" type="text/css" href="a.css" />”
+“<a href="?id=-1">关闭服务器</a>”（“<a href="?id=-2">重启服务器</a>”）。
+
+调用‘得表格’、下代码
+	别名id以参数1。
+	别名名以参数2。
+	显示“<a href="?id=‘id’">‘名’</a>”。
+上代码、‘设置库’、“select id_,name_ from setting__ where use_=2 or use_=4”。
+
+显示“<a href="/">返回</a>”。

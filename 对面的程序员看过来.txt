@@ -1,0 +1,9 @@
+由于本人的机器是32位的i686，所以eclipse里的配置也是针对此，对于其他版本的mk是这样——
+
+loongson版：
+cd new_o
+./mkloongsonv.sh #也许得sh mkloongsonv.sh
+
+64位版：
+cd new_o
+./mk64.sh #也许得sh mk64.sh

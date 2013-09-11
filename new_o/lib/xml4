@@ -1,0 +1,22 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+赋予‘库名’以调用“L”、“‘参数0’.so”。
+赋予“【‘库名’】xml_from_str”以调用“G&Z”、‘‘库名’’、“_xml_from_str__”、“c*”（、c*（编码，如gb2312））。
+赋予“【‘库名’】xml_from_file”以调用“G &Z”、‘‘库名’’、“_xml_from_file__”、“c*”（、c*（编码，如gb2312））。
+赋予“【‘库名’】xml_free”以调用“G”、‘‘库名’’、“_xml_free__”、“&”（实例）。
+
+赋予“【‘库名’】xml_root”以调用“G &”、‘‘库名’’、“_xml_root__”、“&”（实例）。
+赋予“【‘库名’】xml_next”以调用“G &”、‘‘库名’’、“_xml_next__”、“&”（节点）。
+赋予“【‘库名’】xml_children”以调用“G &”、‘‘库名’’、“_xml_children__”、“&”（节点）。
+赋予“【‘库名’】xml_children_count”以调用“G i”、‘‘库名’’、“_xml_children_count__”、“&”（节点）。
+赋予“【‘库名’】xml_node_name”以调用“G c*”、‘‘库名’’、“_xml_node_name__”、“&”（节点）。
+赋予“【‘库名’】xml_node_text”以调用“G A”、‘‘库名’’、“_xml_node_text__”、“&”（节点）、“${l0}”。
+赋予“【‘库名’】xml_node_all_text”以调用“G A”、‘‘库名’’、“_xml_node_text__”、“&”、“${l1}”。
+
+赋予“【‘库名’】xml_has_attr”以调用“G i”、‘‘库名’’、“_xml_has_attr__”、“&”（节点）、“c*”（属性名）。
+赋予“【‘库名’】xml_get_attr”以调用“G c*”、‘‘库名’’、“_xml_get_attr__”、“&”（节点）、“c*”（属性名）。
+
+赋予“【‘库名’】xml_attr”以调用“G &”、‘‘库名’’、“_xml_attr__”、“&”（节点）。
+赋予“【‘库名’】xml_next_attr”以调用“G &”、‘‘库名’’、“_xml_next_attr__”、“&”（属性）。
+赋予“【‘库名’】xml_attr_name”以调用“G c*”、‘‘库名’’、“_xml_attr_name__”、“&”（属性）。
+赋予“【‘库名’】xml_attr_text”以调用“G c*”、‘‘库名’’、“_xml_attr_text__”、“&”（属性）。

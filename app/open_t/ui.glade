@@ -1,0 +1,656 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">&#x5FAE;&#x535A;&#x684C;&#x9762;&#x7AEF;</property>
+    <property name="window_position">center</property>
+    <property name="default_width">1000</property>
+    <property name="default_height">600</property>
+    <property name="icon">icon.png</property>
+    <child>
+      <object class="GtkNotebook" id="notebook1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="tab_pos">left</property>
+        <child>
+          <object class="GtkNotebook" id="notebook2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tab_pos">left</property>
+            <child>
+              <object class="GtkScrolledWindow" id="qiantai">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x524D;&#x53F0;</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="setting">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label6">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x8BBE;&#x7F6E;</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">-</property>
+          </object>
+          <packing>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="box_163">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar1">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="home_163">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x9996;&#x9875;</property>
+                    <property name="label" translatable="yes">163</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-home</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="reload_163">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x5237;&#x65B0;</property>
+                    <property name="label" translatable="yes">163</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="back_163">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x540E;&#x9000;</property>
+                    <property name="label" translatable="yes">163</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-back</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="forw_163">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x524D;&#x8FDB;</property>
+                    <property name="label" translatable="yes">163</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-forward</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton1">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="page_163">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tab_pos">left</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">163</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="box_sina">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar2">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="home_sina">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x9996;&#x9875;</property>
+                    <property name="label" translatable="yes">sina</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-home</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="reload_sina">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x5237;&#x65B0;</property>
+                    <property name="label" translatable="yes">sina</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="back_sina">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x540E;&#x9000;</property>
+                    <property name="label" translatable="yes">sina</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-back</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="forw_sina">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x524D;&#x8FDB;</property>
+                    <property name="label" translatable="yes">sina</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-forward</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton2">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="page_sina">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tab_pos">left</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">sina</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="box_qq">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar3">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="home_qq">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x9996;&#x9875;</property>
+                    <property name="label" translatable="yes">qq</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-home</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="reload_qq">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x5237;&#x65B0;</property>
+                    <property name="label" translatable="yes">qq</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="back_qq">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x540E;&#x9000;</property>
+                    <property name="label" translatable="yes">qq</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-back</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="forw_qq">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x524D;&#x8FDB;</property>
+                    <property name="label" translatable="yes">qq</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-forward</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton3">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="page_qq">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tab_pos">left</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">qq</property>
+          </object>
+          <packing>
+            <property name="position">3</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="box_fanfou">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar_fanfou">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="home_fanfou">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x9996;&#x9875;</property>
+                    <property name="label" translatable="yes">fanfou</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-home</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="reload_fanfou">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x5237;&#x65B0;</property>
+                    <property name="label" translatable="yes">fanfou</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="back_fanfou">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x540E;&#x9000;</property>
+                    <property name="label" translatable="yes">fanfou</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-back</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="forw_fanfou">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x524D;&#x8FDB;</property>
+                    <property name="label" translatable="yes">fanfou</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-forward</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton_fanfou">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="page_fanfou">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tab_pos">left</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label_fanfou">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">fanfou</property>
+          </object>
+          <packing>
+            <property name="position">4</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="box_digu">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar_digu">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="home_digu">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x9996;&#x9875;</property>
+                    <property name="label" translatable="yes">digu</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-home</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="reload_digu">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x5237;&#x65B0;</property>
+                    <property name="label" translatable="yes">digu</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-refresh</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="back_digu">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x540E;&#x9000;</property>
+                    <property name="label" translatable="yes">digu</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-back</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="forw_digu">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x524D;&#x8FDB;</property>
+                    <property name="label" translatable="yes">digu</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-go-forward</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton_digu">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="page_digu">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tab_pos">left</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label_digu">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">digu</property>
+          </object>
+          <packing>
+            <property name="position">5</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

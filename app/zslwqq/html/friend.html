@@ -1,0 +1,42 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src=1.js></script>
+<script>
+function on_failed(msg) {
+	alert(msg);
+}
+function list_clear(id) {
+	$(id).innerHTML = "";
+}
+function list_add(id, uin, nick) {
+	var e = document.createElement("div");
+	e.innerHTML = "<a href='zhscript:chat-with-" + uin + "'>" + nick + "</a> <span id=status" + uin + " onclick='alert(this.id)'>---</span>";
+	$(id).appendChild(e);
+}
+function on_friend_clear() {
+	list_clear("friendlist");
+}
+function on_add_friend(uin, nick) {
+	list_add("friendlist", uin, nick);
+}
+function on_qun_clear() {
+	list_clear("qunlist");
+}
+function on_add_qun(uin, nick) {
+	list_add("qunlist", uin, nick);
+}
+function on_status_change(uin, status) {
+	var e = $("status" + uin);
+	if(!e) {
+		z$("显示status" + uin +"没找到换行");
+		return;
+	}
+	e.innerHTML = status;
+}
+</script>
+好友列表 <a href="javascript:z$('调用‘得好友信息’。刷新好友列表')">刷新</a><br>
+<span id=friendlist></span>
+<br>
+群列表<br>
+<span id=qunlist></span>
+<hr>
+<!--a href="login.html?switch">切换帐号</a><br-->

@@ -1,0 +1,31 @@
+` '
+$( )
+asc
+/* */
+[ ]
+; ;
+~
+: :
+, ,
+{ }
+== != <= < >= > ! && ||
+if then else
+switch
+for break continue
+region out again
+set top up lock lib main = delete
+define noarg
+alias
+has
+<<< >>> text
+begin end code
+echo
+exec call
+load eval with
+exit return
+
+arg args
+.length .
+keyword null
+callback
+window

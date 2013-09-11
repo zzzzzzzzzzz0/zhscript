@@ -1,0 +1,60 @@
+显示
+“HTTP/1.1 200 OK”←↙
+“Content-Type: text/html; charset=utf-8”←↙←↙
+下原样
+<a href="test.wzs?test2=demo/sysvar.zs">
+test.wzs?test2=demo/sysvar.zs</a>
+<br>
+
+<a href="test.wzs?1=a&2=bb&3=ccc&test2=demo/sysvar.zs">
+test.wzs?1=a&2=bb&3=ccc&test2=demo/sysvar.zs</a>
+<br>
+
+<form method="post" action="test.wzs">
+test2=<input type="text" value="上原样先如果存在test2【上】那么‘test2’否则demo/sysvar.zs了下原样" name="test2">
+</form>
+
+<form method="post" action="test.wzs?1=a&2=bb&3=ccc">
+<input type="hidden" value="dddd" name="4">
+<input type="checkbox" name="5">
+<input type="radio" value="ffffff(1)" name="6">
+<input type="radio" value="ffffff(2)" name="6">
+<input type="radio" value="ffffff(3)" name="6">
+<input type="radio" value="ffffff(4)" name="6">
+<input type="radio" value="ffffff(5)" name="6">
+<input type="radio" value="ffffff(6)" name="6">
+test2=<input type="text" value="上原样先如果存在test2【上】那么‘test2’否则demo/sysvar.zs了下原样" name="test2">
+（设为vartable可在后台控制台上显示分配的所有变量）
+<input type="submit">
+</form>
+
+<a href="test.wzs?test2=vartable">
+test.wzs?test2=vartable</a>
+<br>
+上原样。
+
+（赋予ip以调用‘得环境变量方法’、REMOTE_ADDR。）
+显示
+“ip=‘ip’; 
+<a href="test.wzs?ip=1.2.3.4">
+test.wzs?ip=1.2.3.4</a>
+<br>
+”↙。
+
+显示<pre>。
+如果存在test2【上】并且‘test2’那么先
+	如果‘test2’等于vartable那么
+		加载lib/vartable4，解释‘变量表方法’、1、‘回调1【上】’。
+	否则
+		加载‘test2’、‘参数栈’。
+了。
+显示</pre>↙。
+
+显示
+<table>
+先迭代解释下代码
+	别名名以参数1。
+	<tr><td>‘名’</td><td>先头文字‘名’了</td></tr>↙。
+上代码、
+Accept、Accept-Encoding、Accept-Language、Cache-Control、Connection、Host、Referer、User-Agent了
+</table><br>。

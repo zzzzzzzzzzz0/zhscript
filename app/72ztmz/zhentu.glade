@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">阵图编辑器</property>
+    <property name="window_position">center</property>
+    <property name="default_width">360</property>
+    <property name="default_height">380</property>
+    <child>
+      <object class="GtkHBox" id="hbox1">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkHBox" id="hbox2">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar2">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="clear">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">清除</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-clear</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="open">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">打开……</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-open</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="save">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">保存</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-save</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="save-as">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">另存为……</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-save-as</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton2">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="toolbar1">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="toolbar_style">text</property>
+                <child>
+                  <object class="GtkToolButton" id="begin">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">起点</property>
+                    <property name="label" translatable="yes">卍</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="end">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">终点</property>
+                    <property name="label" translatable="yes">卐</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="sp">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">空地</property>
+                    <property name="label" translatable="yes">　</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="gongshi">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">工事</property>
+                    <property name="label" translatable="yes">乂</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="bingwei">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">兵位</property>
+                    <property name="label" translatable="yes">十</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton1">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <child>
+              <object class="GtkTextView" id="text">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="editable">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

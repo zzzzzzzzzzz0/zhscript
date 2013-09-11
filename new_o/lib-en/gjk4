@@ -1,0 +1,55 @@
+set `libname' = `[lib]$(arg0)';
+if has $(libname) then return;
+set `[lib]$(libname)' = call `L', `$(arg0).so';
+set `[lib][$(libname)]calc_func' = call `G ESZ', $($(libname)), `JSBDS2', `c*'/*, i/*小数位数*/*/;
+define `[lib][$(libname)]calc' = `call '$(calc_func)`, $(args)';
+set `[lib][$(libname)]wstrftime' = call `G S', $($(libname)), `wstrftime', `c*'/*fmt*/;
+set `[lib][$(libname)]strftime' = call `G S', $($(libname)), `strftime___', `c*', `l'/*时间值*/;
+
+set `[lib][$(libname)]strpos' = call `G i', $($(libname)), `strpos_2a2__', `c*', `c*';
+set `[lib][$(libname)]strrpos' = call `G i', $($(libname)), `strpos_2a2r__', `c*', `c*';
+set `[lib][$(libname)]startwith' = call `G i', $($(libname)), `strpos_2a2s__', `c*', `c*';
+set `[lib][$(libname)]endwith' = call `G i', $($(libname)), `strpos_2a2e__', `c*', `c*';
+set `[lib][$(libname)]strpos_func' = call `G i'/*不has 时一般返回-1*/, $($(libname)), `strpos_2__', 
+	`c*'/*s*/, 
+	`c*'/*ss：搜索的串*/, 
+	`i'/*i：搜索的起始位置，<0倒数;倒搜索时0为尾*/, 
+	`i'/*ctrl：
+		1, 不has 子串时返回串长度/*倒搜索时返回0*/
+		2, 位置移过子串长度
+		4, 返回尾距离
+		010, 倒搜索
+		020, with;头尾全匹配，返回1或0*/;
+
+set `[lib][$(libname)]strmid' = call `G ESZ', $($(libname)), `strmid_'
+	, `c*'/*s：源*/
+	/*, i/*i1：开始位置，<0倒数;缺省0*/
+	, i/*i2：结束位置，<=0倒数;缺省0*/
+	, c* /*s2：移过子串，当不为NULL时;缺省NULL*/*/;
+
+set `[lib][$(libname)]str_replace' = call `G c*', $($(libname)), `__str_replace', `c*'/*s*/, `c*'/*s1*/, `c*'/*s2*/;
+set `[lib][$(libname)]str_replace_free' = call `G', $($(libname)), `__str_replace_free';
+
+set `[lib][$(libname)]getenv' = call `G c*', $($(libname)), `getenv__', `c*';
+
+set `[lib][$(libname)]random' = call `G SZ', $($(libname)), `random___'/*, 最大值/*默认100*/, 最小值/*默认0*/;差为0或负数将call 种子发生器，返回种子*/;
+
+set `[lib][$(libname)]fmtstr2int' = call `G lESZ', $($(libname)), `fmtstr2int__', `c*'/*源*//*, 进制……*/;
+set `[lib][$(libname)]int2fmtstr' = call `G  ESZ', $($(libname)), `int2fmtstr__', `l'/*源*//*, 进制, 分隔符, ……*/;
+
+set `[lib][$(libname)]shiftcase' = call `G SZ', $($(libname)), `shiftcase__'/*, ……*/;
+set `[lib][$(libname)]unshiftcase' = call `G SZ', $($(libname)), `unshiftcase__'/*, ……*/;
+set `[lib][$(libname)]shiftcase2' = call `G SZ', $($(libname)), `shiftcase2__'/*, ……*/;
+set `[lib][$(libname)]unshiftcase2' = call `G SZ', $($(libname)), `unshiftcase2__'/*, ……*/;
+
+set `[lib][$(libname)]cnum' = call `G c*', $($(libname)), `cnum__', `c*';/*最大单位超出则重复*/
+set `[lib][$(libname)]capsy' = call `G ES', $($(libname)), `capsy__', `c*'/*允许字符0至9, 空格, `,', `.'*/;/*最大单位超出则重复*/
+
+set `[lib][$(libname)]int2str' = call `G c*ESZ', $($(libname)), `int2str__', `l'/*, 进制/*默认10，为-1根据后串*/, 进制格式串/*默认0-Z*/*/;
+set `[lib][$(libname)]str2int' = call `G lESZ', $($(libname)), `str2int__', `c*'/*, 进制, 进制格式串*/;
+
+set `[lib][$(libname)]mem2hex' = call `G S', $($(libname)), `mem2hex_', `c&'/*地址*/, `l'/*长度*/;
+
+/*ge2shi4的含义：s——起始位置，c——占用的长度，.——一个long整数，*——一个串*/
+set `[lib][$(libname)]readstruct' = call `G iZ', $($(libname)), `HS7DU2JIE2GOU4', `c&', `c*'/*ge2shi4*//*, ……*/;
+set `[lib][$(libname)]writestruct' = call `G iZ', $($(libname)), `HS7XIE3JIE2GOU4', `c&', `c*'/*ge2shi4*//*, ……*/;

@@ -1,0 +1,17 @@
+桌面小挂件——瑜伽时钟
+
+瑜伽教练来表达时间会是怎样的？上半身为秒、左腿做分、右腿乃时，婀娜多姿、分外妖娆
+下载地址
+http://zhscript.googlecode.com/files/clock2.7z
+http://zhscript.googlecode.com/svn/tmp/clock2.png
+
+想让她摆出各种固定的post吗？进入终端吧，输入命令
+./post.zs #原设计
+http://zhscript.googlecode.com/svn/tmp/clock2-.png
+./post.zs 1zm #一字马
+http://zhscript.googlecode.com/svn/tmp/clock2-1zm.png
+./post.zs 3f #三分
+http://zhscript.googlecode.com/svn/tmp/clock2-3f.png
+./post.zs 7 30 0 #指定的几点钟（时 分 秒），不指定分或秒的话取当前时间
+http://zhscript.googlecode.com/svn/tmp/clock2-7-30-0.png
+其实她的种种美态真正展现还是在运行中

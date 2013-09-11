@@ -1,0 +1,18 @@
+Debug/
+Release/
+调试/
+发行/
+exe/
+debug-r75891/
+release-r75891/
+debug liucheng/
+release liucheng/
+*.o
+*.so
+*.dll
+*.exe
+/new_o/demo/z.zs
+/new_o/cairogsh
+/new_o/gtkmmsh
+/new_o/l
+/new_o/webkitsh

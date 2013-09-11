@@ -1,0 +1,93 @@
+
+  NPIdentifier n = NPN_GetStringIdentifier("foof");
+
+  NPVariant v;
+  INT32_TO_NPVARIANT(46, v);
+
+  NPN_SetProperty(m_pNPInstance, sWindowObj, n, &v);
+
+  NPVariant rval;
+  NPN_GetProperty(m_pNPInstance, sWindowObj, n, &rval);
+
+  if (NPVARIANT_IS_INT32(rval)) {
+    printf("rval = %d\n", NPVARIANT_TO_INT32(rval));
+  }
+
+  n = NPN_GetStringIdentifier("document");
+
+  if (!NPN_IdentifierIsString(n)) {
+    NPString str;
+    str.utf8characters = "alert('NPN_IdentifierIsString() test failed!');";
+    str.utf8length = strlen(str.utf8characters);
+
+    NPN_Evaluate(m_pNPInstance, sWindowObj, &str, NULL);
+  }
+
+  NPObject *doc;
+
+  NPN_GetProperty(m_pNPInstance, sWindowObj, n, &rval);
+
+  if (NPVARIANT_IS_OBJECT(rval) && (doc = NPVARIANT_TO_OBJECT(rval))) {
+    n = NPN_GetStringIdentifier("title");
+
+    NPN_GetProperty(m_pNPInstance, doc, n, &rval);
+
+    if (NPVARIANT_IS_STRING(rval)) {
+      printf ("title = %s\n", NPVARIANT_TO_STRING(rval).utf8characters);
+
+      NPN_ReleaseVariantValue(&rval);
+    }
+
+    n = NPN_GetStringIdentifier("plugindoc");
+
+    OBJECT_TO_NPVARIANT(doc, v);
+    NPN_SetProperty(m_pNPInstance, sWindowObj, n, &v);
+
+    NPString str;
+    str.utf8characters = "document.getElementById('result').innerHTML += '<p>' + 'NPN_Evaluate() test, document = ' + this + '</p>';";
+    str.utf8length = strlen(str.utf8characters);
+
+    NPN_Evaluate(m_pNPInstance, doc, &str, NULL);
+
+    NPN_ReleaseObject(doc);
+  }
+
+  NPVariant barval;
+  NPN_GetProperty(m_pNPInstance, sWindowObj, sBar_id, &barval);
+
+  NPVariant arg;
+  OBJECT_TO_NPVARIANT(sWindowObj, arg);
+
+  NPN_InvokeDefault(m_pNPInstance, NPVARIANT_TO_OBJECT(barval), &arg, 1,
+                    &rval);
+
+  if (NPVARIANT_IS_INT32(rval) && NPVARIANT_TO_INT32(rval) == 4) {
+    printf ("Default function call SUCCEEDED!\n");
+  } else {
+    printf ("Default function call FAILED!\n");
+  }
+
+  NPN_ReleaseVariantValue(&barval);
+  NPN_ReleaseVariantValue(&rval);
+
+
+#if 0
+  n = NPN_GetStringIdentifier("prompt");
+
+  NPVariant vars[3];
+  STRINGZ_TO_NPVARIANT("foo", vars[0]);
+  STRINGZ_TO_NPVARIANT("bar", vars[1]);
+  STRINGZ_TO_NPVARIANT("foof", vars[2]);
+
+  NPN_Invoke(sWindowObj, n, vars, 3, &rval);
+
+  if (NPVARIANT_IS_STRING(rval)) {
+    printf ("prompt returned '%s'\n", NPVARIANT_TO_STRING(rval).utf8characters);
+  }
+
+  NPN_ReleaseVariantValue(&rval);
+#endif
+
+  const char *ua = NPN_UserAgent(m_pNPInstance);
+  strcpy(m_String, ua);
+  printf("m_String=%s!\n",m_String);

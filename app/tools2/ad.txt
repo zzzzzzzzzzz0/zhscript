@@ -1,0 +1,15 @@
+补充工具箱（第一个glade+zhscript应用）
+
+功能包括表达式计算器、中文数字和大写金额转换等。
+至于好不好用，一试便知，关键是——这不是要点，哈
+
+我要说的是：这是一个gui程序，但他不是c++之类编译语言开发而是脚本
+你点击而启动起来的补充工具箱（环境：ubuntu、gtkmm）其实是个通用的程序
+他会去在启动时调用跟他同名的文件，于是应用便有了
+界面是用glade画出来存放在tools2.ui里，那些.zs文件便是后面的逻辑
+
+哦，下载地址：
+http://zhscript.googlecode.com/files/tools2.7z
+开源中文脚本项目站：
+http://code.google.com/p/zhscript/
+欢迎光临

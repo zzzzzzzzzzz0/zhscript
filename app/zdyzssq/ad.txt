@@ -1,0 +1,9 @@
+撞大运之双色球
+
+大运几时开？gdp滚滚来。
+直接从 zhcw.com 读取数据，所购买号码本地数据库保存，从而可以形成一张既能判断单张多张中奖情况又能提供直观分析数据的历史图，实乃撞大运必备之细作。附送不知如何选之机选。
+这程序的意义在哪里？在于自做web服务端的实现，在于本地程序与网页的没有障碍的数据交换，在于……
+
+http://zhscript.googlecode.com/svn/tmp/zdyzssq-1.png
+http://zhscript.googlecode.com/svn/tmp/zdyzssq-2.png
+http://zhscript.googlecode.com/svn/tmp/zdyzssq-3.png

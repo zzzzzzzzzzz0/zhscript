@@ -1,0 +1,9 @@
+Maintainer: zzzzzzzzzzz <zzzzzzzzzzzgg@gmail.com>
+Installed-Size: 1200
+Depends: libgtkmm-2.4-1c2a, libglademm-2.4-1c2a, mplayer
+Section: video
+Priority: optional
+Homepage: http://code.google.com/p/zhscript/wiki/movbrow_7z
+Description: 电影浏览器
+ 搜索多个指定文件夹下的视频。按照文件实际格式来查找视频，不是根据后缀名，然后会查找一个跟他同名的后缀为png或jpg的图片，一起组成的如影视海报样的一项。没有同名图片时可使用“配图”功能，由程序来自动截屏获取一张。播放分使用外部播放器和内嵌播放器两种，当使用的播放器不存在时将通过系统自动安装。
+

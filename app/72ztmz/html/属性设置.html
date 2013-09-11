@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>属性设置</title>
+</head>
+<style>
+td{font-size:10px;}
+a{font-size:10px;}
+input{font-size:10px;}
+</style>
+<body>
+<form action="zhscript:pref">
+<input name=i type=hidden value="{*i*}">
+<table>
+<tr><td align=left colspan=2><input type=submit value=" 设置 "><a href="zhscript:X"> 放弃 </a></td></tr>
+<tr><td align=right nowrap>兵器携带：</td><td>{*bingqi*}<input name=bingqi_cnt_ type=hidden value="{*bingqi_max*}"></td></tr>
+<tr><td align=right nowrap>攻击策略：</td><td><select name=celve_i_>{*celve*}</select></td></tr>
+<table>
+</form>
+</body>
+</html>

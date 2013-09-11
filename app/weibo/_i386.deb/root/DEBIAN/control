@@ -1,0 +1,9 @@
+Maintainer: zzzzzzzzzzz <zzzzzzzzzzzgg@gmail.com>
+Installed-Size: 700
+Depends: libgtkmm-2.4-1c2a, libglademm-2.4-1c2a, libwebkit-1.0-2
+Section: web
+Priority: optional
+Homepage: http://code.google.com/p/zhscript/wiki/zs_weibo_deb
+Description: weibo桌面端
+ 这是对weibo.com所做的一个桌面应用，操作也便同通常浏览器里的weibo，不同的是独立程序不虞误关、对消息可进行提醒（非libnotify）。
+

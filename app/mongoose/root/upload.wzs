@@ -1,0 +1,42 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+（加载limitip.zs。）
+
+定义链接以下代码
+	别名文件以参数2。
+	显示‘参数1’“<a href="exec.wzs?xdg-open=‘文件’">‘文件’</a>”<br><br>。
+上代码。
+
+基于下代码
+	别名号以参数1。
+	如果存在text‘号’【上】【上】并且‘text‘号’’那么先
+		赋予文件以‘上传目录’post.txt。
+		执行“cat << EOF >> ‘文件’”↙‘text‘号’’↙EOF。
+		链接粘贴文字‘号’到、‘文件’。
+	了。
+上代码先
+	1。2。
+了。
+基于下代码
+	别名号以参数1。
+	如果存在file‘号’【上】【上】并且‘file‘号’’那么
+		链接“上传文件：”、‘file‘号’’。
+上代码先
+	1。2。3。4。5。
+了。
+
+显示下原样
+<form action="?" method="POST" enctype="multipart/form-data">
+	文字1：<br>
+	<textarea name=text1></textarea><br>
+	文字2：<br>
+	<textarea name=text2></textarea><br>
+	文件1：<input type="file" name="file1"><br>
+	文件2：<input type="file" name="file2"><br>
+	文件3：<input type="file" name="file3"><br>
+	文件4：<input type="file" name="file4"><br>
+	文件5：<input type="file" name="file5"><br>
+	<input type="submit" value="上传">
+</form>
+上原样。
+
+显示“<br><br><a href="/">返回</a>”。

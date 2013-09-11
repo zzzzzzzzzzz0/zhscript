@@ -1,0 +1,12 @@
+/*
+1px dashed #000
+2px dotted #fff
+1px solid #000
+3px double rgb(255,224,224)
+5px inset #808080
+10px groove #808080
+
+10px ridge #808080
+3px outset #f00
+*/
+a{border:15px solid #fff;display:inline-block;font-size:24px;}

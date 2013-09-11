@@ -1,0 +1,33 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+赋予‘库名’以调用“L”、“‘参数0’.so”。
+
+调用先调用“G”、‘‘库名’’、“_init__”、“&”、“&”、“&”了、‘回调’、‘回调0’、‘【主】回调1’。
+
+赋予“【‘库名’】server_start”以调用“G l”、‘‘库名’’、“_server_start__”、“i”（端口号）、“i”（侦听数）。
+赋予“【‘库名’】server_script”以调用“G”、‘‘库名’’、“_server_script__”、“l”、“c*”（回调的脚本。返回值：q结束、x出错、“”成功）。
+赋予“【‘库名’】server_script_r”以调用“G”、‘‘库名’’、“_server_script_r__”（读过程）、“l”、“c*”。
+赋予“【‘库名’】server_script_w”以调用“G”、‘‘库名’’、“_server_script_w__”（写过程）、“l”、“c*”。
+赋予“【‘库名’】server_script_i”以调用“G”、‘‘库名’’、“_server_script_i__”（欢迎过程）、“l”、“c*”。
+赋予“【‘库名’】server_script_0”以调用“G”、‘‘库名’’、“_server_script_0__”（超时过程）、“l”、“c*”。
+赋予“【‘库名’】server_stop”以调用“G”、‘‘库名’’、“_server_stop__”、“l”。
+赋予“【‘库名’】server_while”以调用“G i”、‘‘库名’’、“_server_while__”、“l”。
+赋予“【‘库名’】server_while3”以调用“G i”、‘‘库名’’、“_server_while3__”、“l”、“i”（超时秒数）。
+赋予“【‘库名’】server_get”以调用“G c*”、‘‘库名’’、“_server_get__”、“l”、“i”。
+赋予“【‘库名’】server_put”以调用“G i”、‘‘库名’’、“_server_put__”、“l”、“c*”、“i”。
+赋予“【‘库名’】server_put_all”以调用“G”、‘‘库名’’、“_server_put_all__”、“l”、“c*”。
+赋予“【‘库名’】server_accept”以调用“G i”、‘‘库名’’、“_server_accept__”、“l”。
+赋予“【‘库名’】server_accept_addr”以调用“G c*”、‘‘库名’’、“_server_accept_addr__”、“l”。
+赋予“【‘库名’】server_accept_port”以调用“G i”、‘‘库名’’、“_server_accept_port__”、“l”。
+
+赋予“【‘库名’】client_start”以调用“G l”、‘‘库名’’、“_client_start__”、“i”（服务器端口号）、“c*”。
+赋予“【‘库名’】client_script”以调用“G”、‘‘库名’’、“_client_script__”、“l”、“c*”。
+赋予“【‘库名’】client_script_r”以调用“G”、‘‘库名’’、“_client_script_r__”、“l”、“c*”。
+赋予“【‘库名’】client_script_w”以调用“G”、‘‘库名’’、“_client_script_w__”、“l”、“c*”。
+赋予“【‘库名’】client_script_0”以调用“G”、‘‘库名’’、“_client_script_0__”、“l”、“c*”。
+赋予“【‘库名’】client_stop”以调用“G”、‘‘库名’’、“_client_stop__”、“l”。
+赋予“【‘库名’】client_while”以调用“G i”、‘‘库名’’、“_client_while__”、“l”、“i”。
+赋予“【‘库名’】client_get”以调用“G c*”、‘‘库名’’、“_client_get__”、“l”。
+赋予“【‘库名’】client_get_all”以调用“G A”、‘‘库名’’、“_client_get_all__”、“l”、“c*”（控制：b仅身体部分、h仅头部分）。
+赋予“【‘库名’】client_put”以调用“G i”、‘‘库名’’、“_client_put__”、“l”、“c*”。
+

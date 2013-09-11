@@ -1,0 +1,42 @@
+c++ project -> shared library -> empty project
+location: /zzzzzzzzzzz/move/zzzzzzzzzzz/l7k_lib/gtkmmsh-plugin/{name}
+project name: gtkmmsh-plugin-{name}
+
+
+
+c/c++ build -> settings -> all configurations
+gcc c++ compiler -> includes
+../../../gtkmmsh
+../../../new_gg
+
+ -> miscellaneous
+ `pkg-config --cflags gtkmm-2.4` -fPIC -rdynamic
+
+build artifact
+artifact name: {name}
+output prefix: ../../../new_o/gtkmmsh-plugin/
+
+
+
+new -> class
+class name: {name}___
+base classes(-> add): plugin_base___
+
+shell___*sh,direct___ d):plugin_base___(sh,d){}
+virtual int proc__(std::deque<Glib::ustring>* p,char*buf,long siz,char**addr_ret,void*shangji);
+void on__(int event){}
+const char* name__(){return "";}
+int version__(){return 1;}
+
+#include"plugin_def.h"
+//#include "util.cpp"
+
+int ___::proc__(std::deque<Glib::ustring>* p,char*buf,long siz,char**addr_ret,void*shangji) {
+	if((*p)[0]==""){
+		return 1;
+	}
+	return 0;
+}
+
+extern "C" plugin_base___* create__(shell___* sh,direct___ d){return new ___(sh,d);}
+extern "C" void destroy__(plugin_base___* p){delete p;}

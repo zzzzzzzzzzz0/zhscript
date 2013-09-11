@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script>
+		function select__(i){
+			z$('选择',pan_[i].t_,pan_[i].fens_,pan_[i].ming_,pan_[i].bu_);
+		}
+		var pan_=new Array();
+		</script>
+	</head>
+	<style type="text/css"> 
+	.msg{font-size:12px;}
+	.btn{font-size:14px;}
+	.ming{font-size:18px;}
+	.bu{font-size:18px;}
+	body{color:#fff;font-size:16px;background-color:#666;}
+	div{border:#ccc 1px dashed;background-color:#777;}
+	a:link{text-decoration:underline;color:#fff;}
+	a:visited{text-decoration:none;color:#fff;}
+	a:hover{text-decoration:underline;color:#fff;}
+	a:active{text-decoration:none;color:#fff;}
+	</style>
+	<body>
+		<div class=msg><span>消息——</span><span id=msg></span></div>
+		<div id=loginform style="display:none">
+			<form action="zhscript:">
+				需要你的新浪<br>
+				帐号：<input name=u id=u><br>
+				密码：<input name=pw id=pw type=password><br>
+				群：<input name=qun id=qun title="群的网址。空则到你的首页"><br>
+				<input type=submit value="登入">以到大街上<br>
+				群体验可先<a href="javascript:qun.value='http://q.weibo.com/226786'/*this.title*/;" title="http://q.weibo.com/226786">街头象棋群</a>
+			</form>
+			网络不明时<a href="zhscript:reload2">刷</a>下
+		</div>
+		<div id=panlist style="display:none">
+			<ul>
+				<li id=new><a href="zhscript:new">自铺一盘等人</a></li>
+			</ul>
+		</div>
+		<div>
+			<table id=qipu></table>
+			<a href="zhscript:restart" class=btn>重新开始</a>
+		</div>
+		<div id=setver class=btn>
+			<div id=eleeye style="display:none">
+				eleeye：<br>
+				<a href="zhscript:eleeye">下这手</a>
+				思想深度
+				<select onchange="z$('赋予eleeye级别【主】以‘参数1’。显示eleeye级别‘eleeye级别’↙。',this.selectedIndex+1)">
+					<option selected>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+					<option>7</option>
+					<option>8</option>
+					<option>9</option>
+					<option>10</option>
+					<option>11</option>
+					<option>12</option>
+					<option>13</option>
+					<option>14</option>
+					<option>15</option>
+				</select>
+			</div>
+			<a href="zhscript:ver-self">自下</a>
+			<a href="zhscript:ver-eleeye">跟eleeye下</a>
+			<a href="zhscript:ver-net">上街头下</a>
+		</div>
+		<div>
+			<a href="zhscript:qipan" class=btn>显示棋盘</a>
+		</div>
+	</body>
+</html>

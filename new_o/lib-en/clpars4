@@ -1,0 +1,24 @@
+set `libname' = `[lib]$(arg0)';
+if has $(libname) then return;
+set `[lib]$(libname)' = call `L', `$(arg0).so';
+
+call {call `G', $($(libname)), `init__', `$0', `$19'};
+
+set `cmdline-set-callback[lib][$(libname)]' = call `G EBZ', $($(libname)), `set__', `${l0}', `${l0}'
+	/*, 参数标识/*为空则为缺省*/, 参数帮助, 后带参数数目, 参数callback代码, ……*/;
+set `cmdline-add-callback[lib][$(libname)]' = call `G EBZ', $($(libname)), `set__', `${l0}', `${l1}';
+set `cmdline-parse[lib][$(libname)]' = call `G EBZ', $($(libname)), `par__', `$11', `$1', `${l0}', `${l0}'/*, ……*/;
+set `cmdline-parse-with-no[lib][$(libname)]' = call `G EBZ', $($(libname)), `par__', `$11', `$1', `${l0}', `${l1}'/*, ……*/;
+set `cmdline-help[lib][$(libname)]' = call `G A', $($(libname)), `info__', `${l0}', `${*}', `${*asc9}', `${*asc10}', `${l0}';
+set `cmdline-help2[lib][$(libname)]' = call `G A', $($(libname)), `info__', `${l0}', `c*'/*隔1*/, `c*'/*隔2*/, `c*'/*换行*/, `i'/*严格*/;
+
+set `cmdlineo-set-callback[lib][$(libname)]' = call `G &EBZ', $($(libname)), `set__', `${l1}', `${l0}';
+set `cmdlineo-add-callback[lib][$(libname)]' = call `G EBZ', $($(libname)), `set__', `${l1}', `${l1}';
+set `cmdlineo-parse[lib][$(libname)]' = call `G EBZ', $($(libname)), `par__', `$11', `$1', `&', `${l0}';
+set `cmdlineo-parse-with-no[lib][$(libname)]' = call `G EBZ', $($(libname)), `par__', `$11', `$1', `&', `${l1}';
+set `cmdlineo-help[lib][$(libname)]' = call `G A', $($(libname)), `info__', `&', `${*}', `${*asc9}', `${*asc10}', `${l0}';
+set `cmdlineo-help2[lib][$(libname)]' = call `G A', $($(libname)), `info__', `&', `c*', `c*', `c*', `i';
+set `cmdline-free[lib][$(libname)]' = call `G', $($(libname)), `del__', `&';
+
+set `arghandle[lib][$(libname)]' = call `G EBZ', $($(libname)), `one__', `$11', `$1', `${l0}';
+set `arghandle-with-no[lib][$(libname)]' = call `G EBZ', $($(libname)), `one__', `$11', `$1', `${l1}';

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">启动盒</property>
+    <property name="window_position">center</property>
+    <property name="icon">icon.png</property>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">automatic</property>
+        <property name="vscrollbar_policy">automatic</property>
+        <child>
+          <object class="GtkIconView" id="iconview1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="row_spacing">0</property>
+            <property name="column_spacing">0</property>
+            <property name="margin">0</property>
+            <property name="item_padding">0</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="menu1">
+    <property name="visible">True</property>
+    <property name="ubuntu_local">True</property>
+    <child>
+      <object class="GtkCheckMenuItem" id="no_exit">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">启动后盒不按设定退出</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="click2">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">双击/空格启动</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+</interface>

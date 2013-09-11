@@ -1,0 +1,920 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">&#x7528;&#x4E2D;&#x6587;&#x8BED;&#x8A00;&#x6765;&#x7ED8;&#x56FE;</property>
+    <property name="default_width">700</property>
+    <property name="default_height">500</property>
+    <child>
+      <object class="GtkHPaned" id="hpaned1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="position">300</property>
+        <child>
+          <object class="GtkVBox" id="vbox1">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar1">
+                <property name="visible">True</property>
+                <property name="toolbar_style">icons</property>
+                <child>
+                  <object class="GtkToolButton" id="clear">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">&#x6E05;&#x9664;</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-clear</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="toolbutton4">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVPaned" id="vpaned1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="position">50</property>
+                <property name="position_set">True</property>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkVPaned" id="vpaned2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="position">300</property>
+                    <property name="position_set">True</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="drawingarea1">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="resize">False</property>
+                        <property name="shrink">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">
+</property>
+                      </object>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">True</property>
+            <property name="shrink">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="notebook1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <object class="GtkVBox" id="vbox2">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkToolbar" id="toolbar2">
+                    <property name="visible">True</property>
+                    <property name="toolbar_style">icons</property>
+                    <child>
+                      <object class="GtkToolButton" id="exec">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x6267;&#x884C;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-execute</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton3">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="new">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x65B0;&#x5EFA;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-new</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="paste">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x7C98;&#x8D34;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-paste</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton5">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkVBox" id="vbox4">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <child>
+                              <object class="GtkTextView" id="script">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="has_focus">True</property>
+                                <property name="is_focus">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrolledwindow3">
+                            <property name="height_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <child>
+                              <object class="GtkTextView" id="log">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="editable">False</property>
+                                <property name="wrap_mode">char</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolbar" id="toolbar4">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="toolbar_style">text</property>
+                        <property name="icon_size">0</property>
+                        <property name="icon_size_set">True</property>
+                        <child>
+                          <object class="GtkToolButton" id="f1">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&#x3C0;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton8">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f13">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">2</property>
+                            <property name="label" translatable="yes">&#x5750;&#x6807;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f14">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">2</property>
+                            <property name="label" translatable="yes">&#x76F4;&#x7EBF;&#x5230;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f12">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">5</property>
+                            <property name="label" translatable="yes">&#x5F27;&#x7EBF;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f4">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x63CF;&#x753B;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f3">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x63CF;&#x753B;&#x4E8C;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f8">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x4E0A;&#x8272;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f6">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x586B;&#x5145;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f5">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x586B;&#x5145;&#x4E8C;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f2">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x88C1;&#x526A;&#x57DF;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton9">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f15">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">4</property>
+                            <property name="label" translatable="yes">&#x989C;&#x8272;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f11">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">1</property>
+                            <property name="label" translatable="yes">&#x7EBF;&#x5BBD;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f17">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x5706;&#x5F62;&#x7EBF;&#x5E3D;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton2">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f9">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x4FDD;&#x5B58;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f7">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">0</property>
+                            <property name="label" translatable="yes">&#x6062;&#x590D;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton10">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f16">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">2</property>
+                            <property name="label" translatable="yes">&#x8303;&#x56F4;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f10">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">2</property>
+                            <property name="label" translatable="yes">&#x5E73;&#x79FB;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton1">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f19">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">v</property>
+                            <property name="label" translatable="yes">&#x5BBD;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="f18">
+                            <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">v</property>
+                            <property name="label" translatable="yes">&#x9AD8;</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x811A;&#x672C;</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox5">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkToolbar" id="toolbar5">
+                    <property name="visible">True</property>
+                    <property name="toolbar_style">icons</property>
+                    <child>
+                      <object class="GtkToolButton" id="exec-4">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x6267;&#x884C;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-execute</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton11">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="copy-4">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x590D;&#x5236;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-copy</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton12">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <child>
+                      <object class="GtkTextView" id="script-4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="buffer">textbuffer2</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label5">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x793A;&#x8303;&#xFF1A;&#x56DB;&#x89D2;&#x661F;</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox6">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkToolbar" id="toolbar6">
+                    <property name="visible">True</property>
+                    <property name="toolbar_style">icons</property>
+                    <child>
+                      <object class="GtkToolButton" id="exec-5">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x6267;&#x884C;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-execute</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton13">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="copy-5">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x590D;&#x5236;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-copy</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton14">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <child>
+                      <object class="GtkTextView" id="script-5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="buffer">textbuffer3</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label6">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x793A;&#x8303;&#xFF1A;&#x4E94;&#x73AF;</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox3">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkToolbar" id="toolbar3">
+                    <property name="visible">True</property>
+                    <property name="toolbar_style">icons</property>
+                    <child>
+                      <object class="GtkToolButton" id="exec-clock">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x6267;&#x884C;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-execute</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton6">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="copy-clock">
+                        <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">&#x590D;&#x5236;</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-copy</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorToolItem" id="toolbutton7">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <child>
+                      <object class="GtkTextView" id="script-clock">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="buffer">textbuffer1</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&#x793A;&#x8303;&#xFF1A;&#x65F6;&#x949F;</property>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">True</property>
+            <property name="shrink">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">&#xFF08;http://library.gnome.org/devel/gtkmm-tutorial/2.21/sec-drawing-clock-example.html.en&#xFF09;
+&#x8D4B;&#x4E88;&#x65F6;&#x4EE5;&#x7B97;&#x672F; 2 *&#x3C0;/6&#x3002;
+&#x8D4B;&#x4E88;&#x5206;&#x4EE5;&#x7B97;&#x672F; 5 *&#x3C0;/30&#x3002;
+&#x8D4B;&#x4E88;&#x79D2;&#x4EE5;&#x7B97;&#x672F; 30 *&#x3C0;/30&#x3002;
+
+&#x8D4B;&#x4E88;&#x534A;&#x5F84;&#x4EE5;0.42&#x3002;
+&#x8D4B;&#x4E88;&#x7EBF;&#x5BBD;&#x4EE5;0.05&#x3002;
+
+&#x201C;&#x8303;&#x56F4;&#x201D;&#x4E3A;&#x5148;&#x5BBD;&#x4E86;&#x3001;&#x5148;&#x9AD8;&#x4E86;&#x3002;
+&#x5E73;&#x79FB;&#x4E3A;0.5&#x3001;0.5&#x3002;
+&#x7EBF;&#x5BBD;&#x4E3A;&#x2018;&#x7EBF;&#x5BBD;&#x2019;&#x3002;
+&#x4FDD;&#x5B58;&#x3002;
+&#x989C;&#x8272;&#x4E3A;0.337&#x3001;0.612&#x3001;0.117&#x3001;0.9&#x3002;&#xFF08;green&#xFF09;
+&#x4E0A;&#x8272;&#x3002;
+&#x6062;&#x590D;&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;0&#x3001;0&#x3001;&#x2018;&#x534A;&#x5F84;&#x2019;&#x3001;0&#x3001;&#x7B97;&#x672F;2*&#x3C0;&#x3002;
+&#x4FDD;&#x5B58;&#x3002;
+&#x989C;&#x8272;&#x4E3A;1&#x3001;1&#x3001;1&#x3001;0.8&#x3002;
+&#x586B;&#x5145;&#x4E8C;&#x3002;
+&#x6062;&#x590D;&#x3002;
+&#x63CF;&#x753B;&#x4E8C;&#x3002;
+&#x88C1;&#x526A;&#x57DF;&#x3002;
+
+&#xFF08;&#x7ED8;&#x5236;&#x65F6;&#x949F;&#x5468;&#x671F;&#xFF09;
+&#x8D4B;&#x4E88;&#x6570;&#x4EE5;0&#x3002;
+&#x5FAA;&#x73AF;&#x5148;
+	&#x5982;&#x679C;&#x2018;&#x6570;&#x2019;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;12&#x90A3;&#x4E48;&#x8DF3;&#x51FA;&#x3002;
+	&#x8D4B;&#x4E88;&#x957F;&#x4EE5;0.05&#x3002;
+	&#x4FDD;&#x5B58;&#x3002;
+	&#x5706;&#x5F62;&#x7EBF;&#x5E3D;&#x3002;
+	&#x5982;&#x679C;&#x7B97;&#x672F;&#x2018;&#x6570;&#x2019;%3&#x4E0D;&#x7B49;&#x4E8E;0&#x90A3;&#x4E48;&#x5148;
+		&#x8D4B;&#x4E88;&#x957F;&#x4EE5;&#x2018;&#x957F;&#x2019;*0.8&#x3002;
+		&#x7EBF;&#x5BBD;&#x4E3A;0.03&#x3002;
+	&#x4E86;&#x3002;
+	&#x8D4B;&#x4E88;&#x6B63;&#x4EE5;&#x5148;sin&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x6570;&#x2019;*&#x3C0;/6&#x4E86;&#x3002;
+	&#x8D4B;&#x4E88;&#x4F59;&#x4EE5;&#x5148;cos&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x6570;&#x2019;*&#x3C0;/6&#x4E86;&#x3002;
+	&#x5750;&#x6807;&#x4E3A;&#x7B97;&#x672F;(&#x2018;&#x534A;&#x5F84;&#x2019;-&#x2018;&#x957F;&#x2019;)*&#x2018;&#x4F59;&#x2019;&#x3001;&#x7B97;&#x672F;(&#x2018;&#x534A;&#x5F84;&#x2019;-&#x2018;&#x957F;&#x2019;)*&#x2018;&#x6B63;&#x2019;&#x3002;
+	&#x76F4;&#x7EBF;&#x5230;&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x534A;&#x5F84;&#x2019;*&#x2018;&#x4F59;&#x2019;&#x3001;&#x7B97;&#x672F;&#x2018;&#x534A;&#x5F84;&#x2019;*&#x2018;&#x6B63;&#x2019;&#x3002;
+	&#x63CF;&#x753B;&#x3002;
+	&#x6062;&#x590D;&#x3002;
+	&#x8D4B;&#x4E88;&#x6570;&#x4EE5;&#x7B97;&#x672F;&#x2018;&#x6570;&#x2019;+1&#x3002;
+&#x4E86;&#x3002;
+&#x4FDD;&#x5B58;&#x3002;
+&#x5706;&#x5F62;&#x7EBF;&#x5E3D;&#x3002;
+
+&#xFF08;&#x7ED8;&#x5236;&#x79D2;&#x9488;&#xFF09;
+&#x4FDD;&#x5B58;&#x3002;
+&#x7EBF;&#x5BBD;&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x7EBF;&#x5BBD;&#x2019;/3&#x3002;
+&#x989C;&#x8272;&#x4E3A;0.7&#x3001;0.7&#x3001;0.7&#x3001;0.8&#x3002;&#xFF08;gray&#xFF09;
+&#x5750;&#x6807;&#x4E3A;0&#x3001;0&#x3002;
+&#x8D4B;&#x4E88;&#x6B63;&#x4EE5;&#x5148;sin&#x4E3A;&#x2018;&#x79D2;&#x2019;&#x4E86;&#x3002;
+&#x8D4B;&#x4E88;&#x4F59;&#x4EE5;&#x5148;cos&#x4E3A;&#x2018;&#x79D2;&#x2019;&#x4E86;&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x6B63;&#x2019;*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.9)&#x3001;&#x7B97;&#x672F;-(&#x2018;&#x4F59;&#x2019;)*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.9)&#x3002;
+&#x63CF;&#x753B;&#x3002;
+&#x6062;&#x590D;&#x3002;
+
+&#xFF08;&#x7ED8;&#x5236;&#x5206;&#x9488;&#xFF09;
+&#x989C;&#x8272;&#x4E3A;0.117&#x3001;0.337&#x3001;0.612&#x3001;0.9&#x3002;&#xFF08;blue&#xFF09;
+&#x5750;&#x6807;&#x4E3A;0&#x3001;0&#x3002;
+&#x8D4B;&#x4E88;&#x6B63;&#x4EE5;&#x5148;sin&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x5206;&#x2019;+&#x2018;&#x79D2;&#x2019;/60&#x4E86;&#x3002;
+&#x8D4B;&#x4E88;&#x4F59;&#x4EE5;&#x5148;cos&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x5206;&#x2019;+&#x2018;&#x79D2;&#x2019;/60&#x4E86;&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x6B63;&#x2019;*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.8)&#x3001;&#x7B97;&#x672F;-(&#x2018;&#x4F59;&#x2019;)*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.8)&#x3002;
+&#x63CF;&#x753B;&#x3002;
+
+&#xFF08;&#x7ED8;&#x5236;&#x65F6;&#x9488;&#xFF09;
+&#x989C;&#x8272;&#x4E3A;0.337&#x3001;0.612&#x3001;0.117&#x3001;0.9&#x3002;&#xFF08;green&#xFF09;
+&#x5750;&#x6807;&#x4E3A;0&#x3001;0&#x3002;
+&#x8D4B;&#x4E88;&#x6B63;&#x4EE5;&#x5148;sin&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x65F6;&#x2019;+&#x2018;&#x5206;&#x2019;/12&#x4E86;&#x3002;
+&#x8D4B;&#x4E88;&#x4F59;&#x4EE5;&#x5148;cos&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x65F6;&#x2019;+&#x2018;&#x5206;&#x2019;/12&#x4E86;&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;&#x7B97;&#x672F;&#x2018;&#x6B63;&#x2019;*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.5)&#x3001;&#x7B97;&#x672F;-(&#x2018;&#x4F59;&#x2019;)*(&#x2018;&#x534A;&#x5F84;&#x2019;*0.5)&#x3002;
+&#x63CF;&#x753B;&#x3002;
+&#x6062;&#x590D;&#x3002;
+
+&#xFF08;&#x753B;&#x4E00;&#x4E2A;&#x5C0F;&#x70B9;&#x5728;&#x4E2D;&#x95F4;&#xFF09;
+&#x5F27;&#x7EBF;&#x4E3A;0&#x3001;0&#x3001;&#x7B97;&#x672F;&#x2018;&#x7EBF;&#x5BBD;&#x2019;/3&#x3001;0&#x3001;&#x7B97;&#x672F;2*&#x3C0;&#x3002;
+&#x586B;&#x5145;&#x3002;</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer2">
+    <property name="text" translatable="yes">&#x989C;&#x8272;&#x4E3A;1&#x3001;0&#x3001;0&#x3001;1&#x3002;&#xFF08;RGBA &#x7EA2;&#xFF09;
+&#x4E0A;&#x8272;&#x3002;
+&#x989C;&#x8272;&#x4E3A;1&#x3001;1&#x3001;0&#x3001;1&#x3002;&#xFF08;&#x9EC4;&#xFF09;
+&#x5750;&#x6807;&#x4E3A;150&#x3001;10&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;120&#x3001;120&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;10&#x3001;150&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;120&#x3001;180&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;150&#x3001;290&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;180&#x3001;180&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;290&#x3001;150&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;180&#x3001;120&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;150&#x3001;10&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;150&#x3001;290&#x3002;
+&#x5750;&#x6807;&#x4E3A;10&#x3001;150&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;290&#x3001;150&#x3002;
+&#x5750;&#x6807;&#x4E3A;120&#x3001;120&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;180&#x3001;180&#x3002;
+&#x5750;&#x6807;&#x4E3A;120&#x3001;180&#x3002;
+&#x76F4;&#x7EBF;&#x5230;&#x4E3A;180&#x3001;120&#x3002;
+&#x63CF;&#x753B;&#x3002;</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer3">
+    <property name="text" translatable="yes">&#x989C;&#x8272;&#x4E3A;0&#x3001;0&#x3001;1&#x3001;1&#x3002;&#xFF08;&#x84DD;&#xFF09;
+&#x4E0A;&#x8272;&#x3002;
+&#x989C;&#x8272;&#x4E3A;1&#x3001;1&#x3001;1&#x3001;1&#x3002;&#xFF08;&#x767D;&#xFF09;
+&#x7EBF;&#x5BBD;&#x4E3A;10&#x3002;
+&#x5750;&#x6807;&#x4E3A;190&#x3001;150&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;150&#x3001;150&#x3001;40&#x3001;0&#x3001;&#x7B97;&#x672F; 2*&#x3C0;&#x3002;
+&#x5750;&#x6807;&#x4E3A;190&#x3001;70&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;150&#x3001;70&#x3001;40&#x3001;0&#x3001;&#x7B97;&#x672F; 2*&#x3C0;&#x3002;
+&#x5750;&#x6807;&#x4E3A;190&#x3001;230&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;150&#x3001;230&#x3001;40&#x3001;0&#x3001;&#x7B97;&#x672F; 2*&#x3C0;&#x3002;
+&#x5750;&#x6807;&#x4E3A;110&#x3001;150&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;70&#x3001;150&#x3001;40&#x3001;0&#x3001;&#x7B97;&#x672F; 2*&#x3C0;&#x3002;
+&#x5750;&#x6807;&#x4E3A;270&#x3001;150&#x3002;
+&#x5F27;&#x7EBF;&#x4E3A;230&#x3001;150&#x3001;40&#x3001;0&#x3001;&#x7B97;&#x672F; 2*&#x3C0;&#x3002;
+&#x63CF;&#x753B;&#x3002;</property>
+  </object>
+</interface>

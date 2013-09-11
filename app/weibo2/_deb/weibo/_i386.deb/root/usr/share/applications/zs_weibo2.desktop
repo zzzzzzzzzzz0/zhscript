@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Exec=/opt/zhscript/weibo2/start
+Name[zh_CN]=weibo 桌面端
+Name=weibo
+Icon=/opt/zhscript/weibo2/weibo.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;Network;
+

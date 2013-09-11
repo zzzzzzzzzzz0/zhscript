@@ -1,0 +1,17 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+赋予‘库名’以调用“L”、“libnotify.so”、“libnotify.so.1”、“libnotify.so.4”。
+定义“【‘库名’】通知域应用”以“调用”先调用“G i”、‘‘库名’’、“notify_init”、“c*”（app_name）了“、‘参数栈’”。
+定义“【‘库名’】notify_uninit”以“调用”先调用“G”、‘‘库名’’、“notify_uninit”了。
+定义“【‘库名’】通知域新增”以“调用”先调用“G &”、‘‘库名’’、“notify_notification_new”、
+	“c*”（summary）、“c*”（body）、“c*”（icon）、“&”（GtkWidget *attach）了“、
+	如果存在“参数2”并且‘参数2’那么‘参数2’否则“ ”、
+	‘参数1’、
+	如果存在“参数3”那么‘参数3’否则“NULL”、
+	如果存在“参数4”那么‘参数4’否则“NULL””。
+定义“【‘库名’】通知域显示”以“调用”先调用“G i”、‘‘库名’’、“notify_notification_show”、
+	“&”、“&”（GError **error）了“、‘参数1’、如果存在“参数2”那么‘参数2’否则“NULL””。
+定义“【‘库名’】通知域时间”以“调用”先调用“G”、‘‘库名’’、“notify_notification_set_timeout”、
+	“&”、“i”（timeout）了“、‘参数栈’”。
+定义“【‘库名’】通知域整值”以“调用”先调用“G”、‘‘库名’’、“notify_notification_set_hint_int32”、
+	“&”、“c*”（key）、“i”（value）了“、‘参数栈’”。

@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[zh_CN]=/usr/lib/zhscript/edit/icon.png
+Name[zh_CN]=zhscript编辑器
+Exec=/usr/lib/zhscript/edit/start.sh
+Name=zhscriptedit
+Icon=/usr/lib/zhscript/edit/icon.png
+Categories=GNOME;Development;
+

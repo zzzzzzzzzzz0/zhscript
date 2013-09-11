@@ -1,0 +1,12 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+（加载limitip.zs。）
+
+显示“
+<link rel="stylesheet" type="text/css" href="a.css" />
+<a href="download/">下载目录</a><a href="upload/">上传目录</a><a href="read/">阅读目录</a><br>
+<a href="upload.wzs">粘贴文字及上传文件</a><br>
+<a href="exec.wzs">执行脚本</a><br>
+<a href="setting.wzs">设置</a><br>
+
+<a href="test.wzs">test</a>
+”。

@@ -1,0 +1,86 @@
+遍历数组下代码
+	当‘参数1’先
+		等于-fj那么
+			赋予搞飞机【主】以，再来。
+	了。
+	别名帐号以参数1。
+	赋予号以搜索数组帐号、‘帐号’。
+	如果‘号’小于1那么先
+		隧道提示、帐号“ ‘帐号’ ”目前未记录，将在登入后记录。
+		赋予帐号【主】以‘帐号’。
+		如果存在密码【主】那么删除密码【主】。
+		再来。
+	了。
+	赋予帐号【主】以‘帐号之‘号’之1’。
+	赋予密码【主】以‘帐号之‘号’之2’。
+代码上、参数。
+
+
+
+标签页切换{2 NULL NULL}
+刷新专用网址{"http://weibo.com/messages" 4 "查看私信" A}
+	1)http://weibo.com/zzzzzzzzzzz0
+	2)http://weibo.com/message/talklist.php?uid=1904782934
+标签页切换{3 NULL NULL}
+mid2【主】(0-3)zzzzzzzzzzz_1 ：这样？
+延后填zzzzzzzzzzz_1 ：这样？通知{3}
+延后藏通知
+延后藏zzzzzzzzzzz_1 ：这样？通知
+复原我的首页http://weibo.com/messages
+刷新专用网址{"http://weibo.com/messages" 4 "查看私信" A}
+	1)http://weibo.com/zzzzzzzzzzz0
+	2)http://weibo.com/message/talklist.php?uid=1904782934
+	3)http://weibo.com/messages
+mid2【主】(0-3)zzzzzzzzzzz_1 ：是不是？
+延后填zzzzzzzzzzz_1 ：是不是？通知{3}
+延后藏通知
+延后藏zzzzzzzzzzz_1 ：是不是？通知
+复原我的首页http://weibo.com/messages
+刷新专用网址{"http://weibo.com/messages" 4 "查看私信" A}
+	1)http://weibo.com/zzzzzzzzzzz0
+	2)http://weibo.com/message/talklist.php?uid=1904782934
+	3)http://weibo.com/messages
+mid2【主】(0-3)zzzzzzzzzzz_1 ：有可能
+延后填zzzzzzzzzzz_1 ：有可能通知{3}
+延后藏通知
+延后藏zzzzzzzzzzz_1 ：有可能通知
+
+
+
+调用‘echo’、-ma、‘参数栈2’↙、/tmp/‘应用实名’.log，
+
+
+					h+='<script>setTimeout("window.close();",3000);</script>';
+
+
+										var s="e__(__('"+ai+"')"+a[i+1]+")";
+										z$('',s);
+										var v2=eval(s);
+										z$('',v2);
+
+	
+	别名新通知以参数1。
+	别名标题以参数2。
+	别名头像以参数3。
+	如果不存在标题那么赋予标题以。
+	如果不存在头像那么赋予头像以‘应用目录’/icon.png。
+	显示‘头像’↙‘标题’→‘新通知’↙。
+	
+	加载lib/notify4。
+	如果通知域应用weibo那么
+		通知域显示先通知域新增‘新通知’、‘标题’、‘头像’了。
+
+
+
+								var a=new Array('feed_msg_new','','notes','','small_Yellow',',0,1,0,1,1,1,1');
+											var s=\"e__(__('\"+ai+\"')\"+ai1+\")\";
+											var v2=eval(s);
+											me__('click',v2);
+
+
+
+						var s1=e__(e1,3,5,1).outerHTML;
+						var e2=e__(e1,3,5,3,2);
+						var s2=get_p_html__(e2,2,e2.outerHTML);
+						z$("通知",get_lnk__()+get_p_html__(e__(e1,3,5),3,s1+s2));
+						test_e__(e1);

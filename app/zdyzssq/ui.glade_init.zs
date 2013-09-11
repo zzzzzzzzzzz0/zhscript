@@ -1,0 +1,104 @@
+加载lib2/js.zs。
+加载lib2/config.zs。
+加载db.zs。
+
+隧道webkit、web、notebook、
+	代码、下代码
+		显示‘参数0’{‘参数’}↙。
+	上代码、
+	侦听、消息、、
+	侦听、装载完、下代码
+		隧道webkit、加强、web。
+	上代码、
+	侦听、z$、下代码
+		显示‘参数0’{‘参数’}↙。
+		当‘参数1’先
+			等于zhcw那么先
+				加载lib/curl4。
+				赋予curl以curl_easy_init。
+				赋予果以。
+				如果‘curl’那么先
+					赋予错以curl_easy_setopt‘curl’、CURLOPT_URL、http://www.zhcw.com/data-js/nowdata50.js。
+					加载lib/curle4。
+					赋予错以curl_easy_callback‘curl’、下代码
+						赋予【上】果以‘果’‘参数1’。
+						隧道不堵塞。
+					上代码。
+					赋予错以curl_easy_perform‘curl’。
+					curl_easy_cleanup‘curl’。
+				了。
+				加载lib/txtotxt4。
+				赋予果以调用‘iconv’、‘果’、gb18030、utf8。
+				<script>‘果’</script>。
+				退出。
+			了。
+			等于my那么先
+				<script>读取我的号码</script>。
+				退出。
+			了。
+			等于“my list”那么先
+				我的号码列表。
+				退出。
+			了。
+			等于g那么先
+				别名名以参数2。
+				如果存在‘名’【主】那么‘‘名’【主】’。
+				退出。
+			了。
+		了。
+	上代码、
+	侦听、zhscript:、下代码
+		如果迭代正则‘参数1’、^del([0-9]+)、下代码
+			删掉我的号码‘参数1’。
+			隧道webkit、刷新、web。
+		上代码、el那么退出。
+		迭代正则‘参数1’、(^\?|&)?([^=]+)=([^&]*)、下代码
+			赋予‘参数2’【主】以‘参数3’。
+		上代码、el。
+		插入我的号码。
+		隧道webkit、刷新、web。
+	上代码。
+隧道webkit、访问、about:blank、web。
+
+隧道侦听、点击、home、下代码
+	隧道webkit、访问、‘应用目录’/z.html、web#1。
+	隧道webkit、标签提示、‘参数0’、web#1。
+	隧道内容、notebook、1。
+上代码。
+隧道点击、home。
+
+定义新开页面【主】以下代码
+	别名标签提示以参数1。
+	赋予有以0。
+	隧道遍历、notebook、下代码
+		别名号以参数1。
+		如果隧道webkit、标签提示、web#‘号’等于‘标签提示’那么
+			赋予有【上】以‘号’，
+			跳出。
+	上代码。
+	如果不‘有’那么
+		隧道webkit、新开、web。
+	否则
+		隧道内容、notebook、‘有’。
+	隧道一次定时器、‘参数0’‘标签提示’、100、下代码
+		显示‘参数0’{‘参数数目’}↙。
+		隧道webkit、标签、、web。
+		隧道webkit、标签提示、‘参数1’、web。
+		隧道webkit、‘参数2’、‘参数3’、web。
+	上代码、‘参数栈’。
+上代码。
+
+隧道侦听、点击、yao、下代码
+	新开页面‘参数0’、访问、‘应用目录’/y.html。
+上代码。
+
+隧道侦听、点击、input、下代码
+	新开页面‘参数0’、访问、‘应用目录’/i.html。
+上代码。
+
+隧道侦听、点击、refresh、下代码
+	（赋予按钮以隧道webkit、标签提示、web。
+	如果‘按钮’那么
+		隧道点击、‘按钮’。）
+	隧道webkit、‘参数1’、web。
+上代码。

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <property name="icon_name">video-x-generic</property>
+    <child>
+      <object class="GtkDrawingArea" id="drawingarea1">
+        <property name="visible">True</property>
+      </object>
+    </child>
+  </object>
+</interface>

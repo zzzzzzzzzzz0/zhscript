@@ -1,0 +1,63 @@
+#!../l -S syn-html -E err-en --<go>
+<define> *^-^* <equ><code>
+	<echo><var>arg1</var><block>
+		<if><has><var>arg1</var><then>
+			={<var><var>arg1</var></var>}
+		<else>
+			<format> x</format>
+	</block><block><if><has>arg2<then>
+			<var>arg2</var>
+		<else>
+			LF
+	</block><go>
+</code><go>
+<define>LF<a>noarg</a><equ><text><asc>10</text><go>
+
+*^-^* arg<go>
+*^-^* arg.length<go>
+*^-^* arg0<go>
+<eval><var>*^-^*</var><sp>arg0<go>
+
+*^-^* arg<a>up</a><go>
+*^-^* arg.length<a>up</a><go>
+*^-^* arg0<a>up</a><go>
+
+*^-^* arg<a>main</a><go>
+*^-^* arg.length<a>main</a><go>
+*^-^* arg0<a>main</a><go>
+
+*^-^* arg<a>top</a><go>
+*^-^* arg.length<a>top</a><go>
+*^-^* arg0<a>top</a><go>
+
+<echo>args{<go>
+<echo><var>args</var><go>
+<echo>}LF<go>
+<if><var>arg.length</var><gt>1<then>
+	<echo>args2{<var>args2</var>}LF<go>
+
+<alias> @^-^@ <equ><text>*^-^*</text><go>
+
+@^-^@ window<go>
+
+<with><text>@^-^@ <text>callback<var>arg1</var></text></text><block>
+	<text></text><go>
+	0<go>
+	1<go>
+	2<go>
+	3<go>
+	4<go>
+	5<go>
+	6<go>
+	7<go>
+	8<go>
+	9<go>
+	10<go>
+	11<go>
+</block><go>
+
+@^-^@ keyword.length<go>
+@^-^@ keyword1<go>
+@^-^@ keyword2<go>
+@^-^@ keyword<var>keyword.length</var><go>
+@^-^@ keyword<go>

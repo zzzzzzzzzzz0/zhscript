@@ -1,0 +1,39 @@
+#!../gtkmmsh lib2/window1.glade --。
+别名“□”【主】以“隧道”。
+□窗口宽高为400、200。□窗口居中。□标题为‘参数0’。
+
+□代码为下代码
+	显示‘肇事者’--‘动作’/‘参数0’--‘参数’字符10。
+	如果‘肇事者’等于窗口那么先
+		当‘参数0’先
+			等于创建那么先
+				加载lib/unique4。
+				赋予app【主】以调用‘unique_app_new’、zhscript.demo2.unique、NULL。
+				显示app=‘app’字符10。
+				赋予在以调用‘unique_app_is_running’、‘app’。
+				显示running=‘在’字符10。
+				如果‘在’那么先
+					（赋予message以调用‘unique_message_data_new’。
+					调用‘unique_message_data_set_text’、‘message’、你好、-1。
+					调用‘unique_app_send_message’、‘app’、‘UNIQUE_ACTIVATE’、‘message’。
+					调用‘unique_message_data_free’、‘message’。）
+					调用‘发消息’、“‘app’说：“你好，再见！””、‘UNIQUE_ACTIVATE’、‘app’。
+					□终止。
+				了否则先
+					调用‘unique_app_watch_window’、‘app’、□窗。
+					调用‘加回调’、下代码
+						显示‘参数’字符10。
+						□插入、text、‘参数1’字符10、尾。
+					上代码、‘app’。
+					□内容、text、我是‘app’字符10。
+				了。
+				退出。
+			了。
+			等于销毁那么先
+				调用‘断开’、‘app’。
+				加载lib/unique4-。
+				退出。
+			了。
+		了。
+	了。
+上代码。

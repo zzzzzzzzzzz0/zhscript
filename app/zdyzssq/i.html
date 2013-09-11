@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script>
+function i__(n){
+	return document.forms[0][n];
+}
+function set__(xsq,r1,r2,r3,r4,r5,r6,b1){
+	i__("xsq").value=xsq;
+	i__("r1").value=r1;
+	i__("r2").value=r2;
+	i__("r3").value=r3;
+	i__("r4").value=r4;
+	i__("r5").value=r5;
+	i__("r6").value=r6;
+	i__("b1").value=b1;
+}
+</script>
+</head>
+<body>
+<form action="zhscript:" align=center>
+<input name=xsq size=9><input name=r1 
+size=2 type="number" max="33" min="1"><input name=r2 
+size=2 type="number" max="33" min="1"><input name=r3 
+size=2 type="number" max="33" min="1"><input name=r4 
+size=2 type="number" max="33" min="1"><input name=r5 
+size=2 type="number" max="33" min="1"><input name=r6 
+size=2 type="number" max="33" min="1"><input name=b1 
+size=2 type="number" max="16" min="1">
+<input type=submit value="提交">
+</form>
+<p align=center>
+<script>
+document.write(z$("my list"));
+</script>
+</p>
+<script>
+set__(z$("g","xsq"),z$("g","r1"),z$("g","r2"),z$("g","r3"),z$("g","r4"),z$("g","r5"),z$("g","r6"),z$("g","b1"));
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<text> </text>
+<var> </var>
+<asc>
+<!-- -->
+<a> </a>
+<go> <go>
+<oh>
+<next> <next>
+<sp> <sp>
+<block> </block>
+<eq> <ne> <le> <lt> <ge> <gt> <not> <and> <or>
+<if> <then> <else>
+<switch>
+<for> <break> <continue>
+<region> <out> <again>
+<set> top up lock lib main <equ> <delete>
+<define> noarg
+<alias>
+<has>
+<format> </format> format
+<code> </code> code
+<echo>
+<exec> <call>
+<load> <eval> <with>
+<exit> <return>
+
+arg args
+.length .
+keyword
+<null>
+callback
+window 

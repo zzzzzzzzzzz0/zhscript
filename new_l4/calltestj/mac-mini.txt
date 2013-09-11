@@ -1,0 +1,142 @@
+//mac i5 64
+void call_v__(){
+	void* func=(void*)v__;
+	__asm__ volatile ("callq *%0"::"m"( func ));
+}
+void call_l_v__(){
+	void* func=(void*)l_v__;
+	unsigned long l1=0;
+	__asm__ volatile ("callq *%1" "\n" "mov %%rax,%0":"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z0__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile (
+			"mov $0x0,%%edi\n"
+			"mov $0x0,%%al\n" "callq *%1\n" "mov %%rax,%0":"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z1__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile ("mov $0x1,%%esi\n" "mov $0x1,%%edi\n"
+			"mov $0x0,%%al\n" "callq *%1\n" "mov %%rax,%0":"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z2__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile ("mov $0x2,%%edx\n" "mov $0x1,%%esi\n" "mov $0x2,%%edi\n"
+			"mov $0x0,%%al\n" "callq *%1" "\n" "mov %%rax,%0":"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z3__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile ("mov $0x3,%%ecx\n" "mov $0x2,%%edx\n" "mov $0x1,%%esi\n" "mov $0x3,%%edi\n"
+			"mov $0x0,%%al\ncallq *%1\nmov %%rax,%0":"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z4__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile (
+			//"sub $0x20,%%rsp\n"
+			"mov $0x4,%%r8d\n"
+			"mov $0x3,%%ecx\n" "mov $0x2,%%edx\n" "mov $0x1,%%esi\n" "mov $0x4,%%edi\n"
+			"mov $0x0,%%al\n" "callq *%1\n" "mov %%rax,%0\n"
+			//"add $0x20,%%rsp"
+			:"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z5__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile (
+			//"sub $0x20,%%rsp\n"
+			"mov $0x5,%%r9d\n""mov $0x4,%%r8d\n"
+			"mov $0x3,%%ecx\n""mov $0x2,%%edx\n""mov $0x1,%%esi\n""mov $0x5,%%edi\n"
+			"mov $0x0,%%al\n""callq *%1\n""mov %%rax,%0\n"
+			//"add $0x20,%%rsp"
+			:"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z6__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile (
+			//"sub $0x20,%%rsp\n"
+			"mov %%rsp,%%rax\nmovl $0x6,(%%rax)\n"
+			"mov $0x5,%%r9d\n""mov $0x4,%%r8d\n"
+			"mov $0x3,%%ecx\n""mov $0x2,%%edx\n""mov $0x1,%%esi\n""mov $0x6,%%edi\n"
+			"mov $0x0,%%al\n""callq *%1\n""mov %%rax,%0\n"
+			//"add $0x20,%%rsp"
+			:"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+void call_l_z7__(){
+	void* func=(void*)l_z__;
+	unsigned long l1=0;
+	__asm__ volatile (
+			//"sub $0x30,%%rsp\n"
+			"mov %%rsp,%%rax\nmovl $0x7,0x8(%%rax)\nmovl $0x6,(%%rax)\n"
+			"mov $0x5,%%r9d\n""mov $0x4,%%r8d\n"
+			"mov $0x3,%%ecx\n""mov $0x2,%%edx\n""mov $0x1,%%esi\n""mov $0x7,%%edi\n"
+			"mov $0x0,%%al\n""callq *%1\n""mov %%rax,%0\n"
+			//"add $0x30,%%rsp"
+			:"=m"( l1 ):"m"( func ));
+	cout<<"l1="<<l1<<endl;
+}
+
+void call_l_z8__(void* func,bool b,int argc,unsigned long *argv){
+	unsigned long ax_qi4;
+#define sp_subx "$0x20"
+		__asm__ volatile (
+			"sub "sp_subx",%%rsp\n"
+			"mov %3,%%rbx\n"
+			"mov %2,%%rax\n"
+			//"cmp $0xa,%%rax\n""je case_10\n"
+			"cmp $0x9,%%rax\n""je case_9\n"
+			"cmp $0x8,%%rax\n""je case_8\n"
+			"cmp $0x7,%%rax\n""je case_7\n"
+			"cmp $0x6,%%rax\n""je case_6\n"
+			"cmp $0x5,%%rax\n""je case_5\n"
+			"cmp $0x4,%%rax\n""je case_4\n"
+			"cmp $0x3,%%rax\n""je case_3\n"
+			"cmp $0x2,%%rax\n""je case_2\n"
+			"cmp $0x1,%%rax\n""je case_1\n"
+			"cmp $0x0,%%rax\n""jl case_0\n"
+			//"mov %%rip,%%rcx\n""lea (%%rax,%%rcx,1),%%rax\n""jmpq *%%rax\n"
+			//"mov 0x2,%%rcx\n""mov 0x7,%%rdx\n""mov (%%rbx,%%rdx,8),(%%rsp,%%rcx,8)\n"
+			//"case_10:\n""mov 0x48(%%rbx),%%rax\n""mov %%rax,0x18(%%rsp)\n"
+			"case_9:\n""mov 0x40(%%rbx),%%rax\n""mov %%rax,0x10(%%rsp)\n"
+			"case_8:\n""mov 0x38(%%rbx),%%rax\n""mov %%rax,0x8(%%rsp)\n"
+			"case_7:\n""mov 0x30(%%rbx),%%rax\n""mov %%rax,(%%rsp)\n"
+			"case_6:\n""mov 0x28(%%rbx),%%r9\n"
+			"case_5:\n""mov 0x20(%%rbx),%%r8\n"
+			"case_4:\n""mov 0x18(%%rbx),%%rcx\n"
+			"case_3:\n""mov 0x10(%%rbx),%%rdx\n"
+			"case_2:\n""mov  0x8(%%rbx),%%rsi\n"
+			"case_1:\n""mov     (%%rbx),%%rdi\n"
+			"case_0:\n"
+			"mov $0x0,%%al\n""callq *%1\n""mov %%rax,%0\n"
+			"add "sp_sub",%%rsp\n"
+			:"=m"( ax_qi4 ):"m"( func ),"m"( argc ),"m"( argv ));
+	cout<<"ax_qi4="<<ax_qi4<<endl;
+}
+
+void call_ret_ca__(){
+	char**s1=new char*[1];
+	s1[0]=(char*)"123";
+
+	char*s=ret_ca__(s1[0]);
+	cout<<"{"<<s<<"}"<<endl;
+
+	void* func=(void*)ret_ca__;
+	__asm__ volatile (
+			"mov %2,%%rbx\n""mov (%%rbx),%%rdi\n"
+			"callq *%1\n" "mov %%rax,%0":"=m"( s ):"m"( func ),"m"( s1 ));
+	cout<<"{"<<s<<"}"<<endl;
+	delete s1;
+}

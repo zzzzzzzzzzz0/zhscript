@@ -1,0 +1,96 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+加载limitip.zs。
+
+如果存在id【上】那么先
+	如果‘id’等于+或者调用‘头匹配方法’、‘id’、+那么先
+		如果‘id’等于+那么
+			赋予use以2。
+		否则先
+			赋予name以调用‘子串方法’、‘id’、1。
+			赋予‘name’【主】以‘value’。
+			赋予use以1。
+		了。
+		调用‘执行【sqlite4】’、‘设置库’、“insert into setting__(name_,value_,use_)values('‘name’','‘value’',‘use’)”。
+	了否则先
+		如果存在value【上】那么先
+			调用‘得表格’、下代码
+				别名名以参数1。
+				别名用以参数2。
+				如果‘用’等于3那么
+					赋予value【上】以加密‘value’。
+				<<<<‘名’→‘value’。
+				赋予‘名’【主】以‘value’。
+			上代码、‘设置库’、“select name_,use_ from setting__ where id_=‘id’”。
+			调用‘执行【sqlite4】’、‘设置库’、“update setting__ set value_='‘value’' where id_=‘id’”。
+		了否则
+			调用‘执行【sqlite4】’、‘设置库’、“delete from setting__ where id_=‘id’”。
+	了。
+	显示<script>window.location.href="?"</script>。
+	退出。
+了。
+
+显示<table>。
+调用‘得表格’、下代码
+	别名id以参数1。
+	别名名以参数2。
+	别名值以参数3。
+	别名用以参数4。
+
+	如果‘用’等于3那么
+		赋予值以解密‘值’。
+	赋予值以调用‘加反斜杠’、‘值’、C。
+	显示“<form method="post">
+	<input type="hidden" value="‘id’" name="id">
+	<tr><td>
+	‘名’
+	</td><td>
+	<input type="”先如果‘用’等于3那么password否则text了“" value="‘值’" name="value">
+	</td><td>
+	<input type="submit" value="修改">
+	</td></tr>
+	</form>”。
+上代码、‘设置库’、“select id_,name_,value_,use_ from setting__ where use_=1 or use_=3”。
+
+范围先
+	调用‘得表格’、“遁出”、‘设置库’、“select id_ from setting__ where use_=1 and name_='上传目录'”。
+	显示“<form method="post"><input type="hidden" value="+上传目录" name="id">
+	<tr><td>上传目录</td><td><input type="text" value="‘上传目录’" name="value"></td><td><input type="submit" value="修改"></td></tr>
+	</form>”。
+了。
+显示</table>。
+
+显示<br>“注意：管理员命令需要正确设置sudo密码方能成功执行”<table>。
+调用‘得表格’、下代码
+	别名id以参数1。
+	别名名以参数2。
+	别名值以参数3。
+	
+	赋予‘名’【主】以‘值’。
+	显示“
+	<tr><td nowrap><a name="‘id’">脚本名</a></td><td>‘名’</td></tr>
+	<tr><td>代码</td><td><pre>‘值’</pre></td></tr>
+	<tr>
+	<td>
+	</td>
+	<form method="post">
+	<td>
+	<a href="edit.wzs?id=‘id’">修改</a> 
+	<a href="exec.wzs?id=‘id’" target=_blank>执行</a> | 
+	<input type="hidden" value="‘id’" name="id">
+	<input type="submit" value="删除">
+	</td>
+	</form>
+	</tr>
+	”。
+上代码、‘设置库’、“select id_,name_,value_ from setting__ where use_=2 or use_=4”。
+显示</table>。
+显示“<form method="post">
+<input type="hidden" value="+" name="id">
+<table>
+<tr><td>脚本名</td><td><input type="text" name="name"></td></tr>
+<tr><td>代码</td><td><textarea name="value" wrap="off"></textarea></td></tr>
+<tr><td></td><td><input type="submit" value="增加"></td></tr>
+</table>
+</form>”。
+
+显示“<a href="/">返回</a>”。

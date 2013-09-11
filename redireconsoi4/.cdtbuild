@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 3.1.0?>
+
+<ManagedProjectBuildInfo>
+<project id="redireconsoi.cdt.managedbuild.target.gnu.so.1724766960" name="Shared Library (Gnu)" projectType="cdt.managedbuild.target.gnu.so">
+<configuration artifactExtension="so" artifactName="redireconsoi" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.so.debug.640998538" name="Debug" parent="cdt.managedbuild.config.gnu.so.debug" postbuildStep="cp *.so ../../../o/redireconsoi.so">
+<toolChain id="cdt.managedbuild.toolchain.gnu.so.debug.1692390790" name="GCC Tool Chain" superClass="cdt.managedbuild.toolchain.gnu.so.debug">
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.so.debug.2081416442" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.so.debug">
+<option id="gnu.cpp.compiler.option.include.paths.528413479" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../../../gg"/>
+</option>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.debug.42386912" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.so.debug.202909319" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.so.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.so.debug.1092541305" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.so.debug.1123025710" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.so.debug"/>
+<macros/>
+</toolChain>
+</configuration>
+<configuration artifactExtension="so" artifactName="redireconsoi" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.so.release.659701078" name="Release" parent="cdt.managedbuild.config.gnu.so.release" postbuildStep="cp *.so ../../../o/redireconsoi.so">
+<toolChain id="cdt.managedbuild.toolchain.gnu.so.release.1737576752" name="GCC Tool Chain" superClass="cdt.managedbuild.toolchain.gnu.so.release">
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.so.release.488778350" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.so.release">
+<option id="gnu.cpp.compiler.option.include.paths.1031440916" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../../../gg"/>
+</option>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.release.1664743194" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release"/>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.so.release.1070807810" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.so.release"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.so.release.390284569" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.release"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.so.release.1879232221" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.so.release"/>
+<macros/>
+</toolChain>
+</configuration>
+</project>
+</ManagedProjectBuildInfo>

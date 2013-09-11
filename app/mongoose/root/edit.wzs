@@ -1,0 +1,54 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+加载limitip.zs。
+
+如果存在id【上】那么先
+	如果存在value【上】那么先
+		赋予1=2以。
+		调用‘参数处理’、、、1、下代码
+			如果‘1=2’不等于“”那么
+				赋予1=2【上】以‘1=2’,。
+			别名名以参数1。
+			如果存在‘名’那么
+				赋予1=2【上】以‘1=2’‘名’_='‘‘名’’'。
+		上代码、----、value、name、use。
+		调用‘执行【sqlite4】’、‘设置库’、“update setting__ set ‘1=2’ where id_=‘id’”。
+		显示<script>window.location.href="setting.wzs#‘id’"</script>。
+		退出。
+	了。
+	调用‘得表格’、下代码
+		别名id以参数1。
+		别名名以参数2。
+		别名值以参数3。
+		别名用以参数4。
+	
+		赋予‘名’【主】以‘值’。
+		显示“
+		<form method="post">
+		<table width=100% height=100%>
+		<input type="hidden" value="‘id’" name="id">
+		<tr height=20><td width=50>脚本名</td><td><input type="text" value="‘名’" name="name"></td></tr>
+		<tr><td>代码</td><td>
+		<textarea name="value" style= "width:100%;height:100%;overflow:scroll;">‘值’</textarea>
+		</td></tr>”。
+		如果‘用’等于2或者等于4那么先
+			显示“<tr height=20><td></td><td>”。
+			调用‘参数处理’、、、2、下代码
+				别名用2以参数1。
+				显示“<input type="radio" name="use" value="‘用2’"”。
+				如果‘用2’等于‘用’那么
+					显示“ checked="checked"”。
+				显示>‘参数2’。
+			上代码、----、
+			2、“不需要登入”、
+			4、“需要登入”。
+			显示</td></tr>。
+		了。
+		显示“
+		<tr height=20><td></td><td>
+		<input type="submit" value="修改"> | <a href="setting.wzs#‘id’">返回</a>
+		</td></tr>
+		</table>
+		</form>
+		”。（ wrap="off"）
+	上代码、‘设置库’、“select id_,name_,value_,use_ from setting__ where id_=‘id’”。
+了。

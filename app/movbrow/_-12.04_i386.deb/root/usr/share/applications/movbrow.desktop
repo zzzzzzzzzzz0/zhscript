@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Exec=/opt/zhscript/movbrow/start.sh
+Name[zh_CN]=电影浏览器
+Name=movbrow
+Icon=/opt/zhscript/movbrow/icon.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;AudioVideo;
+

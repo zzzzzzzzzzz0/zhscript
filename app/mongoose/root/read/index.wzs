@@ -1,0 +1,46 @@
+显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
+（加载limitip.zs。）
+加载lib/doscmd4。
+赋予目录以调用‘得目录名’、‘参数0’。
+
+如果存在f【上】那么先
+	加载lib/txtotxt4。
+	赋予内容以调用‘html2text’、‘目录’‘f’、1、1。
+	如果存在c【上】那么
+		赋予内容以调用‘iconv’、‘内容’、‘c’。
+	显示‘内容’。
+	退出。
+了。
+
+显示“<style>
+img{
+max-width:200px;
+max-height:200px;
+}
+body{
+font-size:12px;
+}
+div{
+float:left;
+padding:10px;
+text-align:center;
+border: 1px solid #DEDEDE;
+width:200px;
+}
+</style>”。
+赋予搜以调用‘dir.begin’、‘目录’、\.txt$、s l o0。
+循环先
+	赋予名以调用‘dir.next’、‘搜’。
+	如果‘名’等于“”那么跳出。
+	赋予名2以调用‘子串方法’、‘名’、0、-4。
+	范围先
+		迭代解释下代码
+			别名后缀以参数1。
+			赋予封面【上】以‘名2’.‘后缀’。
+			如果调用‘exist’、‘目录’‘封面’那么遁出。
+		上代码、png、jpg、gif。
+		赋予封面以index.jpg。
+	了。
+	显示“<div><a href="?f=‘名’"><img src="‘封面’"><br>‘名2’</a> <a href="?f=‘名’&c=gb18030">gbk</a></div>”。
+了。
+调用‘dir.end’、‘搜’。

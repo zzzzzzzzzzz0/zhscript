@@ -1,0 +1,8 @@
+`pkg-config --cflags gtkmm-2.4`
+
+err:module:import_dll Library libglib-2.0-0.dll (which is needed by L"G:\\gtkmmsh.exe") not found
+err:module:import_dll Library libglibmm-2.4-1.dll (which is needed by L"G:\\gtkmmsh.exe") not found
+err:module:import_dll Library libgobject-2.0-0.dll (which is needed by L"G:\\gtkmmsh.exe") not found
+err:module:import_dll Library libgtk-win32-2.0-0.dll (which is needed by L"G:\\gtkmmsh.exe") not found
+err:module:import_dll Library libgtkmm-2.4-1.dll (which is needed by L"G:\\gtkmmsh.exe") not found
+err:module:import_dll Library libsigc-2.0-0.dll (which is needed by L"G:\\gtkmmsh.exe") not found

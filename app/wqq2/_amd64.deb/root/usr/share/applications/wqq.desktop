@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Exec=/opt/zhscript/wqq2/start.sh
+Name[zh_CN]=w.qq桌面端
+Name=wqq
+Icon=/opt/zhscript/wqq2/128.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;Network;
+

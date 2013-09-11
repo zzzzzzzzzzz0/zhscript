@@ -1,0 +1,40 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src=1.js></script>
+<script>
+var friend_uin;
+function on_set_friend(uin) {
+	friend_uin = uin;
+}
+function on_new_msg(from, msg, time) {
+	var e = document.createElement("div");
+	e.innerHTML = from + " " + time + "<pre>" + msg + "</pre>";
+	var msgarea = $("msgarea");
+	if(!msgarea) {
+		z$("显示msgarea没找到换行");
+		return;
+	} 
+	msgarea.appendChild(e);
+}
+function send() {
+	var msg = $("msg").value;
+	$("msg").value = "";
+	on_new_msg("我", msg, "");
+	z$("调用‘发消息’、‘参数栈’", friend_uin, msg);
+}
+</script>
+<div style="width:100%; height:100%;">
+	<div id=msgarea style="overflow:auto; white-space:nowrap; width:100%; height:90%;"></div>
+	<div style="width:100%; height:10%;">
+		<table style="width:100%; height:100%;">
+			<tr>
+				<td>
+					<textarea id=msg style="width:100%; height:100%;"></textarea>
+				</td>
+				<td style="width:100px">
+					<a href="javascript:z$('进行魔法表情‘参数栈’',friend_uin)">魔法表情</a>
+					<input type=button value="发送" onclick="send()">
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

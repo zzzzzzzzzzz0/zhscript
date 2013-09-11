@@ -1,0 +1,22 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+
+赋予‘库名’以调用“L”、“‘参数0’.so”。
+调用先调用“G”、‘‘库名’’、“init__”、“$”、“$0”、“&”了、‘回调1【主】’。
+赋予“断开【‘库名’】”以调用“G”、‘‘库名’’、“unref__”、“&”。
+赋予“加回调【‘库名’】”以调用“G”、‘‘库名’’、“add_message_received__”、“c*”（回调代码）、“&”。
+赋予“发消息【‘库名’】”以调用“G”、‘‘库名’’、“send_message__”、“c*”、“i”、“&”。
+
+赋予“‘库名’*【库】”以调用“L”、“libunique-1.0.so.0”。
+赋予“unique_app_new【‘库名’】”以调用“G &”、‘‘库名’*’、“unique_app_new”、“c*”、“c*”。
+赋予“unique_app_is_running【‘库名’】”以调用“G i”、‘‘库名’*’、“unique_app_is_running”、“&”。
+赋予“unique_app_watch_window【‘库名’】”以调用“G”、‘‘库名’*’、“unique_app_watch_window”、“&”、“l”。
+赋予“unique_message_data_new【‘库名’】”以调用“G &”、‘‘库名’*’、“unique_message_data_new”。
+赋予“unique_message_data_set_text【‘库名’】”以调用“G”、‘‘库名’*’、“unique_message_data_set_text”、“&”、“c*”、“i”。
+赋予“UNIQUE_INVALID【‘库名’】”以0。
+赋予“UNIQUE_ACTIVATE【‘库名’】”以-1。
+赋予“UNIQUE_NEW【‘库名’】”以-2。
+赋予“UNIQUE_OPEN【‘库名’】”以-3。
+赋予“UNIQUE_CLOSE【‘库名’】”以-4。
+赋予“unique_app_send_message【‘库名’】”以调用“G”、‘‘库名’*’、“unique_app_send_message”、“&”、“i”、“&”。
+赋予“unique_message_data_free【‘库名’】”以调用“G”、‘‘库名’*’、“unique_message_data_free”、“&”。

@@ -1,0 +1,8 @@
+#Sat Apr 23 23:08:30 CST 2011
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997=
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997/PKG_CONFIG_PATH/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997/PKG_CONFIG_PATH/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997/PKG_CONFIG_PATH/value=/opt/gtkmm-win32/lib/pkgconfig
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.release.1303389678.157480997/appendContributed=false

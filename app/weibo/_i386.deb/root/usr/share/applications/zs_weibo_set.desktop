@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Version=1.0
+Exec=xdg-open .config/weibo_zs/
+Name[zh_CN]=weibo桌面端 设置
+Name=weibo set
+Icon=/opt/zhscript/weibo/icon.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;Network;

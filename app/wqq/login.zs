@@ -1,0 +1,186 @@
+如果不存在登录目标那么
+	赋予【主】登录目标以w.qq。
+如果不存在最小化到托盘那么
+	赋予【主】最小化到托盘以1。
+
+定义【主】开始登录以下代码
+	别名数据以参数1。
+	如果调用‘正则攫’、‘数据’、(\?|&)?([^=]+)=([^&]*)那么先
+		赋予【主】隐身以0。
+		赋予【主】窗口最小化以0。
+		赋予【主】最小化到托盘以0。
+		迭代数组下代码
+			当‘参数2’先
+				等于u那么赋予【顶】qq帐号以‘参数3’，跳出。
+				等于p那么赋予【顶】qq密码以‘参数3’，跳出。
+				等于yin那么先
+					赋予【主】隐身以1。
+					赋予【主】在线图标以‘应用目录’/yinshen.png。
+					跳出。
+				了。
+				等于xiao那么赋予【主】窗口最小化以1，跳出。
+				等于tuo那么赋予【主】最小化到托盘以1，跳出。
+				等于tag那么先
+					赋予【主】登录目标以‘参数3’。
+					赋予【上】目标以先当‘登录目标’先
+						等于w.qq那么
+							http://ui.ptlogin2.qq.com/cgi-bin/login?
+							style=4&
+							appid=1002101&
+							no_verifyimg=1&
+							s_url=http%3A%2F%2Fw.qq.com%2Fmain.shtml%3F816&
+							f_url=loginerroralert，
+							跳出。
+						等于web.qq那么
+							（http://web.qq.com）
+							http://ui.ptlogin2.qq.com/cgi-bin/login?
+							style=4&
+							appid=1002101&
+							enable_qlogin=0&
+							no_verifyimg=1&
+							s_url=http://web.qq.com/main.shtml
+							，
+							隧道窗口最大化，
+							跳出。
+						那么调用‘urldecode’、‘登录目标’，跳出。
+					了了。
+					跳出。
+				了。
+			了。
+		上代码、。
+		如果‘最小化到托盘’那么
+			隧道最小化到托盘、驻留、图标为‘离线图标’。
+		否则
+			隧道托盘应用、图标为‘离线图标’。
+
+		赋予号以搜索数组qq帐号、‘qq帐号’。
+		如果‘号’小于1那么
+			增至数组【顶】qq帐号、2、‘qq帐号’、加密密码‘qq密码’。
+		否则
+			赋予【顶】qq帐号之‘号’之2以加密密码‘qq密码’。
+
+		保存配置文件。
+
+		隧道webkit3、访问、‘目标’、浏览器#0。
+		隧道托盘提示、“‘qq帐号’ - ‘应用名’”。
+		1。退出。
+	了。
+上代码。
+定义【主】进行登录以下代码
+	如果隧道内容、notebook1不等于1那么退出。
+	别名网址以参数1。
+	
+	如果调用‘正则配’、‘网址’、^http://ui\.ptlogin2\.qq\.com/cgi-bin/login\?、l那么先
+		当‘登录目标’先
+			等于w.qq那么先
+				如果‘窗口最小化’那么
+					隧道窗口最小化。
+				隧道标题、“马上自动登入 - ‘应用名’”。
+				
+				（下面这句）
+				隧道webkit3、附加、document.getElementById("u").value="‘qq帐号’";、浏览器。
+				
+				基于“隧道webkit3、元素、‘参数栈’、浏览器”先
+					如果‘隐身’那么
+						webqq_type、传送、MouseEvents、click。
+					u、焦点。
+					u、属性、value、‘qq帐号’。
+					p、焦点。
+					p、属性、value、‘qq密码’。
+				了。
+				跳出。
+			了。
+			等于web.qq那么先
+				（（下面这几句）
+				隧道剪贴板、‘qq帐号’。
+				隧道webkit3、元素、内嵌页、ifram_login、u、焦点、浏览器。
+				隧道webkit3、粘贴、浏览器。
+				
+				基于“隧道webkit3、元素、内嵌页、ifram_login、‘参数栈’、浏览器”先
+					如果‘隐身’那么
+						loginStatePanel、6、2、传送、MouseEvents、click。
+					u、焦点。
+					u、属性、value、‘qq帐号’。
+					p、焦点。
+					p、属性、value、‘qq密码’。
+					login2qq_checkbox、传送、MouseEvents、click。
+				了。）
+				（下面这句）
+				隧道webkit3、附加、document.getElementById("u").value="‘qq帐号’";、浏览器。
+				
+				基于“隧道webkit3、元素、‘参数栈’、浏览器”先
+					如果‘隐身’那么
+						webqq_type、传送、MouseEvents、click。
+					u、焦点。
+					u、属性、value、‘qq帐号’。
+					p、焦点。
+					p、属性、value、‘qq密码’。
+				了。
+				跳出。
+			了。
+		了。
+		隧道定时器、延后登入、2000、下代码
+			隧道定时器、‘动作’、移除。
+			当‘登录目标’先
+				等于w.qq那么先
+					隧道webkit3、元素、login_button、传送、MouseEvents、click、浏览器#0。
+					跳出。
+				了。
+				等于web.qq那么先
+					（隧道webkit3、元素、内嵌页、ifram_login、login_button、传送、MouseEvents、click、浏览器#0。）
+					隧道webkit3、元素、login_button、传送、MouseEvents、click、浏览器#0。
+					跳出。
+				了。
+			了。
+
+			隧道定时器、是否在线检查、30000、下代码
+				如果‘登录目标’等于w.qq那么
+				如果不‘在线’那么
+					隧道窗口恢复。
+
+				如果隧道webkit3、元素、tipArea、样式、display、浏览器#0等于block那么先
+					赋予提示以隧道webkit3、元素、tipArea、文本、浏览器#0。
+					赋予提示以调用‘正则替’、‘提示’、([→↙]+)、。
+					如果‘提示’那么先
+						（显示‘颜色’‘绿字’m‘提示’‘颜色’m↙。）
+						如果不存在旧提示或者‘旧提示’不等于‘提示’那么先
+							赋予【主】旧提示以‘提示’。
+							进行通知‘提示’。
+						了。
+						如果调用‘正则配’、‘提示’、“与服务器失去联系”那么设置在线0。
+					了。
+				了。
+
+				如果隧道webkit3、元素、webos_eqq_tipsBox、样式、display、浏览器#0等于block那么先
+					赋予提示以隧道webkit3、元素、webos_eqq_tipsBox、文本、浏览器#0。
+					如果‘提示’那么先
+						如果不存在旧提示或者‘旧提示’不等于‘提示’那么先
+							赋予【主】旧提示以‘提示’。
+							进行通知‘提示’。
+						了。
+						（设置在线0。）
+					了。
+				了。
+			上代码。
+		上代码。
+		1。退出。
+	了。
+	（如果‘网址’等于http://web.qq.com/并且不‘在线’并且‘登录目标’等于web.qq那么先
+		隧道定时器、延后弹出、5000、下代码
+			隧道定时器、‘动作’、移除。
+			隧道webkit3、元素、startMenuSelfNick、1、传送、MouseEvents、click、浏览器#0。
+		上代码。
+		1。退出。
+	了。）
+	如果‘网址’等于http://web.qq.com/main.shtml并且不‘在线’并且‘登录目标’等于web.qq那么先
+		隧道定时器、延后弹出、5000、下代码
+			隧道定时器、‘动作’、移除。
+			赋予1以隧道webkit3、元素、dockItemList、1、得、浏览器#0。
+			（隧道提示、）显示
+				‘1’↙
+				先隧道webkit3、元素、‘1’、属性、title、浏览器#0了↙
+				先隧道webkit3、元素、‘1’、传送、MouseEvents、click、浏览器#0了↙。
+		上代码。
+		1。退出。
+	了。
+上代码。

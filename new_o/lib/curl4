@@ -1,0 +1,9 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+赋予‘库名’以调用“L”、“libcurl.so”、“libcurl.so.4”。
+定义“【‘库名’】【无参】curl_version”以“调用”先调用“G c*”、‘‘库名’’、“curl_version”了。
+定义“【‘库名’】curl_easy_init”以“调用”先调用“G &”、‘‘库名’’、“curl_easy_init”了。
+定义“【‘库名’】curl_easy_cleanup”以“调用”先调用“G”、‘‘库名’’、“curl_easy_cleanup”、“&”了“、‘参数栈’”。
+定义“【‘库名’】curl_easy_setopt”以“调用”先调用“G i”、‘‘库名’’、“curl_easy_setopt”、“&”（handle）、“i”（opt）、“c*”（param）了“、‘参数栈’”。
+定义“【‘库名’】【无参】CURLOPT_URL”以“10002”。
+定义“【‘库名’】curl_easy_perform”以“调用”先调用“G i”、‘‘库名’’、“curl_easy_perform”、“&”了“、‘参数栈’”。

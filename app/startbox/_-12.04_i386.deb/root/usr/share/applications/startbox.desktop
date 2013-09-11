@@ -1,0 +1,12 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Exec=/opt/zhscript/startbox/start.sh
+Name[zh_CN]=启动盒
+Name=startbox
+Icon=/opt/zhscript/startbox/icon.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;Utility;
+

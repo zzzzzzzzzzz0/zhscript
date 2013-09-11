@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<link rel="Shortcut Icon" href=favicon.ico>
+<style>
+<!--
+.red{color:red;}
+.blue{color:blue;}
+.zi{color:aa00aa;}
+.info{font-size:7px;vertical-align:top;}
+.rmb{text-align:right;}
+table{empty-cells:show;border-collapse:collapse;font-size:12px;}
+.jiang0{background-color:green;}
+.jiang1{color:white;background-color:red;}
+.jiang2{color:white;background-color:red;}
+.jiang3{color:white;background-color:red;}
+.jiang4{color:white;background-color:red;}
+.jiang5{color:white;background-color:red;}
+.jiang6{color:white;background-color:blue;}
+-->
+</style>
+<body>
+<script>
+var my_=new Array();
+</script>
+<script>
+document.write(z$("zhcw"));
+document.write(z$("my"));
+</script>
+<table border align=center>
+<tr>
+<th colspan=7>号码</th>
+<th class=jiang0></th>
+<th>期号</th>
+<th colspan=2>中奖号码</th>
+<th>开奖日期</th>
+<th colspan=2>奖金(元)</th>
+<th>销量(元)</th>
+<th>累计池(元)</th>
+<th>中奖注数</th>
+</tr>
+<script>
+var xsq0;
+for(var i=0;i<my_.length;i++){
+	var xsq=my_[i][0];
+	if(xsq<=QCODEn[0])
+		break;
+	document.write("<tr>");
+	for(var i1=1;i1<=7;i1++)
+		document.write("<td>"+my_[i][i1]+"</td>");
+	document.write("<td class=jiang0></td><td>"+(xsq==xsq0?"同上":xsq)+"</td><td colspan=8></td></tr>");
+	xsq0=xsq;
+}
+for(var i2=0;;i2++){
+	var xsq2=QCODEn[i2];
+	if(!xsq2)
+		break;
+	document.write("\n<tr>");
+	var r=CLA004n[xsq2];
+	var b=CLA005n[xsq2];
+	var has=0;
+	for(var i=0;i<my_.length;i++){
+		var xsq=my_[i][0];
+		if(xsq!=xsq2)
+			continue;
+		if(has>0)
+			document.write("<td colspan=9>同下</td></tr>\n<tr>");
+		var i_r=0;
+		for(var i1=1;i1<=6;i1++){
+			var r1=my_[i][i1];
+			var y=r&&r.indexOf(r1)>=0;
+			if(y)
+				i_r++;
+			document.write("<td"+(y?" class=red":"")+">"+r1+"</td>");
+		}
+		var b1=my_[i][7];
+		var y1=b==b1;
+		var jiang=0;
+		if(y1 && i_r==6)
+			jiang=1;
+		else if(!y1 && i_r==6)
+			jiang=2;
+		else if(y1 && i_r==5)
+			jiang=3;
+		else if(!y1 && i_r==5 || y1 && i_r==4)
+			jiang=4;
+		else if(!y1 && i_r==4 || y1 && i_r==3)
+			jiang=5;
+		else if(y1)
+			jiang=6;
+		if(jiang>0)
+			z$("中",jiang,i2,xsq2);
+		var jiang2=["","一","二","三","四","五","六"];
+		document.write("<td"+(y1?" class=blue":"")+">"+b1+"</td>");
+		document.write("<td class=jiang"+jiang+">"+jiang2[jiang]+"</td>");
+		has++;
+	}
+	if(has==0)
+		document.write("<td colspan=7></td><td class=jiang0></td>");
+	document.write("<td>"+xsq2+"</td>");
+	document.write("<td nowrap class=red>"+r+"</td>");
+	document.write("<td class=blue>"+b+"</td>");
+	document.write("<td nowrap>"+CLA003n[xsq2].substr(0,10)+"</td>");
+	document.write("<td class=rmb>"+CLA014n[xsq2]+"</td>");
+	document.write("<td class=rmb>"+CLA016n[xsq2]+"</td>");
+	document.write("<td class=rmb>"+CLA007n[xsq2]+"</td>");
+	document.write("<td class=rmb>"+CLA008n[xsq2]+"</td>");
+	document.write("<td nowrap title='"+CLA232n[xsq2]+"'>"+CLA135n[xsq2]+
+		"、"+CLA015n[xsq2]+
+		"、"+CLA017n[xsq2]+
+		"、"+CLA019n[xsq2]+
+		"、"+CLA021n[xsq2]+
+		"、"+CLA023n[xsq2]+
+		"、"+CLA025n[xsq2]+
+		"</td>");
+	//document.write("<td class=info>"+CLA232n[xsq2]+"</td>");
+	document.write("</tr>");
+}
+</script>
+</table>
+</body>
+</html>

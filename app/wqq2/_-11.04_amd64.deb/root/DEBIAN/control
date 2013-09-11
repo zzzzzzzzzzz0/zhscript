@@ -1,0 +1,9 @@
+Maintainer: zzzzzzzzzzz <zzzzzzzzzzzgg@gmail.com>
+Installed-Size: 950
+Depends: libgtkmm-2.4-1c2a, libglademm-2.4-1c2a, libwebkitgtk-1.0-0
+Section: web
+Priority: optional
+Homepage: http://code.google.com/p/zhscript/wiki/wqq_7z
+Description: w.qq桌面端
+ 这是对webqq所做的一个桌面应用，也就是说是不在通常浏览器里的而在小窗口里的webqq，另可以头像进行消息提醒（及托盘图标闪烁）、本地sqlite保存聊天记录、选登入w.qq还是web.qq。
+

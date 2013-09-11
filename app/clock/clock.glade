@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="main_window">
+    <child>
+      <object class="GtkDrawingArea" id="drawingarea1">
+        <property name="visible">True</property>
+        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
+        <property name="tooltip_text" translatable="yes">Alt+&#x9F20;&#x6807;&#x62D6;&#x52A8;
+&#x53E6;&#xFF1A;&#x53F3;&#x952E;&#x6709;&#x83DC;&#x5355;</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="menu1">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkImageMenuItem" id="w2">
+        <property name="label" translatable="yes">&#x5BBD;&#x52A0;&#x500D;</property>
+        <property name="visible">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
+        <property name="always_show_image">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="h2">
+        <property name="label" translatable="yes">&#x9AD8;&#x52A0;&#x500D;</property>
+        <property name="visible">True</property>
+        <property name="image">image3</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="w_2">
+        <property name="label" translatable="yes">&#x5BBD;&#x51CF;&#x534A;</property>
+        <property name="visible">True</property>
+        <property name="image">image4</property>
+        <property name="use_stock">False</property>
+        <property name="always_show_image">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="h_2">
+        <property name="label" translatable="yes">&#x9AD8;&#x51CF;&#x534A;</property>
+        <property name="visible">True</property>
+        <property name="image">image5</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem1">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="exit">
+        <property name="label" translatable="yes">&#x9000;&#x51FA;</property>
+        <property name="visible">True</property>
+        <property name="image">image2</property>
+        <property name="use_stock">False</property>
+        <property name="always_show_image">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-zoom-in</property>
+    <property name="icon-size">6</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-quit</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-zoom-in</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="stock">gtk-zoom-out</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="stock">gtk-zoom-out</property>
+  </object>
+</interface>

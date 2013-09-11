@@ -1,0 +1,65 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src=1.js></script>
+<script>
+function on_failed(msg) {
+	alert(msg);
+}
+function send(file, url) {
+	z$("发送‘参数栈’", file, url);
+}
+function on_biaoqing_clear() {
+	$("list").innerHTML = "";
+}
+function freeze_gif(i) {
+	var c = document.createElement('canvas');
+	var w = c.width = i.width;
+	var h = c.height = i.height;
+	c.getContext('2d').drawImage(i, 0, 0, w, h);
+	try {
+		i.src = c.toDataURL("image/gif");
+	} catch(e) {
+		for (var j = 0, a; a = i.attributes[j]; j++)
+			c.setAttribute(a.name, a.value);
+		i.parentNode.replaceChild(c, i);
+	}
+}
+function on_add_biaoqing(file, url) {
+	var span = document.createElement("span");
+	
+	var a = document.createElement("a");
+	a.href = "javascript:send('" + file + "','" + url + "')";
+	a.title= url;
+	
+	var img = document.createElement("img");
+	img.className = "freeze_gif";
+	img.onload = function() {
+		freeze_gif(this);
+	};
+	img.src = file;
+	a.appendChild(img);
+	
+	span.appendChild(a);
+	
+	$("list").appendChild(span);
+}
+</script>
+<style>
+	body {margin:0;}
+	.freeze_gif {width:100px; height:100px;}
+</style>
+<table style="width:100%;">
+	<tr>
+		<form onsubmit="send('',$('url').value);return false">
+		<td style="width:100px">
+			gif url: 
+		</td>
+		<td>
+			<input type=text id=url style="width:100%; height:100%;">
+		</td>
+		<td style="width:50px">
+			<input type=submit value="发送">
+		</td>
+		</form>
+	</tr>
+</table>
+<div id=list></div>

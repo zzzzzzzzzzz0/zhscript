@@ -1,0 +1,47 @@
+#!../l --。
+加载lib/gjke4。
+赋予1以下原样//以下是那部分代码
+				case'C':
+					switch(c){
+					case'\r':b=1;c='r';break;
+					case'\n':b=1;c='n';break;
+					case'\t':b=1;c='t';break;
+					case'\\':b=1;break;
+					case'\'':b=1;break;
+					case'"':b=1;break;
+					}
+					break;
+				case'R':
+					switch(c){
+					case'.':b=1;break;
+					case'$':b=1;break;
+					case'^':b=1;break;
+					case'*':b=1;break;
+					case'[':b=1;break;
+					case'-':b=1;break;
+					case']':b=1;break;
+					case'<':b=1;break;
+					case'>':b=1;break;
+					case'(':b=1;break;
+					case')':b=1;break;
+					case'|':b=1;break;
+					case'+':b=1;break;
+					case'?':b=1;break;
+					case'{':b=1;break;
+					case',':b=1;break;
+					case'}':b=1;break;
+					}
+					break;
+				case'x':
+					if(c<' '||c>=127){
+						sprintf(buf2+2,"%02x",(unsigned char)c);
+						b=2;
+					}
+					break;
+上原样。
+显示调用‘加反斜杠’、‘1’、C。
+显示字符10。
+显示调用‘加反斜杠’、‘1’、R。
+显示字符10。
+显示调用‘加反斜杠’、‘1’、Cx。
+显示字符10。

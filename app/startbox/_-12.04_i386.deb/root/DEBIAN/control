@@ -1,0 +1,9 @@
+Maintainer: zzzzzzzzzzz <zzzzzzzzzzzgg@gmail.com>
+Installed-Size: 850
+Depends: libgtkmm-2.4-1c2a, libglademm-2.4-1c2a
+Section: utils
+Priority: optional
+Homepage: http://code.google.com/p/zhscript/wiki/startbox_7z
+Description: 启动盒
+ 我总是有很多程序要启动，建了不少“快捷方式”，如何在面板放置也费了心思，那天突想不如自己写一个好了。
+
