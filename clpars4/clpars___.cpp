@@ -12,8 +12,6 @@
 #include "../new_gg/l4/keyword.h"
 #include "../new_gg/call_util.cpp"
 
-#define argc_max_ 16
-
 void* jsq_;
 callback3_2___ cb2_;
 dlle___ void init__(void* jsq,callback3_2___ cb2){
@@ -59,15 +57,28 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
         	*err=10;
         	return;
         }
-        if(sscanf(s,"%d",&argc1)!=1){
-        	sprintf(buf,"no int");
-        	*err=2;
-        	return;
-        }
-        if(argc1 < -3 || argc1 >= argc_max_){
-        	sprintf(buf,"< %d or >= %d", -3, argc_max_);
-        	*err=2;
-        	return;
+        switch(s[0]) {
+        case 'a':
+        	argc1 = -10;
+        	break;
+        case 'b':
+        	argc1 = -1;
+        	break;
+        case 'e':
+        	argc1 = -2;
+        	break;
+        case 'c':
+        	argc1 = -3;
+        	break;
+        case 'h':
+        	argc1 = -20;
+        	break;
+        default:
+            if(sscanf(s,"%d",&argc1)!=1){
+            	sprintf(buf,"no int");
+            	*err=2;
+            	return;
+            }
         }
 		clpars_item___* item=new clpars_item___(flag,info,code,argc1);
 		item_.push_back(item);
@@ -139,9 +150,10 @@ public:
     }
 };
 
-int clpars___::cb__(char*buf,int* err,void*ce,void* shangji,const char*flag,const char*flag2,int i1,
-		int argc,va_list& argv,int&i){
-	const char*argv2[argc_max_];
+int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_help,int i1,int&i,
+		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv)
+{
+	const char**argv2 = new const char*[argc];
 	int start;
 	char no1[16];
 	int i2=0;
@@ -151,7 +163,7 @@ int clpars___::cb__(char*buf,int* err,void*ce,void* shangji,const char*flag,cons
 		start=1;
 	}else
 		start=0;
-	if(!flag2[0]){
+	if(by_default){
 		argv2[i2++]=flag;
 	}
 	int has=0;
@@ -161,21 +173,24 @@ int clpars___::cb__(char*buf,int* err,void*ce,void* shangji,const char*flag,cons
     for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
     	clpars_item___* ci=*cii;
     	bool b=false;
-		switch(ci->argc_){
-		case -1:case -2:case -3:
-			if(!flag2[0])
-				b=true;
-			break;
-		}
-		if(b)
-			continue;
-    	if(!b && ci->flags_.size() <= 1){
-    		b = comp___::bool__(ci->flag_,flag2,ci->argc_,&src2,&arg1);
-    	}
-    	if(!b){
-    		list<string>::iterator si = find_if(ci->flags_.begin(), ci->flags_.end(),
-    				comp___(flag2,ci->argc_,&src2,&arg1) );
-    		b=(si != ci->flags_.end());
+    	if(by_help){
+    		b=(ci->argc_ == -20);
+    	} else {
+    		switch(ci->argc_){
+    		case -1:case -2:case -3:
+    			if(by_default)
+    				continue;
+    			break;
+    		}
+        	if(!b){
+        		if(by_default) {
+            		b = comp___::bool__(ci->flag_,flag2,ci->argc_,&src2,&arg1);
+        		} else {
+					list<string>::iterator si = find_if(ci->flags_.begin(), ci->flags_.end(),
+							comp___(flag2,ci->argc_,&src2,&arg1) );
+					b=(si != ci->flags_.end());
+        		}
+        	}
     	}
     	if(b){
     		has++;
@@ -184,30 +199,34 @@ int clpars___::cb__(char*buf,int* err,void*ce,void* shangji,const char*flag,cons
     			code=ci->info_.c_str();
     		else
     			code=ci->code_.c_str();
-    		if(has==1){
-    			if(ci->argc_ >= 0){
-					int argc2 = ci->argc_ + start;
-					for(;i2<argc2;i2++,i++){
-						argv2[i2] = va_arg(argv, char*);
+			if(by_help){
+			} else {
+				if(has==1){
+					if(ci->argc_ >= 0 || ci->argc_ == -10){
+						int argc2 = start + (ci->argc_ == -10 ? argc - i : ci->argc_);
+						for(;i2<argc2;i2++,i++){
+							argv2[i2] = va_arg(argv, char*);
+						}
+						if(i>argc){
+							sprintf(buf,"'%s'(%d) no arg",flag2,ci->argc_);
+							*err=1;
+							break;
+						}
+					}else{
+						i2_old = i2;
 					}
-					if(i>argc){
-						sprintf(buf,"'%s' no arg",flag2);
-						*err=1;
+    			}
+				switch(ci->argc_){
+				case -1:case -2:case -3:
+	    			i2 = i2_old;
+					switch(ci->argc_){
+					case -1:case -2:
+						argv2[i2++] = arg1.c_str();
+					case -3:
+						argv2[i2++] = flag;
 						break;
 					}
-    			}else{
-    				i2_old = i2;
-    			}
-    		}
-    		if(ci->argc_ < 0){
-    			i2 = i2_old;
-				switch(ci->argc_){
-				case -1:case -2:
-					argv2[i2++] = arg1.c_str();
-				case -3:
-					argv2[i2++] = flag;
-					break;
-				}
+	    		}
     		}
     		cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
 			switch(*err){
@@ -219,40 +238,54 @@ int clpars___::cb__(char*buf,int* err,void*ce,void* shangji,const char*flag,cons
     			break;
     	}
     }
+    delete argv2;
 	return has;
 }
 
-void clpars___::par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no){
-	char*flag;
-	int i1=0;
-    for (int i = from; i < argc; ){
-        flag = va_arg(argv, char*);
-        if(!flag){
-        	sprintf(buf,"is null");
-        	*err=10;
-        	return;
-        }
-        i++;
-
-        int has=cb__(buf,err,ce,shangji,flag,flag,0,argc,argv,i);
-		if(*err)
-			return;
-        if(has)
-        	continue;
-
-		if(no){
-			++i1;
-		}
-		has=cb__(buf,err,ce,shangji,flag,"",i1,argc,argv,i);
-		if(*err)
-			return;
-        if(has)
-        	continue;
-
-    	sprintf(buf,"no parse");
-    	*err=3;
-    	return;
+int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
+		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,bool no)
+{
+    if(!flag){
+    	sprintf(buf,"is null");
+    	*err=10;
+    	return 1;
     }
+    i++;
+
+    int has=cb__(flag,flag,false,by_help,0,i,buf,err,ce,shangji,argc,argv);
+	if(*err)
+		return 1;
+    if(has)
+    	return 0;
+
+    if(by_help)
+    	return 0;
+
+    if(no)
+		++i1;
+	has=cb__(flag,"",true,by_help,i1,i,buf,err,ce,shangji,argc,argv);
+	if(*err)
+		return 1;
+	if(has)
+		return 0;
+
+	sprintf(buf,"no parse");
+	*err=3;
+	return 1;
+}
+
+void clpars___::par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no){
+	int i1=0,i = from;
+	if(argc == 0)
+		par__(i1,i,"",true,buf,err,ce,shangji,argc,argv,no);
+	else {
+		for (; i < argc; ){
+			switch(par__(i1,i,va_arg(argv, char*),false,buf,err,ce,shangji,argc,argv,no)){
+			case 1:
+				return;
+			}
+		}
+	}
 }
 
 void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange){
