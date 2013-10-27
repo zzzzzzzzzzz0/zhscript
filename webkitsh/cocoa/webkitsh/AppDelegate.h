@@ -14,6 +14,7 @@
     NSMutableArray* windows_;
     NSString* zhscript_2_;
     unsigned long zhscript_len_;
+    NSString* app_path_;
     NSOperationQueue *oq_;
 }
 

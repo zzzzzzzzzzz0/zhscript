@@ -67,24 +67,6 @@
             ReferencedContainer = "container:webkitsh.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "/Users/moyeasoft/Documents/src/test.zs"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/moyeasoft/Documents/src/kw.zs"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/moyeasoft/Documents/opt/writedevice.app/Contents/MacOS/webkitsh1.zs"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/moyeasoft/Documents/opt/longcat.app/Contents/MacOS/webkitsh1.zs"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

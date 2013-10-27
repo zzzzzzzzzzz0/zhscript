@@ -234,7 +234,8 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
         }
         w=[self get_window__:p0 :page_num :p1];if(!w)return;
         //nil
-        NSURL* baseurl=[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+        //[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]
+        NSURL* baseurl=[NSURL fileURLWithPath:app_path_ isDirectory:YES];
 		for(size_t i=3; i<[p count]; i++) {
 			NSString* p3=[p objectAtIndex:i];
 			if(++i >= [p count]) {
@@ -490,6 +491,8 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
 		err=l4_.def_new__("使",s.c_str(),true,false,l4_main_qu_);
     }
 	if(!err){
+        app_path_ = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/../MacOS"];
+        
 		err=l4_.jieshi__(l4_main_qu_);
 		if(err==errinfo_src_file_){
 			err=0;

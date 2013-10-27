@@ -374,7 +374,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = $HOME/Documents/src/zhscript/trunk/new_gg;
+				USER_HEADER_SEARCH_PATHS = ../../new_gg;
 			};
 			name = Debug;
 		};
@@ -399,7 +399,7 @@
 				INSTALL_OWNER = zhscript;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = $HOME/Documents/src/zhscript/trunk/new_gg;
+				USER_HEADER_SEARCH_PATHS = ../../new_gg;
 			};
 			name = Release;
 		};
