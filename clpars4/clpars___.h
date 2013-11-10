@@ -20,11 +20,14 @@ public:
 	string info_;
 	int argc_;
 	string code_;
-	clpars_item___(const char*flag,const char*info,const char*code,int argc1){
+	char type_;
+	clpars_item___(const char*flag,const char*info,const char*code,
+			int argc1,char type){
 		flag_=flag;
 		info_=info;
 		code_=code;
 		argc_=argc1;
+		type_=type;
 
     	stringstream ss(flag);
     	string s;

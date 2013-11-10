@@ -57,42 +57,50 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
         	*err=10;
         	return;
         }
+        char type=' ';
         switch(s[0]) {
         case 'a':
-        	argc1 = -10;
-        	break;
         case 'b':
-        	argc1 = -1;
-        	break;
         case 'e':
-        	argc1 = -2;
-        	break;
         case 'c':
-        	argc1 = -3;
-        	break;
         case 'h':
-        	argc1 = -20;
-        	break;
+			type=s[0];
+        	if(!s[1]) {
+				argc1=0;
+				break;
+        	}
+        	s++;
         default:
             if(sscanf(s,"%d",&argc1)!=1){
             	sprintf(buf,"no int");
             	*err=2;
             	return;
             }
+            switch(argc1){
+            case -1:
+            	type='b';
+            	break;
+            case -2:
+            	type='e';
+            	break;
+            case -3:
+            	type='c';
+            	break;
+            }
         }
-		clpars_item___* item=new clpars_item___(flag,info,code,argc1);
+		clpars_item___* item=new clpars_item___(flag,info,code,argc1,type);
 		item_.push_back(item);
     }
 }
 
 class comp___ {
 private:
-	int type_;
+	char type_;
 	const char*s_;
 	const char**src2_;
 	string*arg1_;
 public:
-	comp___(const char*s, int type,const char**src2,string*arg1) {
+	comp___(const char*s, char type,const char**src2,string*arg1) {
 		s_ = s;
 		type_ = type;
 		src2_=src2;
@@ -101,14 +109,14 @@ public:
     bool operator () (string& s2) {
         return bool__(s2, s_, type_, src2_,arg1_);
     }
-    static bool bool__(const string&s2,const string&s,int type,const char**src2,string*arg1) {
+    static bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
     	bool b=false;
 		switch(type){
-		case -1:case -2:case -3:
+		case 'b':case 'e':case 'c':
 			{
 				size_t i;
 				switch(type){
-				case -2:
+				case 'e':
 					i=s.rfind(s2);
 					break;
 				default:
@@ -116,26 +124,26 @@ public:
 					break;
 				}
 				switch(type){
-				case -1:
+				case 'b':
 					b=(i == 0);
 					break;
-				case -2:
+				case 'e':
 					b=(i == s.size()-s2.size());
 					break;
-				case -3:
+				case 'c':
 					b=(i != string::npos);
 					break;
 				}
 				if(b){
 					*src2 = s2.c_str();
 					switch(type){
-					case -1:
+					case 'b':
 						*arg1 = s.substr(s2.size());
 						break;
-					case -2:
+					case 'e':
 						*arg1 = s.substr(0, s.size()-s2.size());
 						break;
-					case -3:
+					case 'c':
 						*arg1 = s;
 						break;
 					}
@@ -154,15 +162,13 @@ int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_hel
 		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv)
 {
 	const char**argv2 = new const char*[argc];
-	int start;
 	char no1[16];
-	int i2=0;
+	int start=0,i2=0;
 	if(i1>0){
 		sprintf(no1,"%d",i1);
 		argv2[i2++]=no1;
-		start=1;
-	}else
-		start=0;
+		start++;
+	}
 	if(by_default){
 		argv2[i2++]=flag;
 	}
@@ -174,20 +180,20 @@ int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_hel
     	clpars_item___* ci=*cii;
     	bool b=false;
     	if(by_help){
-    		b=(ci->argc_ == -20);
+    		b=(ci->type_ == 'h');
     	} else {
-    		switch(ci->argc_){
-    		case -1:case -2:case -3:
+    		switch(ci->type_){
+    		case 'b':case 'e':case 'c':
     			if(by_default)
     				continue;
     			break;
     		}
         	if(!b){
         		if(by_default) {
-            		b = comp___::bool__(ci->flag_,flag2,ci->argc_,&src2,&arg1);
+            		b = comp___::bool__(ci->flag_,flag2,ci->type_,&src2,&arg1);
         		} else {
 					list<string>::iterator si = find_if(ci->flags_.begin(), ci->flags_.end(),
-							comp___(flag2,ci->argc_,&src2,&arg1) );
+							comp___(flag2,ci->type_,&src2,&arg1) );
 					b=(si != ci->flags_.end());
         		}
         	}
@@ -202,8 +208,15 @@ int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_hel
 			if(by_help){
 			} else {
 				if(has==1){
-					if(ci->argc_ >= 0 || ci->argc_ == -10){
-						int argc2 = start + (ci->argc_ == -10 ? argc - i : ci->argc_);
+					switch(ci->type_){
+					case 'b':case 'e':case 'c':
+						argv2[i2++] = arg1.c_str();
+						start++;
+						break;
+					}
+					if(ci->argc_ >= 0 || ci->type_ == 'a'){
+						int argc2 = start + (ci->type_ == 'a' ?
+								argc - i : ci->argc_);
 						for(;i2<argc2;i2++,i++){
 							argv2[i2] = va_arg(argv, char*);
 						}
@@ -212,21 +225,11 @@ int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_hel
 							*err=1;
 							break;
 						}
-					}else{
-						i2_old = i2;
 					}
-    			}
-				switch(ci->argc_){
-				case -1:case -2:case -3:
+	    			i2_old = i2;
+				}else{
 	    			i2 = i2_old;
-					switch(ci->argc_){
-					case -1:case -2:
-						argv2[i2++] = arg1.c_str();
-					case -3:
-						argv2[i2++] = flag;
-						break;
-					}
-	    		}
+    			}
     		}
     		cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
 			switch(*err){
