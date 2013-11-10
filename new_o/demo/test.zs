@@ -10,16 +10,6 @@
 显示调用‘ul’。显示字符10。
 显示调用‘c’。显示字符10。
 
-调用‘Z’。
-调用‘Z’、a。
-调用‘Z’、a、bb。
-调用‘Z’、a、bb、ccc。
-调用‘Z’、a、bb、ccc、dddd。
-调用‘Z’、a、bb、ccc、dddd、eeeee。
-调用‘Z’、a、bb、ccc、dddd、eeeee、ffffff。
-调用‘Z’、a、bb、ccc、dddd、eeeee、ffffff、ggggggg。
-调用‘Z’、a、bb、ccc、dddd、eeeee、ffffff、ggggggg、hhhhhhhh。
-
 显示{先调用‘ret_ca’、123了}字符10。
 显示{先调用‘ret_i’、-1了}字符10。
 显示{先调用‘ret_l’、-1了}字符10。
