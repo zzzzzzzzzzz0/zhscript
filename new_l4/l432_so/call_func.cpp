@@ -13,7 +13,11 @@
 unsigned long int call_func2__(void*func,bool ret,int argc,call_data_type___ *argv){
 	unsigned long int ax_qi4;
 	//以下是汇编密集地方，不能乱插语句
-#ifdef ver_loongson_
+#ifdef ver_no_asm_16_
+#include "call_func-no-asm-16.inc"
+#elif ver_no_asm_32_
+#include "call_func-no-asm-32.inc"
+#elif defined( ver_loongson_ )
 #include"call_func-loongson.inc"
 #elif defined( 	ver_mac_mini_ )
 #include"call_func-mac-mini.inc"
@@ -33,6 +37,19 @@ unsigned long int call_func2__(void*func,bool ret,int argc,call_data_type___ *ar
 #endif
 	//以上是汇编密集地方，不能乱插语句
 	return ax_qi4;
+
+	/*if(!ret) {
+		if(argc <= 0) {
+			typedef void (*func_vv___)();
+			((func_vv___)func)();
+		} else {
+			typedef void (*func_v___)(call_data_type___ *argv);
+			((func_v___)func)(argv);
+		}
+		return 0;
+	}
+	typedef unsigned long int (*func___)(call_data_type___ *argv);
+	return ((func___)func)(argv);*/
 }
 #pragma GCC pop_options
 

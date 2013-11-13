@@ -95,11 +95,11 @@ dlle___ const char* l4_errinfo__(jieshiqi___* l4,int err){
 	l4->errinfo_.get_file__(l4->args_.err_file_);
 	return l4->errinfo_[err];
 }
-dlle___ void l4_err_out__(jieshiqi___* l4, const char* ret, int err, int by) {
+dlle___ void l4_err_out2__(string& s, jieshiqi___* l4, const char* ret, int err, int by) {
+	s = "";
 	if(err) {
-		cerr << endl;
 		if(ret)
-			cerr << ret;
+			s += ret;
 		switch(by) {
 		case 0:
 			break;
@@ -108,11 +108,20 @@ dlle___ void l4_err_out__(jieshiqi___* l4, const char* ret, int err, int by) {
 				err -= jieshiqi_err_;
 				break;
 			}
-			cerr << " err" << err << endl;
+			s += " err";
+			s += l2s__(err);
 			return;
 		}
-		cerr << l4_err__(l4) << l4_errinfo__(l4, err) << endl;
+		s += l4_err__(l4);
+		s += l4_errinfo__(l4, err);
 		l4_err_clear__(l4);
+	}
+}
+dlle___ void l4_err_out__(jieshiqi___* l4, const char* ret, int err, int by) {
+	if(err) {
+		string s;
+		l4_err_out2__(s, l4, ret, err, by);
+		cerr << endl << s << endl;
 	}
 }
 dlle___ void l4_go__(jieshiqi___* l4, int kw) {

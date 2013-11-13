@@ -66,6 +66,7 @@ int kws_zhujie_[]={kwst_z_,keyword_zhujieshi_,keyword_zhujiezhong_,keyword_no_};
 int kws_jiehe_[]={kwst_len_,2,keyword_jieheshi_,keyword_jiehezhong_,};
 
 syn___::syn___() {
+	has_=false;
 }
 
 syn___::~syn___() {
@@ -94,6 +95,7 @@ int syn___::get_file__(const string& path){
 		err_<<l2s__(i)<<"/"<<l2s__(keywords_length_);
 		return errinfo_num_;
 	}
+	has_=true;
 	return 0;
 }
 

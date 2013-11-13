@@ -232,6 +232,10 @@ int jieshiqi___::x__(int kw,qu___* qu,size_t& offi,size_t to,string& buf,int kw0
 	return 0;
 }
 
+#ifdef ver_android_
+extern void android_log__(const string& s);
+#endif
+
 int jieshiqi___::echo__(deque<string>* p,string& buf,int kw0){
 	string s;
 	for(deque<string>::iterator li=p->begin();li!=p->end();++li)
@@ -239,7 +243,11 @@ int jieshiqi___::echo__(deque<string>* p,string& buf,int kw0){
 	if(args_.is_server_pages_)
 		buf += s;
 	else {
+#ifdef ver_android_
+		android_log__(s);
+#else
 		cout<<s;
+#endif
 		if(kw0!=keyword_no_) {
 			//不利于“解释”的调试
 			buf+=s;

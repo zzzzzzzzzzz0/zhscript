@@ -71,10 +71,20 @@ int file___::name__(const string& filename,string& ret){
 	return 0;
 }
 
+#ifdef ver_android_
+extern int aam_get_file__(const char* filename, string& ret);
+#endif
+
 int file___::get__(const string& filename,string& filename1,string& ret){
 	err_.del__();
-	int err=name__(filename,filename1);
-	if(err){
+	int err;
+#ifdef ver_android_
+	if((err = aam_get_file__(filename.c_str(), ret))){
+		err_ << filename;
+		return err;
+	}
+#else
+	if((err=name__(filename,filename1))){
 		err_<<filename;
 		return err;
 	}
@@ -97,6 +107,7 @@ int file___::get__(const string& filename,string& filename1,string& ret){
 
 	ret=buf;
 	delete buf;
+#endif
 
 	return 0;
 }

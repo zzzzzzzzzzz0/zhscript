@@ -48,6 +48,7 @@ using namespace std;
 class syn___ {
 private:
 	string keywords_[keywords_length_];
+	bool has_;
 	string path_;
 	int find_kw__(const string& text,size_t offi,int kws[]);
 	int find__(const string& text,size_t& offi,unsigned long mask);
@@ -56,7 +57,7 @@ public:
 	virtual ~syn___();
 	int get_file__(const string& path);
 	const string& operator[](int i){return keywords_[i];}
-	bool has__(){return !path_.empty();}
+	bool has__(){return has_;}
 	const string& path__(){return path_;}
 	int find__(const string& text,size_t& offi,int& text_cnt,int&yuanyang_cnt,int&code_cnt,
 			unsigned long mask,unsigned long mask_text,list<string>* rems=NULL,int* text_zhujie=NULL);
