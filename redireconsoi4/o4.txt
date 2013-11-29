@@ -1,0 +1,150 @@
+class fd___ {
+private:
+	int fd_[2];
+	std::string* script_;
+	int fileno_;
+	int* ret_;
+	std::string buf_;
+public:
+	fd___(std::string* script, int fileno, int* ret) {
+		script_ = script;
+		fileno_ = fileno;
+		ret_ = ret;
+	}
+	bool pipe__() {
+		if(script_->empty())
+			return true;
+		return pipe(fd_) == 0;
+	}
+	bool dup2__() {
+		if(script_->empty())
+			return true;
+		close(fd_[0]);
+		if (dup2(fd_[1], fileno_) == -1)
+			return false;
+		return false;
+	}
+	void close_1__() {
+		if(!script_->empty())
+			close(fd_[1]);
+	}
+	void close_0__() {
+		if(!script_->empty())
+			close(fd_[0]);
+	}
+	int read__(callback2_2___ cb,void*jsq,void*shangji,int*err,void*ce) {
+		if(script_->empty())
+			return -1;
+		char c;
+		int count = read( fd_[0], &c, sizeof(c) );
+		if(count > 0){
+			if(c == '\n' || c == '\r') {
+				cb__(cb,jsq,shangji,err,ce);
+				if(*err){
+					return 1;
+				}
+			} else if(ret_ && c == ctrl0_) {
+				read( fd_[0], ret_, sizeof(*ret_) );
+			} else
+				buf_ += c;
+			return 0;
+		}
+		cb__(cb,jsq,shangji,err,ce);
+		return -1;
+	}
+	void cb__(callback2_2___ cb,void*jsq,void*shangji,int*err,void*ce) {
+		if(!buf_.empty()) {
+			cb(jsq,shangji,err,ce,script_->c_str(),false,NULL,1,buf_.c_str());
+			buf_.clear();
+		}
+	}
+};
+
+
+	int ret = 0;
+	int fds_len = 2;
+	fd___ fds[] = {
+			fd___(&script,		STDOUT_FILENO, &ret),
+			fd___(&script_err,	STDERR_FILENO, NULL),
+	};
+	for(int i = 0; i < fds_len;)
+		if(!fds[i++].pipe__())
+			return 261;
+	pid_t pid;
+	if ((pid = fork()) == -1)
+		return 262;
+	if (pid == 0) {
+		for(int i = 0; i < fds_len;)
+			if(!fds[i++].dup2__())
+				exit(1);
+		ret = system(cmd);
+		write(STDOUT_FILENO, &ctrl0_,	sizeof(ctrl0_));
+		write(STDOUT_FILENO, &ret,		sizeof(ret));
+		exit(0);
+	}
+	for(int i = 0; i < fds_len;)
+		fds[i++].close_1__();
+	if(!script_info.empty()) {
+		char buf[32];
+		sprintf(buf, "%d", pid);
+		cb(jsq,shangji,err,ce,script_info.c_str(),false,NULL,2,buf,"p");
+		if(*err){
+			return 264;
+		}
+	}
+	int err2 = 0;
+	for(;;) {
+		int b = 0;
+		for(int i = 0; i < fds_len;) {
+			switch(fds[i++].read__(cb,jsq,shangji,err,ce)) {
+			case 1:
+				err2 = 263;
+				break;
+			case -1:
+				b++;
+				break;
+			}
+		}
+		if(err2 || b == fds_len)
+			break;
+	}
+	for(int i = 0; i < fds_len;)
+		fds[i++].close_0__();
+	if(err2)
+		return err2;
+	int status;
+	pid = waitpid(pid, &status, WNOHANG);
+	return get_exit__(ret);
+}
+*/
+
+/*
+dlle___ int o4__(int*err,char*buf,long bufsiz,callback2_2___ cb,void*jsq,void*shangji,void*ce,char*script,char*cmd){
+	fflush(stdout);
+	int ret=0;
+	FILE*f=popen(cmd,"r");
+	if(!f)
+		ret=261;
+	else{
+		char*s;
+		for(;(s=fgets(buf,bufsiz,f));){
+			for(;*s;s++){
+				if(*s=='\n'||*s=='\r'){
+					*s=0;
+					break;
+				}
+			}
+			cb(jsq,shangji,err,ce,script,false,NULL,1,buf);
+			if(*err){
+				ret=262;
+				break;
+			}
+		}
+		int ret2=pclose(f);
+		if(ret==0){
+			buf[0]=0;
+			ret=ret2/256;
+		}
+	}
+	return ret;
+}

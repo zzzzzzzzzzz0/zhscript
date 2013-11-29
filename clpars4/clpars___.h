@@ -39,7 +39,7 @@ public:
 class clpars___ {
 private:
 	list<clpars_item___*> item_;
-	int cb__(const char*flag,const char*flag2,bool by_default,bool by_help,int i1,int&i,
+	int cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv);
 	int par__(int& i1,int& i,const char* flag,bool by_help,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,bool no);

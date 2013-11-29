@@ -109,7 +109,7 @@ public:
     bool operator () (string& s2) {
         return bool__(s2, s_, type_, src2_,arg1_);
     }
-    static bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
+    bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
     	bool b=false;
 		switch(type){
 		case 'b':case 'e':case 'c':
@@ -158,89 +158,100 @@ public:
     }
 };
 
-int clpars___::cb__(const char*flag,const char*flag2,bool by_default,bool by_help,int i1,int&i,
+int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv)
 {
 	const char**argv2 = new const char*[argc];
 	char no1[16];
-	int start=0,i2=0;
-	if(i1>0){
-		sprintf(no1,"%d",i1);
-		argv2[i2++]=no1;
-		start++;
-	}
-	if(by_default){
-		argv2[i2++]=flag;
-	}
 	int has=0;
-	const char* src2 = flag2;
+	const char* src2 = flag;
 	string arg1;
-	int i2_old = i2;
-    for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
-    	clpars_item___* ci=*cii;
-    	bool b=false;
-    	if(by_help){
-    		b=(ci->type_ == 'h');
-    	} else {
-    		switch(ci->type_){
-    		case 'b':case 'e':case 'c':
-    			if(by_default)
-    				continue;
-    			break;
-    		}
-        	if(!b){
-        		if(by_default) {
-            		b = comp___::bool__(ci->flag_,flag2,ci->type_,&src2,&arg1);
-        		} else {
-					list<string>::iterator si = find_if(ci->flags_.begin(), ci->flags_.end(),
-							comp___(flag2,ci->type_,&src2,&arg1) );
-					b=(si != ci->flags_.end());
-        		}
-        	}
-    	}
-    	if(b){
-    		has++;
-    		const char*code;
-    		if(ci->code_.empty())
-    			code=ci->info_.c_str();
-    		else
-    			code=ci->code_.c_str();
-			if(by_help){
-			} else {
-				if(has==1){
-					switch(ci->type_){
-					case 'b':case 'e':case 'c':
-						argv2[i2++] = arg1.c_str();
-						start++;
-						break;
+	for(int scan = 0; scan < 2 && !has; scan++) {
+		int start=0,i2=0;
+		int i2_old = i2;
+		for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
+			clpars_item___* ci=*cii;
+			bool b=false;
+			switch(scan) {
+			case 0:
+				if(by_help){
+					b=(ci->type_ == 'h');
+				} else {
+					if(!b){
+						list<string>::iterator si = find_if(ci->flags_.begin(), ci->flags_.end(),
+								comp___(flag,ci->type_,&src2,&arg1) );
+						b=(si != ci->flags_.end());
 					}
-					if(ci->argc_ >= 0 || ci->type_ == 'a'){
+				}
+				break;
+			case 1:
+				if(by_help){
+				} else {
+					if(ci->flag_.empty())
+						b = true;
+				}
+				break;
+			}
+			if(b){
+				has++;
+				const char*code;
+				if(ci->code_.empty())
+					code=ci->info_.c_str();
+				else
+					code=ci->code_.c_str();
+				switch(scan) {
+				case 0:
+					if(by_help){
+					} else {
+						if(has==1){
+							switch(ci->type_){
+							case 'b':case 'e':case 'c':
+								argv2[i2++] = arg1.c_str();
+								start++;
+								break;
+							}
+						}
+					}
+					break;
+				case 1:
+					if(no) {
+						sprintf(no1,"%d",++i1);
+						argv2[i2++]=no1;
+						start++;
+					}
+					argv2[i2++]=flag;
+					if(ci->type_ == 'a')
+						start++;
+					break;
+				}
+				if(has==1){
+					if(ci->argc_ > 0 || ci->type_ == 'a'){
 						int argc2 = start + (ci->type_ == 'a' ?
 								argc - i : ci->argc_);
 						for(;i2<argc2;i2++,i++){
 							argv2[i2] = va_arg(argv, char*);
 						}
 						if(i>argc){
-							sprintf(buf,"'%s'(%d) no arg",flag2,ci->argc_);
+							sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
 							*err=1;
 							break;
 						}
 					}
-	    			i2_old = i2;
+					i2_old = i2;
 				}else{
-	    			i2 = i2_old;
-    			}
-    		}
-    		cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
-			switch(*err){
-			case jieshiqi_err_go_+keyword_continue_:
-				*err=0;
-				break;
+					i2 = i2_old;
+				}
+				cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
+				switch(*err){
+				case jieshiqi_err_go_+keyword_continue_:
+					*err=0;
+					break;
+				}
+				if(*err)
+					break;
 			}
-    		if(*err)
-    			break;
-    	}
-    }
+		}
+	}
     delete argv2;
 	return has;
 }
@@ -255,7 +266,7 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
     }
     i++;
 
-    int has=cb__(flag,flag,false,by_help,0,i,buf,err,ce,shangji,argc,argv);
+    int has=cb__(flag,by_help,no,i1,i,buf,err,ce,shangji,argc,argv);
 	if(*err)
 		return 1;
     if(has)
@@ -263,14 +274,6 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 
     if(by_help)
     	return 0;
-
-    if(no)
-		++i1;
-	has=cb__(flag,"",true,by_help,i1,i,buf,err,ce,shangji,argc,argv);
-	if(*err)
-		return 1;
-	if(has)
-		return 0;
 
 	sprintf(buf,"no parse");
 	*err=3;
