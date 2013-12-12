@@ -3,10 +3,8 @@ Release/
 调试/
 发行/
 exe/
-debug-r75891/
-release-r75891/
-debug liucheng/
-release liucheng/
+debug*/
+release*/
 *.o
 *.so
 *.dll
