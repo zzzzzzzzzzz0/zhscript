@@ -1,9 +1,0 @@
-main.cpp:
-#include "shell___.h"
-
-int main(int argc, char* argv[], char* env[]) {
-	shell___ sh;
-	return sh.with__(argc, argv, env);
-}
-
-
