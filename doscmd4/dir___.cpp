@@ -414,3 +414,9 @@ dlle___ int dlln___(dir_count__)(dir___*d){
 		return -1;
 	return d->list_.size();
 }
+
+dlle___ vector<string>* dlln___(dir_list__)(dir___*d){
+	if(!d)
+		return NULL;
+	return &(d->list_);
+}

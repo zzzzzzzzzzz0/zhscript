@@ -26,6 +26,7 @@
 		了。
 		等于20那么先
 			调用‘移除定时器’、2。
+			调用‘gtk-main-quit’。
 			退出。
 		了。
 	了。
@@ -34,4 +35,5 @@
 加载lib/gtkmain4-。
 
 加载lib/timeout4-。
+加载lib/gjk4-。
 加载lib/vartable4。解释‘变量表方法’。
