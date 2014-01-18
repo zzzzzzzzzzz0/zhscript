@@ -5,7 +5,7 @@
 
 使主窗、侦听、
 	创建为下代码
-		使主窗、大小、1000、600。
+		使主窗、大小、1024、600。
 		使主窗、居中。
 		使主窗#1、加钮、-、（大小为6、）
 			名为后退、gtk-go-back、
@@ -14,8 +14,6 @@
 		使主窗、访问、http://baidu.com。
 	上代码、
 	显现为下代码
-		显示xid=先使主窗、xid了换行。
-		
 		使控制、创建（、弹出窗）。
 		使控制、侦听、
 			显现为下代码
@@ -58,13 +56,6 @@
 					<a href="javascript:z$('使主窗#youku、关闭');">关闭</a><br>
 					
 					<a href="javascript:down__()">下载</a><br>
-					
-					<a href="javascript:msg__(z$('使控制、文件选择、文件夹、文件夹、预选、/opt2/'))">文件选择文件夹</a><br>
-					<a href="javascript:msg__(z$('使控制、文件选择、打开、打开、
-						类型、txt、*.txt、
-						类型、sh、*.sh
-						'))">文件选择打开</a><br>
-					<a href="javascript:msg__(z$('使控制、文件选择、保存'))">文件选择保存</a><br>
 					
 					<hr><span id=msg></span><hr>
 					

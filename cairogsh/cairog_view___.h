@@ -10,15 +10,10 @@
 
 #include "sh-base/window___.h"
 
-class cairog_window___ : public window___ {
-private:
-	GtkWidget *canvas_;
+class cairog_view___ : public view___ {
 public:
 	string huitu_;
-	cairog_window___(const char* name, bool is_main = false);
-	GtkWidget* new__(window_flag___* flag);
-	GtkWidget* canvas__() {return canvas_;}
-
+	cairog_view___(GtkWidget* scrolled2, void* window);
 };
 
 #endif /* CAIROG_WINDOW____H_ */

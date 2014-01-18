@@ -27,7 +27,10 @@ static void s1s_push__(s1___* s1) {
 }
 
 s1___::s1___(const char* src2, const char* signal, char type) {
-	src2_ = src2;
+	if(src2)
+		src2_ = src2;
+	else
+		src2_ = signal;
 	signal_ = signal;
 	type_ = type;
 	cb_ = NULL;

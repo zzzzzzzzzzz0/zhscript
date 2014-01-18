@@ -5,62 +5,32 @@
  *      Author: zzzzzzzzzzz
  */
 
-#include "webkit_window___.h"
+#include "webkit_view___.h"
 #include "sh-base/s1___.h"
 #include <iostream>
 #include "sh-base/extern.h"
 
 static string true_="true",false_="false";
 
-webkit_window___* webkit_window___::from__(WebKitWebView* page){
-	return (webkit_window___*)gtk_object_get_data(GTK_OBJECT(page),object_data_window_);
+webkit_view___* webkit_view___::from__(WebKitWebView* page){
+	return (webkit_view___*)gtk_object_get_data(GTK_OBJECT(page),object_data_view_);
 }
-GtkWidget* webkit_window___::scrolled_from__(WebKitWebView* page){
+GtkWidget* webkit_view___::scrolled_from__(WebKitWebView* page){
 	return (GtkWidget*)gtk_object_get_data(GTK_OBJECT(page),object_data_scrolled_);
 }
-WebKitWebView* webkit_window___::webview_from__(GtkNotebook *notebook, int page_num){
-	return WEBKIT_WEB_VIEW(get_data__(notebook,page_num,object_data_view_));
-}
 
-WebKitWebView* webkit_window___::webview__(int page_num){
-	if(!notebook_)
-		return WEBKIT_WEB_VIEW(webview_);
-	return webview_from__(notebook__(), page_num);
-}
-
-void webkit_window___::close__(int page_num){
+/*void webkit_view___::close__(int page_num){
 	GtkWidget* v=GTK_WIDGET(webview__(page_num));
 	if(v)
 		gtk_widget_destroy(v);
 	window___::close__(page_num);
-}
+}*/
 
-GtkWidget* webkit_window___::new__(window_flag___* wf) {
-	GtkWidget* scrolled = window___::new__(wf);
-	if(wf->has_1page_)
-		webview_=webview_new__(scrolled);
-	return scrolled;
-}
-
-WebKitWebView* webkit_window___::tabpg_new__(const char* name, bool is_hide) {
-	GtkWidget* webview;
-	if(is_hide) {
-		webview = webview_new__(NULL);
-	} else {
-		if(notebook_) {
-			GtkWidget* scrolled2 = window___::tabpg_new__(name);
-			webview=webview_new__(scrolled2);
-			gtk_widget_show_all (scrolled2);
-			gtk_widget_grab_focus(webview);
-		} else
-			webview = webview_;
-	}
-	return WEBKIT_WEB_VIEW(webview);
-}
-
-webkit_window___::webkit_window___(const char* name, bool is_main):window___(name, is_main) {
-	webview_ = NULL;
+webkit_view___::webkit_view___(GtkWidget* scrolled2, void* window, bool is_app_paintable)
+:view___(scrolled2, window) {
 	target_ = NULL;
+	is_app_paintable_ = is_app_paintable;
+	widget_ = webview_new__(scrolled2);
 }
 
 static JSValueRef
@@ -139,29 +109,23 @@ static void window_object_cleared__(
     JSObjectRef o = JSContextGetGlobalObject(ctx);
     JSObjectSetProperty(ctx, o, name, func, kJSPropertyAttributeNone, NULL);
     JSStringRelease(name);
-    /*bool b=*/JSObjectSetPrivate(func, (void*)webkit_window___::from__(wv));
+    /*bool b=*/JSObjectSetPrivate(func, (void*)webkit_view___::from__(wv));
 }
 
-GtkWidget* webkit_window___::webview_new__(GtkWidget* scrolled) {
+GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {
 	GtkWidget* webview = webkit_web_view_new ();
 	//g_object_ref_sink(webview);
-	gtk_object_set_data(GTK_OBJECT(webview),object_data_window_,(gpointer)this);
+	gtk_object_set_data(GTK_OBJECT(webview),object_data_view_,(gpointer)this);
 	if(scrolled) {
 		gtk_object_set_data(GTK_OBJECT(webview),object_data_scrolled_,(gpointer)scrolled);
 		gtk_container_add (GTK_CONTAINER (scrolled), webview);
-		gtk_object_set_data(GTK_OBJECT(scrolled),object_data_view_,(gpointer)webview);
 
-		if(flag_.is_app_paintable_) {
+		if(is_app_paintable_) {
 			webkit_web_view_set_transparent(WEBKIT_WEB_VIEW(webview), true);
 		}
 
 		g_signal_connect(webview,"window-object-cleared",G_CALLBACK(window_object_cleared__),NULL);
-		for(size_t i = 0; i < s1s_length__(); i++) {
-			s1___* s1 = s1s__(i);
-			if(s1->type__() == 'w' && s1->cb_) {
-				g_signal_connect(webview, s1->signal__(), s1->cb_, NULL);
-			}
-		}
+		signal_connect__(webview);
 	}
 
 	return webview;

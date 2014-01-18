@@ -7,7 +7,9 @@
 
 #ifndef WINDOW____H_
 #define WINDOW____H_
-#include "base_.h"
+#include <deque>
+#include <map>
+#include "view___.h"
 
 #define label_style_auto_ 0
 #define label_style_text_ 1
@@ -26,17 +28,21 @@
 class window_flag___ {
 public:
 	GtkWindowType wt_;
+
 	bool is_tabpg_, is_tabpg_vbox_;
 	GtkPositionType pt_;
 	int label_style_;
+
 	bool is_app_paintable_;
 	bool has_1page_;
 	window_flag___() {
 		wt_ = GTK_WINDOW_TOPLEVEL;
+
 		is_tabpg_ = false;
 		is_tabpg_vbox_ = false;
 		pt_ = GTK_POS_TOP;
 		label_style_ = label_style_default_;
+
 		is_app_paintable_ = false;
 		has_1page_ = true;
 	}
@@ -49,7 +55,8 @@ public:
 };
 
 class window___ {
-protected:
+private:
+	deque<view___*> views_;
 	GtkWidget* window_;
 	GtkWidget* notebook_;
 	string name_;
@@ -58,7 +65,7 @@ protected:
 	static gpointer get_data__(GtkNotebook *notebook, int page_num, const char *key);
 public:
 	string code_;
-	string codes_[32];
+	map<int, string> codes_;
 
 	window___(const char* name, bool is_main = false);
 	const string& name__(){return name_;}
@@ -72,12 +79,19 @@ public:
 	static window___* from__(GtkNotebook *notebook, int page_num);
 	GtkLabel* label__(int page_num);
 	GtkWidget* close_button__(int page_num);
-	virtual void close__(int page_num);
-	bool button_new__(int page_num,const char*name,const char*iconame,GtkIconSize size,char clicked);
-	virtual GtkWidget* new__(window_flag___* flag);
+	void close__(int page_num);
+	bool button_new__(int page_num,const char*name,
+			const char*iconame,GtkIconSize size,
+			const char* code, char clicked);
+	GtkWidget* new__(window_flag___* flag);
 	GtkWidget* tabpg_new__(const char* name);
 	void destroy__();
 	void hide__();
+
+	void push__(view___* v);
+	void erase__(view___* v);
+	view___* view__(int page_num);
+	bool is_app_paintable__() {return flag_.is_app_paintable_;}
 
 	int current_page__();
 	int n_pages__();

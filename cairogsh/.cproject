@@ -35,7 +35,7 @@
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1508197269" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1358936151" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.552864669" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
+							<tool commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.552864669" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.flags.1290263983" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="`pkg-config gtk+-2.0 --libs`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1682568550" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -76,7 +76,7 @@
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.819913157" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
 							<builder buildPath="${workspace_loc:/cairogsh/Release}" id="cdt.managedbuild.target.gnu.builder.exe.release.189236281" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.932902591" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1540256448" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1540256448" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
 								<option id="gnu.cpp.compiler.exe.release.option.optimization.level.365077160" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.555612302" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1626539645" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 `pkg-config gtk+-2.0 --cflags`" valueType="string"/>
@@ -91,7 +91,7 @@
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1492616706" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1157478960" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1414354917" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
+							<tool commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1414354917" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.flags.440594321" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="`pkg-config gtk+-2.0 --libs`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.715425189" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -167,7 +167,17 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="cairogsh.cdt.managedbuild.target.gnu.exe.190194061" name="Executable" projectType="cdt.managedbuild.target.gnu.exe"/>
 	</storageModule>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/cairogsh"/>
+		</configuration>
+		<configuration configurationName="release3">
+			<resource resourceType="PROJECT" workspacePath="/cairogsh"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/cairogsh"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">

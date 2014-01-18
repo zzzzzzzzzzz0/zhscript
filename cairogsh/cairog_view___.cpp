@@ -5,7 +5,7 @@
  *      Author: zzzzzzzzzzz
  */
 
-#include "cairog_window___.h"
+#include "cairog_view___.h"
 #include "sh-base/extern.h"
 #include "sh-base/extern2.h"
 #include "gif_surface___.h"
@@ -80,7 +80,7 @@ static void callback__(cairo_t *cr, int argc, ...) {
 static char cr_[32], callback_[64];
 static const char* argv_[] = {callback_, cr_, };
 static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpointer data) {
-	cairog_window___* w = (cairog_window___*)data;
+	cairog_view___* w = (cairog_view___*)data;
 	if(w->huitu_.size() > 0) {
 		cairo_t *cr = gdk_cairo_create(
 			#ifdef no_gtk_2_
@@ -97,16 +97,9 @@ static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpoin
 	return FALSE;
 }
 
-GtkWidget* cairog_window___::new__(window_flag___* flag) {
-	GtkWidget* w = window___::new__(flag);
-
-    canvas_ = gtk_drawing_area_new ();
-    gtk_container_add (GTK_CONTAINER (w), canvas_);
-    gtk_widget_show(canvas_);
-    g_signal_connect(G_OBJECT(canvas_), "expose-event", G_CALLBACK(expose_event__), this);
-	return w;
-}
-
-cairog_window___::cairog_window___(const char* name, bool is_main):window___(name, is_main) {
-	canvas_ = NULL;
+cairog_view___::cairog_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, window) {
+	widget_ = gtk_drawing_area_new ();
+    gtk_container_add (GTK_CONTAINER (scrolled2), widget_);
+    gtk_widget_show(widget_);
+    g_signal_connect(G_OBJECT(widget_), "expose-event", G_CALLBACK(expose_event__), this);
 }

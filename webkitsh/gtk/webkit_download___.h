@@ -8,7 +8,7 @@
 #ifndef WEBKIT_DOWNLOAD____H_
 #define WEBKIT_DOWNLOAD____H_
 
-#include "webkit_window___.h"
+#include "webkit_view___.h"
 #include <deque>
 
 class webkit_download___ {

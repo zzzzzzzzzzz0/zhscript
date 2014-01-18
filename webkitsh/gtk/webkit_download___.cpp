@@ -75,7 +75,6 @@ static void notify_status__(GObject* object, GParamSpec* pspec, gpointer data){
 
 static void notify_load_status__(WebKitWebView* web_view, GParamSpec* pspec, gpointer data){
 	WebKitLoadStatus ls = webkit_web_view_get_load_status(web_view);
-	printf("notify_load_status %d\n", ls);
 	switch(ls) {
 	case WEBKIT_LOAD_FINISHED:
 		break;

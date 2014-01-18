@@ -8,8 +8,10 @@
 #include "window___.h"
 #include "extern.h"
 #include "extern2.h"
+#include <algorithm>
+#include <map>
 
-static s1___* clicked_s1_ = new s1___("点击", "", 0);
+static s1___* clicked_s1_ = new s1___("点击", "", 'w');
 
 static void clicked_close__(GtkButton *button, gpointer user_data) {
 	GtkWidget *sw = (GtkWidget *)user_data;
@@ -18,7 +20,16 @@ static void clicked_close__(GtkButton *button, gpointer user_data) {
 	int i=gtk_notebook_page_num(nb,sw);
 	w->close__(i);
 }
+
+typedef map<GtkButton*, string> button_code___;
+static button_code___ button_code_;
 static void clicked__(GtkButton *button, gpointer user_data) {
+	button_code___::iterator it = button_code_.find(button);
+	if(it != button_code_.end()) {
+		call4__((*it).second.c_str(),gtk_widget_get_name(GTK_WIDGET(button)),0,NULL,0);
+		return;
+	}
+
 	GtkWidget *sw = (GtkWidget *)user_data;
 	window___* w=(window___*)gtk_object_get_data(GTK_OBJECT(sw),object_data_window_);
 	const char* name=gtk_widget_get_name(GTK_WIDGET(button));
@@ -38,28 +49,29 @@ gpointer window___::get_data__(GtkNotebook *notebook, int page_num, const char *
 }
 
 int window___::current_page__(){
-	if(!notebook_)
-		return notebook_page_no_;
-	return gtk_notebook_get_current_page (notebook__());
+	if(notebook_)
+		return gtk_notebook_get_current_page (notebook__());
+	return notebook_page_no_;
 }
 
 int window___::n_pages__() {
-	if(!notebook_)
-		return 0;
-	return gtk_notebook_get_n_pages(notebook__());
+	if(notebook_)
+		return gtk_notebook_get_n_pages(notebook__());
+	return 0;
 }
 
 int window___::page_check__(int page_num){
-	if(!notebook_)
-		return notebook_page_no_;
-	int n=gtk_notebook_get_n_pages(notebook__());
-	if(page_num==notebook_current_page_)
-		page_num=current_page__();
-	else if(page_num==notebook_end_page_)
-		page_num=n-1;
-	if(page_num<0 || page_num>=n)
-		return notebook_page_no_;
-	return page_num;
+	if(notebook_) {
+		int n=gtk_notebook_get_n_pages(notebook__());
+		if(page_num==notebook_current_page_)
+			page_num=current_page__();
+		else if(page_num==notebook_end_page_)
+			page_num=n-1;
+		if(page_num<0 || page_num>=n)
+			return notebook_page_no_;
+		return page_num;
+	}
+	return notebook_page_no_;
 }
 
 void window___::set_page__(int page_num){
@@ -100,17 +112,18 @@ GtkWidget* window___::close_button__(int page_num){
 }
 
 void window___::close__(int page_num){
-	if(!notebook_){
+	if(notebook_) {
+		GtkNotebook* nb=notebook__();
+		erase__(view__(page_num));
+		gtk_notebook_remove_page(nb, page_num);
+		if(gtk_notebook_get_n_pages(nb) == 0) {
+			if(flag_.has_1page_)
+				destroy__();
+			else
+				hide__();
+		}
+	} else {
 		destroy__();
-		return;
-	}
-	GtkNotebook* nb=notebook__();
-	gtk_notebook_remove_page(nb, page_num);
-	if(gtk_notebook_get_n_pages(nb) == 0) {
-		if(flag_.has_1page_)
-			destroy__();
-		else
-			hide__();
 	}
 }
 
@@ -118,7 +131,9 @@ void window___::hide__(){
 	gtk_widget_hide(widget__());
 }
 
-bool window___::button_new__(int page_num,const char*name,const char*iconame,GtkIconSize size,char clicked){
+bool window___::button_new__(int page_num,const char*name,
+		const char*iconame,GtkIconSize size,
+		const char* code,char clicked){
 	if(!notebook_)
 		return false;
 	if((page_num=page_check__(page_num))<0)
@@ -154,6 +169,9 @@ bool window___::button_new__(int page_num,const char*name,const char*iconame,Gtk
 		default:
 			gtk_widget_set_name(btn,name);
 			cb = G_CALLBACK(clicked__);
+			if(code) {
+				button_code_[GTK_BUTTON(btn)] = code;
+			}
 			break;
 		}
 		gtk_widget_set_tooltip_markup(btn, name);
@@ -207,9 +225,9 @@ GtkWidget* window___::new__(window_flag___* flag){
 #else
 	    gtk_container_add (GTK_CONTAINER (scrolled), notebook_);
 #endif
-	    if(flag->has_1page_)
-	    	return tabpg_new__(NULL);
-	    return NULL;
+	    if(!flag->has_1page_)
+		    return NULL;
+	    return tabpg_new__(NULL);
 	}
 	return scrolled;
 }
@@ -260,7 +278,7 @@ GtkWidget* window___::tabpg_new__(const char* name) {
 	gtk_widget_show_all (label);
 	switch(flag_.label_style_){
 	case label_style_can_close_:
-		button_new__(i,NULL,GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU,0);
+		button_new__(i,NULL,GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU, NULL, 0);
 		break;
 	}
 
@@ -283,10 +301,31 @@ void window___::name2__(string& name2, GtkWidget *sw) {
 	}
 }
 
+view___* window___::view__(int page_num) {
+	if(notebook_) {
+		int num = page_check__(page_num);
+		if(num < 0)
+			return NULL;
+		//return views_[page_num];
+		return (view___*)get_data__(notebook__(), page_num, object_data_view_);
+	}
+	if(views_.size() < 1)
+		return NULL;
+	return views_[0];
+}
+
+void window___::push__(view___* v) {
+	views_.push_back(v);
+}
+void window___::erase__(view___* v) {
+	deque<view___*>::iterator i = find(views_.begin(), views_.end(), v);
+	if(i != views_.end())
+		views_.erase(i);
+}
+
 window___::window___(const char* name, bool is_main){
 	is_main_ = is_main;
 	name_ = name;
 	window_ = NULL;
 	notebook_ = NULL;
-	//codes_ = new string[s1s_length__()];
 }

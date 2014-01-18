@@ -62,6 +62,13 @@ static void err__(const char* s,const char* s2=NULL,const char* s3=NULL){
 void err_buzu__(const char* s=NULL){
 	err__(s,"参数不足");
 }
+bool err_buzu2__(const deque<string>* p, size_t need, size_t i = 1){
+	if(p->size()<need){
+		err_buzu__(p->size() > i ? (*p)[i].c_str() : NULL);
+		return true;
+	}
+	return false;
+}
 void err_wufa__(const string& s3,const char* s=NULL){
 	err__(s,"无法",s3.c_str());
 }
@@ -92,8 +99,11 @@ const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
 		argv2[i]=s;
 	_next_args
 	const char* code=NULL;
-	if(w)
-		code=w->codes_[s1->i__()].c_str();
+	if(w) {
+		map<int, string>::iterator it = w->codes_.find(s1->i__());
+		if(it != w->codes_.end())
+			code=(*it).second.c_str();
+	}
 	if(!code || !code[0]){
 		for(;;){
 			if(w) {
@@ -126,38 +136,9 @@ const string& s__(const deque<string>& p, size_t i) {
 	return s__(&p, i);
 }
 
-window___* shell___::get_window__(const string& name,int& page_num,const string& help,
-		bool chk_can, string* page_num2, bool show_err){
-	window___* w;
-	size_t i=name.find('#');
-	if(i==string::npos){
-		w=windows_.get__(name.c_str());
-		page_num=notebook_current_page_;
-	}else{
-		w=windows_.get__(name.substr(0,i).c_str());
-		if(w) {
-			string num = name.substr(1+i);
-			if(page_num2)
-				*page_num2 = num;
-			page_num = w->page_num__(num.c_str());
-			if(page_num < 0) {
-				page_num = s2i__(num, page_num);
-				if(page_num > 0)
-					--page_num;
-			}
-		}
-	}
-	if(!w || (chk_can && !w->can_set__())){
-		if(show_err)
-			err_wufa__(help,name.c_str());
-		return NULL;
-	}
-	return w;
-}
-
-static s1___* new_window_s1_ = new s1___("创建", "", 0);
-static s1___* show_window_s1_ = new s1___("显现", "", 0);
-static s1___* window_destroy_s1_ = new s1___("销毁", "", 0);
+static s1___* new_window_s1_ = new s1___("创建", "", 'w');
+static s1___* show_window_s1_ = new s1___("显现", "", 'w');
+static s1___* window_destroy_s1_ = new s1___("销毁", "", 'w');
 static s1___* switch_page_s1_ = new s1___("标签页切换", "switch-page", 'n');
 
 static void show_window__(window___* w){
@@ -193,8 +174,10 @@ static void suidao__(char**addr_ret,char*buf,long siz,shell___* sh,void*ce,void*
 	sh->api__(shangji,ce,&p,buf,siz,addr_ret);
 }
 
-static void new_window0__(window___* w, window_flag___* flag){
-	w->new__(flag);
+static void new_window0__(window___* w, window_flag___* flag, shell___* sh){
+	GtkWidget* w2 = w->new__(flag);
+	if(w2)
+		w->push__(sh->new_view__(w2, w));
 
 	g_signal_connect(w->window__(), "destroy", G_CALLBACK(destroy__), NULL);
 	for(size_t i = 0; i < s1s_length__(); i++) {
@@ -203,38 +186,74 @@ static void new_window0__(window___* w, window_flag___* flag){
 			g_signal_connect(w->notebook__(), s1->signal__(), s1->cb_, NULL);
 		}
 	}
-
 	call4__(NULL,w,new_window_s1_,0);
 }
 
-window___* shell___::new_window__(const char*name, window_flag___* flag) {
+view___* shell___::new_view__(GtkWidget* scrolled2, window___* window) {
+	return new view___(scrolled2, window);
+}
+
+window___* shell___::new_window__(const char* name, window_flag___* flag) {
 	window___* w=windows_.get__(name);
 	if(!w){
-		w=new_window__(name);
+		w=new_window__(name, false);
 		windows_.push__(w);
-		new_window0__(w, flag);
+		new_window0__(w, flag, this);
 	}
 	return w;
 }
-window___* shell___::new_window__(const char*name, bool is_main) {
+window___* shell___::new_window__(const char* name, bool is_main) {
 	return new window___(name, is_main);
 }
 
-bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,char**addr_ret){
-	if(p->size()<1){
-		err_buzu__();
-		return true;
+window___* shell___::get_window__(const string& name,int& page_num,const string& help,
+		bool chk_can, string* page_num2, bool show_err){
+	window___* w;
+	size_t i=name.find('#');
+	if(i==string::npos){
+		w=windows_.get__(name.c_str());
+		page_num=notebook_current_page_;
+	}else{
+		w=windows_.get__(name.substr(0,i).c_str());
+		if(w) {
+			string num = name.substr(1+i);
+			if(page_num2)
+				*page_num2 = num;
+			page_num = w->page_num__(num.c_str());
+			if(page_num < 0) {
+				page_num = s2i__(num, page_num);
+				if(page_num > 0)
+					--page_num;
+			}
+		}
 	}
+	if(!w || (chk_can && !w->can_set__())){
+		if(show_err)
+			err_wufa__(help,name.c_str());
+		return NULL;
+	}
+	return w;
+}
+
+view___* shell___::get_view__(const string& name, int& page_num, const string& help,
+		bool chk_can, string* page_num2, bool show_err) {
+	window___* w = get_window__(name, page_num, help, chk_can, page_num2, show_err);
+	if(!w)
+		return NULL;
+	return w->view__(page_num);
+}
+
+bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,char**addr_ret){
+	if(err_buzu2__(p, 1))
+		return true;
 	const string& p0=(*p)[0];
 	if(p0=="不堵塞"){
 		while (gtk_events_pending ())
 		  gtk_main_iteration ();
 		return true;
 	}
-	if(p->size()<2){
-		err_buzu__(p0.c_str());
+	if(err_buzu2__(p, 2, 0))
 		return true;
-	}
 	const string& p1=(*p)[1];
 	window___* w;
 	int page_num;
@@ -248,7 +267,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 				ret = "-1";
 		} else
 			ret = "0";
-		sprintf(buf, ret);
+		cpy__(buf, ret, siz);
 		return true;
 	}
 	if(p1=="标签号"){
@@ -291,10 +310,8 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="移动"){
-		if(p->size()<4){
-			err_buzu__(p1.c_str());
+		if(err_buzu2__(p, 4))
 			return true;
-		}
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		int x,y;
 		gtk_window_get_position(w->window__(),&x,&y);
@@ -339,6 +356,11 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		w->destroy__();
 		return true;
 	}
+	if(p1=="焦点"){
+		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
+		gtk_widget_grab_focus(v->widget__());
+		return true;
+	}
 	if(p0=="屏幕"){
 		if(p1 == "宽度") {
 			l2s__(gdk_screen_width(), buf);
@@ -352,10 +374,8 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="大小"){
-		if(p->size()<4){
-			err_buzu__(p1.c_str());
+		if(err_buzu2__(p, 4))
 			return true;
-		}
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		int w1 = s2i__((*p)[2], gdk_screen_width()),
 			h1 = s2i__((*p)[3], gdk_screen_height());
@@ -373,7 +393,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		char clicked=' ';
 		GtkIconSize size=GTK_ICON_SIZE_MENU;
-		const char *name=NULL,*iconame;
+		const char *name=NULL,*iconame, *code = NULL, *code1 = NULL;
 		for(size_t i=2;i<p->size();i++){
 			const string& p2=(*p)[i];
 			if(p2=="点有焦点"){
@@ -385,29 +405,40 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 				continue;
 			}
 			if(p2=="大小"){
-				if(++i>=p->size()){
-					err_buzu__(p1.c_str());
+				if(err_buzu2__(p, ++i))
 					return true;
-				}
 				size=(GtkIconSize)s2i__((*p)[i]);
 				continue;
 			}
 			if(p2=="名"){
-				if(++i>=p->size()){
-					err_buzu__(p1.c_str());
+				if(err_buzu2__(p, ++i))
 					return true;
-				}
 				name=(*p)[i].c_str();
+				continue;
+			}
+			if(p2=="代码"){
+				if(err_buzu2__(p, ++i))
+					return true;
+				code=(*p)[i].c_str();
+				continue;
+			}
+			if(p2 == "缺省代码") {
+				if(err_buzu2__(p, ++i))
+					return true;
+				code1 = (*p)[i].c_str();
+				if(!code1[0])
+					code1 = NULL;
 				continue;
 			}
 			iconame=p2.c_str();
 			if(!name)
 				name=iconame;
-			if(!w->button_new__(page_num,name,iconame,size,clicked)) {
+			if(!w->button_new__(page_num,name,iconame,size,
+					code ? code : code1,clicked)) {
 				err_wufa__(p1,p0.c_str());
 				return true;
 			}
-			name=NULL;
+			code = name=NULL;
 		}
 		return true;
 	}
@@ -458,14 +489,13 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 						break;
 					}
 				}
-				if(i1<0){
+				if(i1<0 || (i1==new_window_s1_->i__() && !w->is_main__())){
 					err_buzhichi__(p2,p1.c_str());
+					return true;
 				}
 			}
-			if(++i2>=p->size()) {
-				err_buzu__(p1.c_str());
+			if(err_buzu2__(p, ++i2))
 				return true;
-			}
 			const string& p3=(*p)[i2];
 			switch(i1) {
 			case -2:
@@ -556,10 +586,8 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="图标"){
-		if(p->size()<3){
-			err_buzu__(p1.c_str());
+		if(err_buzu2__(p, 3))
 			return true;
-		}
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		const string& p2=(*p)[2];
 		GdkPixbuf* pb=gdk_pixbuf_new_from_file(p2.c_str(),NULL);
@@ -571,10 +599,8 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="不透明度"){
-		if(p->size()<3){
-			err_buzu__(p1.c_str());
+		if(err_buzu2__(p, 3))
 			return true;
-		}
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_set_opacity(w->window__(),s2f__((*p)[2]));
 		return true;
@@ -593,11 +619,19 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 #endif
 		return true;
 	}
+	if(p1=="地址"){
+		view___*v = get_view__(p0,page_num,p1);if(!v)return true;
+		l2x__((long)v->widget__(), buf);
+		return true;
+	}
 	if(p1=="xid"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		GdkWindow* w2=gtk_widget_get_window(w->widget__());
 		//GDK_DRAWABLE(w2)
 		sprintf(buf,"%lu",GDK_WINDOW_XID(w2));
+		/*sprintf(buf,"%lu",
+				gdk_x11_drawable_get_xid(
+						gtk_widget_get_window(GTK_WIDGET(w->widget__()))));*/
 		return true;
 	}
 	if(p0=="代码"){
@@ -697,7 +731,7 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 
 	{
 		window___* w = windows_.main__();
-		new_window0__(w, &main_window_flag_);
+		new_window0__(w, &main_window_flag_, this);
 		show_window__(w);
 	}
 	gtk_main ();
