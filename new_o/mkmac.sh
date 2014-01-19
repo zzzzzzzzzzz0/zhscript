@@ -26,6 +26,9 @@ export ver_="-D ver_mac_mini_"
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
+./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-3.0 --cflags --libs`"
 
 ./mk_.sh r gxx_l_
 
