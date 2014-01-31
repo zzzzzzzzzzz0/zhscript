@@ -80,7 +80,7 @@ public:
 	GtkLabel* label__(int page_num);
 	GtkWidget* close_button__(int page_num);
 	void close__(int page_num);
-	bool button_new__(int page_num,const char*name,
+	GtkWidget* button_new__(int page_num,const char*name,
 			const char*iconame,GtkIconSize size,
 			const char* code, char clicked);
 	GtkWidget* new__(window_flag___* flag);

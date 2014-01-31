@@ -394,6 +394,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		char clicked=' ';
 		GtkIconSize size=GTK_ICON_SIZE_MENU;
 		const char *name=NULL,*iconame, *code = NULL, *code1 = NULL;
+		bool is_focus = false;
 		for(size_t i=2;i<p->size();i++){
 			const string& p2=(*p)[i];
 			if(p2=="点有焦点"){
@@ -402,6 +403,10 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			}
 			if(p2=="点无焦点"){
 				clicked=' ';
+				continue;
+			}
+			if(p2=="焦点"){
+				is_focus = true;
 				continue;
 			}
 			if(p2=="大小"){
@@ -433,12 +438,17 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			iconame=p2.c_str();
 			if(!name)
 				name=iconame;
-			if(!w->button_new__(page_num,name,iconame,size,
-					code ? code : code1,clicked)) {
+			GtkWidget* btn = w->button_new__(page_num,name,iconame,size,
+					code ? code : code1,clicked);
+			if(!btn) {
 				err_wufa__(p1,p0.c_str());
 				return true;
 			}
-			code = name=NULL;
+			if(is_focus) {
+				gtk_widget_grab_focus(btn);
+				is_focus = false;
+			}
+			code = name = NULL;
 		}
 		return true;
 	}

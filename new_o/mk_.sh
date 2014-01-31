@@ -13,7 +13,7 @@ r)
 	echo "d? r?"
 	exit 1;;
 esac
-p_lib3="-Wl,-rpath=lib3,-rpath=/usr/lib/zhscript/lib3"
+p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
 
 s2="-fPIC"
 s1="-shared $s2"

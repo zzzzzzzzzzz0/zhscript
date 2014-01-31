@@ -131,13 +131,13 @@ void window___::hide__(){
 	gtk_widget_hide(widget__());
 }
 
-bool window___::button_new__(int page_num,const char*name,
+GtkWidget* window___::button_new__(int page_num,const char*name,
 		const char*iconame,GtkIconSize size,
 		const char* code,char clicked){
 	if(!notebook_)
-		return false;
+		return NULL;
 	if((page_num=page_check__(page_num))<0)
-		return false;
+		return NULL;
 	GtkWidget* scrolled2 = gtk_notebook_get_nth_page(notebook__(), page_num);
 	GtkWidget* box = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(scrolled2),object_data_box_));
 
@@ -182,7 +182,7 @@ bool window___::button_new__(int page_num,const char*name,
 		gtk_button_set_image(GTK_BUTTON(btn),img);
 	}
 	gtk_widget_show (btn);
-	return true;
+	return btn;
 }
 
 void window___::destroy__() {
