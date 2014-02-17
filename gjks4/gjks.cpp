@@ -257,6 +257,41 @@ dlle___ void list_add__(vector<vector<string>*>* p, int colnum, int argc, ...) {
 	_next_args
 }
 
+dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
+		const char* src0, const char* sep0) {
+	if(!ok__(p) || colnum <= 0 || !src0 || !sep0)
+		return;
+	string src = src0, sep = sep0, s;
+	if(src.empty() || sep.empty())
+		return;
+	string::size_type pos_begin = 0;
+	int i1 = colnum;
+	vector<string>* v;
+
+	while (pos_begin != string::npos)
+	{
+		string::size_type comma_pos = src.find(sep, pos_begin);
+		if (comma_pos != string::npos)
+		{
+			s = src.substr(pos_begin, comma_pos - pos_begin);
+			pos_begin = comma_pos + sep.length();
+		}
+		else
+		{
+			s = src.substr(pos_begin);
+			pos_begin = comma_pos;
+		}
+
+		if(i1 >= colnum) {
+			v = new vector<string>();
+			p->push_back(v);
+			i1 = 0;
+		}
+		v->push_back(s);
+		i1++;
+	}
+}
+
 dlle___ void list_foreach__(int* err, void*ce, void* shangji,
 		bool has_num, vector<vector<string>*>* p, char* code)
 {
@@ -313,7 +348,7 @@ dlle___ void list_get__(int* err, char** addr_ret, vector<vector<string>*>* p, c
 }
 
 dlle___ void list_find__(char* buf, vector<vector<string>*>* p, char* s, int i_only) {
-	if(!ok__(p))
+	if(!ok__(p) || !s)
 		return;
 	i_only--;
 	for(size_t i1 = 0; i1 < p->size(); i1++) {
@@ -334,18 +369,24 @@ dlle___ void list_find__(char* buf, vector<vector<string>*>* p, char* s, int i_o
 }
 
 dlle___ vector<string>* list_col__(vector<vector<string>*>* p, size_t i) {
+	if(!ok__(p))
+		return NULL;
 	if(--i >= p->size())
 		return NULL;
 	return (*p)[i];
 }
 
 dlle___ void sort_list__(vector<vector<string>*>* p, int row, int type) {
+	if(!ok__(p))
+		return;
 	list_cmp___* lc = new list_cmp___(--row, type);
 	sort(p->begin(), p->end(), *lc);
 	delete lc;
 }
 
 dlle___ void sort_list_col__(vector<string>* p, int type) {
+	if(!ok__(p))
+		return;
 	list_cmp___* lc = new list_cmp___(type);
 	sort(p->begin(), p->end(), *lc);
 	delete lc;

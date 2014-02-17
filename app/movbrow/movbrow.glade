@@ -603,11 +603,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="ffmpeg">
-                                        <property name="label" translatable="yes">ffplay</property>
+                                      <object class="GtkRadioButton" id="gnome-mplayer">
+                                        <property name="label" translatable="yes">gnome-mplayer</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="tooltip_text" translatable="yes">gnome-mplayer --showcontrols=0 -q --keep_on_top</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">mplayer</property>
                                       </object>
@@ -616,12 +617,11 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkRadioButton" id="gnome-mplayer">
-                                        <property name="label" translatable="yes">gnome-mplayer</property>
+                                      <object class="GtkRadioButton" id="ffmpeg">
+                                        <property name="label" translatable="yes">ffplay</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">gnome-mplayer --showcontrols=0 -q --keep_on_top</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">mplayer</property>
                                       </object>

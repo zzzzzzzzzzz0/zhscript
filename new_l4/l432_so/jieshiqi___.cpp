@@ -80,12 +80,12 @@ int jieshiqi___::jieshi2__(args___* args,qu___* shangji,string& buf){
 	try{
 		err=jieshi__(&qu,0,qu.src_.length(),buf);
 	}catch(...){
-		if(args->src_is_file_)
-			file_.del_path__(args->src_);
+		/*if(args->src_is_file_)
+			file_.del_path__(args->src_);*/
 		throw;
 	}
-	if(args->src_is_file_)
-		file_.del_path__(args->src_);
+	/*if(args->src_is_file_)
+		file_.del_path__(args->src_);*/
 	return err;
 }
 
