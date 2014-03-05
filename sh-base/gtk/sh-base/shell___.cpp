@@ -6,6 +6,7 @@
  */
 
 #include "shell___.h"
+#include"l4/args_util.cc"
 #include"l4/l4___.cc"
 #include"l4/keyword.h"
 #include"for_arg_.h"
@@ -15,6 +16,11 @@
 #include "s1___.h"
 #include "windows___.h"
 #include "extern2.h"
+
+static void not_block__() {
+	while (gtk_events_pending ())
+	  gtk_main_iteration ();
+}
 
 static bool file__(const char* path,const char* ext,const char* sp,string& cmdline){
 	string file;
@@ -248,8 +254,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	const string& p0=(*p)[0];
 	if(p0=="不堵塞"){
-		while (gtk_events_pending ())
-		  gtk_main_iteration ();
+		not_block__();
 		return true;
 	}
 	if(err_buzu2__(p, 2, 0))
@@ -646,6 +651,34 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p0=="代码"){
 		code_=p1;
+		return true;
+	}
+	if(p1 == "等待") {
+		time_t start = time(NULL), len;
+		char c;
+		switch(sscanf(p0.c_str(), "%ld%c", &len, &c)) {
+		case 2:
+			switch(c) {
+			case 'd':
+				len *= 24;
+			case 'h':
+				len *= 60;
+			case 'm':
+				len *= 60;
+			case 's':
+				break;
+			default:
+				err_buzhichi__(p1, p0.c_str());
+				return true;
+			}
+		case 1:
+			break;
+		default:
+			err_buzhichi__(p1, p0.c_str());
+			return true;
+		}
+		for(;time(NULL) - start < len;)
+			not_block__();
 		return true;
 	}
 	err_buzhichi__(p1);

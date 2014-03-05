@@ -8,6 +8,7 @@
 #include "args___.h"
 #include "file___.h"
 #include "path.h"
+#include "../../new_gg/l4/args_util.hh"
 
 args___::args___() {
 	src_is_file_=true;
@@ -83,9 +84,6 @@ bool args___::get_arg_str__(unsigned char c1,unsigned char c,const string& s,siz
 
 void args___::set_path__(const string& s){
 	file_.add_path1__(s);
-	/*//path_没用，但不如此在loongson会报“总线错误”
-	path_=s;
-	file_.add_path1__(path_);*/
 }
 
 int args___::get_arg__(const string& s1,string& s2,list<string>::iterator& li){
@@ -157,7 +155,7 @@ int args___::parse_args__(){
 			src_=s;
 			continue;
 		}
-		if(s=="--")
+		if(s==jieshiqi_args_del_)
 			continue;
 		if(s.length()>2&&s[0]=='-'&&s[1]=='-'){
 			if((s[2]>='0'&&s[2]<='9')||(s[2]>='a'&&s[2]<='z')||(s[2]>='A'&&s[2]<='Z')||s[2]=='-')

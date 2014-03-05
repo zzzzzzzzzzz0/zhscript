@@ -19,6 +19,7 @@ static s1___* load_progress_changed_s1_ = new s1___("装载进度", "load-progre
 static s1___* load_committed_s1_ = new s1___("装载完", "load-committed", 'v');
 static s1___* load_finished_s1_ = new s1___("装载完毕",	"load-finished",			'v');
 static s1___* resource_request_starting_s1_ = new s1___("请求", "resource-request-starting", 'v');
+static s1___* mime_type_policy_decision_requested_s1_ = new s1___("类型请求", "mime-type-policy-decision-requested", 'v');
 static s1___* console_message_s1_ = new s1___("消息", "console-message", 'v');
 static s1___* script_alert_s1_ = new s1___("警告", "script-alert", 'v');
 static s1___* script_confirm_s1_ = new s1___("确认", "script-confirm", 'v');
@@ -60,7 +61,9 @@ static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* fra
 			wv=((webkit_view___*)v->target_)->webview__();
 		else
 			wv=tabpg_new2__(NULL, window__(v));
-		call4__(widget__(page),window__(page),create_web_view_s1_,0);
+		string name2;
+		window__(wv)->name2__(name2, widget__(wv));
+		call4__(widget__(page),window__(page),create_web_view_s1_,1,name2.c_str());
 	}
 	return wv;
 }
@@ -120,6 +123,20 @@ static void resource_request_starting__(WebKitWebView*page,WebKitWebFrame*frame,
 		else if(ret[1]=='-')
 			webkit_network_request_set_uri (request, ret+2);
 	}
+}
+
+static gboolean mime_type_policy_decision_requested__(
+		WebKitWebView* page, WebKitWebFrame* frame,
+		WebKitNetworkRequest* request, const char* mime_type,
+		WebKitWebPolicyDecision* decision, gpointer data)
+{
+	const gchar* uri = webkit_network_request_get_uri(request);
+	const char* ret = call4__(widget__(page), window__(page),
+			mime_type_policy_decision_requested_s1_, 3, mime_type, uri,
+			webkit_web_view_can_show_mime_type(page, mime_type) ? "1" : "0");
+	if(ret[0] == 'x' && !ret[1])
+		return true;
+    return false;
 }
 
 static gboolean script_alert__(
@@ -255,6 +272,14 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			v->target_=w2;
 			return true;
 		}
+		if(p1=="代理"){
+			if(err_buzu2__(p, 3))
+				return true;
+			SoupURI *proxyUri = soup_uri_new((*p)[2].c_str());
+			g_object_set(webkit_get_default_session(), SOUP_SESSION_PROXY_URI, proxyUri, NULL);
+			soup_uri_free(proxyUri);
+			return true;
+		}
 	}
 	return shell___::api__(shangji,ce,p,buf,siz,addr_ret);
 }
@@ -272,6 +297,7 @@ webkit_shell___::webkit_shell___() {
 	load_committed_s1_->cb_ = (G_CALLBACK(load_committed__));
 	load_finished_s1_->cb_ = (G_CALLBACK(load_finished__));
 	resource_request_starting_s1_->cb_ = (G_CALLBACK(resource_request_starting__));
+	mime_type_policy_decision_requested_s1_->cb_ = (G_CALLBACK(mime_type_policy_decision_requested__));
 	console_message_s1_->cb_ = (G_CALLBACK(console_message__));
 	script_alert_s1_->cb_ = (G_CALLBACK(script_alert__));
 	script_confirm_s1_->cb_ = (G_CALLBACK(script_confirm__));

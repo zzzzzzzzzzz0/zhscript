@@ -23,6 +23,7 @@
 #include"l4/keyword.h"
 #include"plugin_def.h"
 #include"def1.h"
+#include "l4/args_util.hh"
 
 shell___::shell___(){
 	exit_=0;
@@ -506,3 +507,4 @@ int shell___::l4__(char*arg1,int argc, char *argv[],int from,char**env){
 }
 
 #include "l4/l4___.cc"
+#include "l4/args_util.cc"

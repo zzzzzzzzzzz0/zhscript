@@ -16,6 +16,7 @@ extern "C"{
 #endif
 #include <unistd.h>
 #include<stdlib.h>
+#include "args_util.hh"
 
 l4___::l4___() {
 	dl_=NULL;
@@ -95,7 +96,7 @@ void l4___::get_ex__(int argc,char** argv,int from,string& ex){
 		string s=argv[i];
 		int i2=get_ex__(s,ex,false);
 		if(i2>0){
-			argv[i][i2]=0;
+			jieshiqi_args_del__(argv[i]);
 		}
 	}
 }
@@ -114,10 +115,9 @@ int l4___::get_ex__(string& s,string& ex,bool chuli){
 		if(i1!=string::npos&&i1<i3){
 			ex=s.substr(i+iex,i1-i2);
 			if(chuli){
-				for(size_t i4=i+2;i4<i3;i4++)
-					s[i4]=' ';
+				jieshiqi_args_del_line__(s, i);
 			}
-			return i+2;
+			return 1;
 		}
 	}
 	return 0;
