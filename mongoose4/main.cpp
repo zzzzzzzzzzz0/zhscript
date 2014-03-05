@@ -132,6 +132,8 @@ dlle___ void filenaming_code__(char*s){
 	filenaming_code_=s;
 }
 
+static std::string _wzs_ = ".wzs";
+
 static void *callback__(enum mg_event event, struct mg_connection *conn) {
 	if (event == MG_NEW_REQUEST) {
 		bool is_zs;
@@ -143,9 +145,12 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 			if(st.is_directory)
 				substitute_index_file(conn, path, sizeof(path), &st);
 			script=path;
-			is_zs=(script.rfind(".wzs")==script.length()-4);
+			is_zs=(script.rfind(_wzs_)==script.length()-_wzs_.length());
 		}
 		if(is_zs){
+			if(script.find(uploadir_) == 0) {
+				return NULL;
+			}
 			void* qu=qu_new_(shangji_);
 			char out[8]="";
 			int err;

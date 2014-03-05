@@ -110,11 +110,15 @@ if(!window.txt__)
 if(!window.show__)
 	window.show__=
 	function(id,s){
-		if(!s)
-			s='block';
 		var e=__(id);
-		if(e)
+		if(e){
+			if(!s){
+				if(e.tagName=='DIV')
+					s='block';
+				else s='inline';
+			}
 			e.style.display=s;
+		}
 	};
 if(!window.hide__)
 	window.hide__=

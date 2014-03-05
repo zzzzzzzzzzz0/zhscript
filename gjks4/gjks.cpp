@@ -325,26 +325,48 @@ dlle___ void list_foreach__(int* err, void*ce, void* shangji,
 	delete argv;
 }
 
+static vector<string>* list_get__(int* err, vector<vector<string>*>* p,
+		char* i1i2, int* i1, int* i2) {
+	if(!ok__(p) || !i1i2) {
+		*err = 1;
+		return NULL;
+	}
+	if(sscanf(i1i2, "%d,%d", i1, i2) != 2) {
+		*err = 2;
+		return NULL;
+	}
+	(*i1)--;
+	(*i2)--;
+	if(*i1 < 0 || (size_t)*i1 >= p->size()) {
+		return NULL;
+	}
+	vector<string>* v = (*p)[*i1];
+	if(*i2 < 0 || (size_t)*i2 >= v->size()) {
+		return NULL;
+	}
+	return v;
+}
+
 dlle___ void list_get__(int* err, char** addr_ret, vector<vector<string>*>* p, char* i1i2) {
-	if(!ok__(p)) {
+	int i1, i2;
+	vector<string>* v = list_get__(err, p, i1i2, &i1, &i2);
+	if(!v) {
+		return;
+	}
+	*addr_ret = dup__((*v)[i2].c_str());
+}
+
+dlle___ void list_set__(int* err, vector<vector<string>*>* p, char* i1i2, char* s) {
+	if(!s) {
 		*err = 1;
 		return;
 	}
 	int i1, i2;
-	if(sscanf(i1i2, "%d,%d", &i1, &i2) != 2) {
-		*err = 2;
+	vector<string>* v = list_get__(err, p, i1i2, &i1, &i2);
+	if(!v) {
 		return;
 	}
-	i1--;
-	i2--;
-	if(i1 < 0 || (size_t)i1 >= p->size()) {
-		return;
-	}
-	vector<string>* v = (*p)[i1];
-	if(i2 < 0 || (size_t)i2 >= v->size()) {
-		return;
-	}
-	*addr_ret = dup__((*v)[i2].c_str());
+	(*v)[i2] = s;
 }
 
 dlle___ void list_find__(char* buf, vector<vector<string>*>* p, char* s, int i_only) {
