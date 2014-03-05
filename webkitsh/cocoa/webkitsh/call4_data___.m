@@ -30,6 +30,8 @@
 }
 
 -(id)argv_add2__:(const char*)s {
+    if(!s)
+        return self;
     return [self argv_add__:[NSString stringWithUTF8String:s]];
 }
 

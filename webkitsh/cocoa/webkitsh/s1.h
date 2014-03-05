@@ -22,6 +22,10 @@ enum{
 	new_window_,
 	show_window_,
 	window_destroy_,
+
+    open_file_,
+    system_terminate_,
+    
 	s1_length_
 };
 extern NSString* s1_[s1_length_][1];

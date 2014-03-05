@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33038CFE18BCB96100399F12 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33038CFD18BCB96100399F12 /* Carbon.framework */; };
 		330D3CCF164F6EFB000B2B07 /* s1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 330D3CCE164F6EFB000B2B07 /* s1.mm */; };
 		333CEABC164DE3DE00E28C4E /* window___.m in Sources */ = {isa = PBXBuildFile; fileRef = 333CEABB164DE3DE00E28C4E /* window___.m */; };
 		33518414165C72F80049E416 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 33518413165C72F80049E416 /* icon.icns */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		33038CFD18BCB96100399F12 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		330D3CCD164F6EFB000B2B07 /* s1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = s1.h; sourceTree = "<group>"; };
 		330D3CCE164F6EFB000B2B07 /* s1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = s1.mm; sourceTree = "<group>"; };
 		333CEABA164DE3DE00E28C4E /* window___.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "window___.h"; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33038CFE18BCB96100399F12 /* Carbon.framework in Frameworks */,
 				33EBE35F15EC69090006ED5F /* WebKit.framework in Frameworks */,
 				33EBE32B15EC67A80006ED5F /* Cocoa.framework in Frameworks */,
 			);
@@ -109,6 +112,7 @@
 		33EBE32915EC67A80006ED5F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				33038CFD18BCB96100399F12 /* Carbon.framework */,
 				33EBE32A15EC67A80006ED5F /* Cocoa.framework */,
 				33EBE34815EC67A90006ED5F /* SenTestingKit.framework */,
 				33EBE32C15EC67A80006ED5F /* Other Frameworks */,

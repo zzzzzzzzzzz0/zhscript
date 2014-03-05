@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EDDBB83B-8F1F-40AE-B618-43A55BD52622</string>
+	<key>IDESourceControlProjectName</key>
+	<string>webkitsh</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>29831C36-D830-45C5-9B05-5C66480A1BAE</key>
+		<string>https://github.com/zzzzzzzzzzz0/zhscript.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>webkitsh/cocoa/webkitsh.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>29831C36-D830-45C5-9B05-5C66480A1BAE</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zzzzzzzzzzz0/zhscript.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>29831C36-D830-45C5-9B05-5C66480A1BAE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>29831C36-D830-45C5-9B05-5C66480A1BAE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>zhscript</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -7,9 +7,11 @@
 //
 
 #import "AppDelegate.h"
-//../../../../trunk/new_gg/
+#include <Carbon/Carbon.h>
+
+//../../../../new_gg/
 //User Header Search Paths
-//$HOME/Documents/src/zhscript/trunk/new_gg
+//$HOME/Documents/src/zhscript/new_gg
 #include "l4/l4___.cc"
 #include "l4/keyword.h"
 #include "for_arg_.h"
@@ -113,6 +115,14 @@ const char* call4__(window___* w,int i1,int argc,...){
 	_next_args
 	return call4a__(w,i1,argc,argv2);
 }
+static BOOL call4b__(int i1, window___* w) {
+    call4_data___* data = [[call4_data___ alloc]init:i1 :w];
+    const char* ret = call4a__(data->w_, data->i1_, data->argc_, data->argv_);
+    if (ret[0] == 'x' && !ret[1]) {
+        return NO;
+    }
+    return YES;
+}
 
 static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,void* shangji,int argc,...) {
 	NSMutableArray* p=[NSMutableArray new];
@@ -124,6 +134,46 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
     }
 	_next_args
 	[sh api__:shangji :ce :p :buf :siz :addr_ret];
+}
+
+OSStatus SendAppleEventToSystemProcess(AEEventID EventToSend)
+{
+    AEAddressDesc targetDesc;
+    static const ProcessSerialNumber kPSNOfSystemProcess = { 0, kSystemProcess };
+    AppleEvent eventReply = {typeNull, NULL};
+    AppleEvent appleEventToSend = {typeNull, NULL};
+    
+    OSStatus error = noErr;
+    
+    error = AECreateDesc(typeProcessSerialNumber, &kPSNOfSystemProcess,
+                         sizeof(kPSNOfSystemProcess), &targetDesc);
+    
+    if (error != noErr)
+    {
+        return(error);
+    }
+    
+    error = AECreateAppleEvent(kCoreEventClass, EventToSend, &targetDesc,
+                               kAutoGenerateReturnID, kAnyTransactionID, &appleEventToSend);
+    
+    AEDisposeDesc(&targetDesc);
+    if (error != noErr)
+    {
+        return(error);
+    }
+    
+    error = AESend(&appleEventToSend, &eventReply, kAENoReply,
+                   kAENormalPriority, kAEDefaultTimeout, NULL, NULL);
+    
+    AEDisposeDesc(&appleEventToSend);
+    if (error != noErr)
+    {
+        return(error);
+    }
+    
+    AEDisposeDesc(&eventReply);
+    
+    return(error); 
 }
 
 @implementation AppDelegate
@@ -202,6 +252,19 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
     [self io_call4__:[[call4_data___ alloc]init:show_window_ :w ] :NO];
 }
 
+-(long) alert__:(NSString*)msg :(char)type {
+    NSAlert* alert = [NSAlert new];
+    [alert setAlertStyle:NSInformationalAlertStyle];
+    [alert setMessageText:msg];
+    switch (type) {
+        case 'y':
+            [alert addButtonWithTitle:@"Yes"];
+            [alert addButtonWithTitle:@"No"];
+            break;
+    }
+    return [alert runModal];
+}
+
 -(void) api__:(void*)shangji :(void*)ce :(NSMutableArray*)p :(char*)buf :(long)siz :(char**)addr_ret {
 	if([p count]<1){
 		err_buzu__();
@@ -267,6 +330,27 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
         }
         return;
     }
+    if ([p1 isEqualToString:@"提示"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        if ([p count]<3) {
+            err_buzu__();
+            return;
+        }
+        char type = 'o';
+        switch([p count]) {
+                case 4:
+                if ([[p objectAtIndex:3] isEqualToString:@"是否按钮"]) {
+                    type = 'y';
+                }
+        }
+        NSInteger result = [self alert__:[p objectAtIndex:2] :type];
+        switch (type) {
+            case 'y':
+                sprintf(buf, "%ld", result);
+                break;
+        }
+        return;
+    }
     if ([p1 isEqualToString:@"移动"]) {
         if ([p count]<4) {
             err_buzu__();
@@ -280,81 +364,6 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
         [w2 setFrameOrigin:NSMakePoint(x,y)];
         return;
     }
-    //||p1==s1_[create_web_view_][0]
-    if ([p1 isEqualToString:@"访问"]) {
-        if ([p count]<3) {
-            err_buzu__();
-            return;
-        }
-        w=[self get_window__:p0 :page_num :p1];if(!w)return;
-        [[w webview__] setMainFrameURL:[p objectAtIndex:2]];
-        return;
-    }
-    //活动
-    //激活
-    //隐藏
-    if([p1 isEqualToString:s1_[window_destroy_][0]]){
-        w=[self get_window__:p0 :page_num :p1];if(!w)return;
-        [w destroy__];
-        return;
-    }
-    if ([p1 isEqualToString:@"大小"]) {
-        if ([p count]<4) {
-            err_buzu__();
-            return;
-        }
-        w=[self get_window__:p0 :page_num :p1];if(!w)return;
-        NSWindow* w2=[w window__];
-        NSRect r2=[w2 frame];
-        r2.size.width=[[p objectAtIndex:2]floatValue];
-        r2.size.height=[[p objectAtIndex:3]floatValue];
-        NSRect r3=NSMakeRect(0,0,100,100);
-        NSRect r4=[NSWindow contentRectForFrameRect:r3 styleMask:NSTitledWindowMask];
-        r2.size.height+=r3.size.height-r4.size.height;
-        [w2 setFrame:r2 display:true];
-        return;
-    }
-    //刷新
-    //前进
-    //后退
-    //最大化
-    //加钮
-    //不可关闭
-    //目标
-    if ([p1 isEqualToString:@"居中"]) {
-        w=[self get_window__:p0 :page_num :p1];if(!w)return;
-        [[w window__] center];
-        return;
-    }
-    //显现
-    //侦听
-    //创建
-    if ([p1 isEqualToString:@"侦听"]) {
-        w=[self get_window__:p0 :page_num :p1];if(!w)return;
-		for(size_t i2=2;i2<[p count];i2++){
-			NSString* p2=[p objectAtIndex:i2];
-			int i1=-1;
-			for(int i=0;i<s1_length_;i++){
-				if([p2 isEqualToString:s1_[i][0]]){
-					i1=i;
-					break;
-				}
-			}
-			if(i1>=0){
-				/*const char* s1=s1_[i1][1];
-				if(s1){
-					w->cb_[i1]=cb_[i1];
-				}*/
-			}else{
-				err_buzhichi__([p2 UTF8String],[p1 UTF8String]);
-				return;
-			}
-			if(++i2>=[p count])
-				break;
-			[w codes__:i1 :[p objectAtIndex:i2]];
-		}
-		return;
-	}
     if ([p1 isEqualToString:@"文件选择"]) {
         NSOpenPanel* op = NULL;
         NSSavePanel* sp = NULL;
@@ -408,6 +417,132 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
             }
             *addr_ret = dup__([s UTF8String]);
         }
+        return;
+    }
+    //||p1==s1_[create_web_view_][0]
+    if ([p1 isEqualToString:@"访问"]) {
+        if ([p count]<3) {
+            err_buzu__();
+            return;
+        }
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        [[w webview__] setMainFrameURL:[p objectAtIndex:2]];
+        return;
+    }
+    //活动
+    if ([p1 isEqualToString:@"激活"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        NSWindow* w2 = [w window__];
+        if([w2 isMiniaturized])
+            [w2 deminiaturize:w2];
+        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+        return;
+    }
+    //隐藏
+    if([p1 isEqualToString:s1_[window_destroy_][0]]){
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        [w destroy__];
+        return;
+    }
+    if ([p1 isEqualToString:@"大小"]) {
+        if ([p count]<4) {
+            err_buzu__();
+            return;
+        }
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        NSWindow* w2=[w window__];
+        NSRect r2=[w2 frame];
+        r2.size.width=[[p objectAtIndex:2]floatValue];
+        r2.size.height=[[p objectAtIndex:3]floatValue];
+        NSRect r3=NSMakeRect(0,0,100,100);
+        NSRect r4=[NSWindow contentRectForFrameRect:r3 styleMask:NSTitledWindowMask];
+        r2.size.height+=r3.size.height-r4.size.height;
+        [w2 setFrame:r2 display:true];
+        return;
+    }
+    if ([p1 isEqualToString:@"系统"]) {
+        OSStatus error = noErr;
+        if ([p0 isEqualToString:@"重启"]) {
+            error = SendAppleEventToSystemProcess(kAERestart);
+            return;
+        }
+        if ([p0 isEqualToString:@"关机"]) {
+            error = SendAppleEventToSystemProcess(kAEShutDown);
+            return;
+        }
+        if ([p0 isEqualToString:@"登出"]) {
+            error = SendAppleEventToSystemProcess(kAEReallyLogOut);
+            return;
+        }
+        if ([p0 isEqualToString:@"休眠"]) {
+            error = SendAppleEventToSystemProcess(kAESleep);
+            return;
+        }
+        err_buzhichi__([p0 UTF8String],[p1 UTF8String]);
+        return;
+    }
+    //刷新
+    //前进
+    //后退
+    if ([p1 isEqualToString:@"最大化"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        NSWindow* w2 = [w window__];
+        //[w2 performZoom:w2];
+        [w2 zoom:w2];
+        return;
+    }
+    if ([p1 isEqualToString:@"最小化"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        NSWindow* w2 = [w window__];
+        [w2 miniaturize:w2];
+        return;
+    }
+    //加钮
+    //不可关闭
+    //目标
+    if ([p1 isEqualToString:@"居中"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+        [[w window__] center];
+        return;
+    }
+    //显现
+    if ([p1 isEqualToString:@"侦听"]) {
+        w=[self get_window__:p0 :page_num :p1];if(!w)return;
+		for(size_t i2=2;i2<[p count];i2++){
+			NSString* p2=[p objectAtIndex:i2];
+			int i1=-1;
+			for(int i=0;i<s1_length_;i++){
+				if([p2 isEqualToString:s1_[i][0]]){
+					i1=i;
+					break;
+				}
+			}
+			if(i1>=0){
+				/*const char* s1=s1_[i1][1];
+				if(s1){
+					w->cb_[i1]=cb_[i1];
+				}*/
+			}else{
+				err_buzhichi__([p2 UTF8String],[p1 UTF8String]);
+				return;
+			}
+			if(++i2>=[p count])
+				break;
+			[w codes__:i1 :[p objectAtIndex:i2]];
+		}
+		return;
+	}
+    if([p1 isEqualToString:s1_[new_window_][0]]){
+        //[[MainMenuBlue alloc] initWithNibName:@"MainMenu" bundle:nil];
+        //[[UIViewController alloc] initWithNibName:nil bundle:nil];
+        //[[NSViewController alloc] initWithNibName:@"MainMenu" bundle:nil];
+        /*MainMenuController *mainMenuController = [[MainMenuController alloc]initWithNibName:@"MainMenu" bundle:[NSBundle mainBundle]];
+         self.menuController = mainMenuController;
+         [mainMenuController release];*/
+        //self.menuController = [[MainMenuController alloc]initWithNibName:@"MainMenu" bundle:[NSBundle mainBundle]];
+        //[self.view.window addSubview:[menuController view]];
+        NSWindowController *wc=[[NSWindowController alloc] initWithWindowNibName:@"MainMenu"];
+        [wc showWindow:nil];
         return;
     }
     //图标
@@ -525,11 +660,12 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
         return [a1 UTF8String];
     }
     else if ([a1 isKindOfClass:[NSNull class]] ||
-             [[a1 className] isEqualToString:@"WebUndefined"] ||
              a1==nil) {
         return null_.c_str();
     }
-    else if ([[a1 className] isEqualToString:@"__NSCFString"] ||
+    else if (
+             [[a1 className] isEqualToString:@"WebUndefined"] ||
+             [[a1 className] isEqualToString:@"__NSCFString"] ||
              [[a1 className] isEqualToString:@"__NSCFConstantString"]) {
         return 0;
     }
@@ -573,6 +709,9 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
     call4_data___* data = [call4_data___ new];
     data->i1_ = -1;
     data->code_ = [NSString stringWithUTF8String:[self cc__:p0]];
+    if (!data->code_) {
+        return;
+    }
     [data argv_add2__:[self cc__:p1]];
     [data argv_add2__:[self cc__:p2]];
     [data argv_add2__:[self cc__:p3]];
@@ -620,24 +759,13 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
 }
 - (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame {
     //NSLog(@"%@ %@ %@", self, NSStringFromSelector(_cmd), message);
-    NSAlert* alert = [NSAlert new];
-    [alert setAlertStyle:NSInformationalAlertStyle];
-    [alert setMessageText:message];
-    [alert runModal];
+    [self alert__:message:'o'];
     [self io_call4__:[[[call4_data___ alloc]init:script_alert_ :[self get_window__:sender] ] argv_add__:message] :NO];
 }
 - (BOOL)webView:(WebView *)sender runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame {
-    NSAlert* alert = [NSAlert new];
-    [alert setAlertStyle:NSInformationalAlertStyle];
-    [alert setMessageText:message];
-    [alert addButtonWithTitle:@"Yes"];
-    [alert addButtonWithTitle:@"No"];
     BOOL b;
-    NSInteger result = [alert runModal];
-    if (result == NSAlertFirstButtonReturn)
-        b=YES;
-    else
-        b=NO;
+    NSInteger result = [self alert__:message:'y'];
+    b = (result == NSAlertFirstButtonReturn);
     [self io_call4__:[[[call4_data___ alloc]init:script_confirm_ :[self get_window__:sender] ] argv_add__:message] :NO];
     return b;
 }
@@ -664,9 +792,27 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
     }
     [listener use];
 }
+-(BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+{
+	return YES;
+}
+-(void) application:(NSApplication *)theApplication openFiles:(NSArray *)filenames
+{
+    for (int i = 0; i <[filenames count]; i++) {
+        NSString *filename = [filenames objectAtIndex:i];
+        [self io_call4__:[[[call4_data___ alloc]init:open_file_ :nil] argv_add__:filename] :NO];
+    }
+}
+
 - (BOOL)windowShouldClose:(id)window{
-    [self io_call4__:[[call4_data___ alloc]init:window_destroy_ :[self get_window3__:window] ] :NO];
-    return YES;
+    return call4b__(window_destroy_, [self get_window3__:window]);
+}
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)theApplication
+{
+    if (!call4b__(system_terminate_, nil)) {
+        return NSTerminateCancel;
+    }
+    return  NSTerminateNow;
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;  //quit when main window is closed
@@ -726,11 +872,13 @@ static void suidao__(char**addr_ret,char*buf,long siz,AppDelegate* sh,void*ce,vo
 
 - (void) awakeFromNib {
     [NSApp setDelegate: self];
+    //[_window_ setDelegate:self];这得用拖
     
     [_webview_ setUIDelegate:self];
     [_webview_ setFrameLoadDelegate:self];
     [_webview_ setResourceLoadDelegate:self];
     [_webview_ setPolicyDelegate:self];
+    [[NSApplication sharedApplication] setDelegate:self];
     
     windows_=[NSMutableArray new];
     zhscript_2_ = [NSString stringWithString:s1_[zhscript_][0]];

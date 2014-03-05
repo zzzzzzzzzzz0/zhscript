@@ -1,12 +1,23 @@
 #!/bin/sh
 
-#/Users/moyeasoft/Library/Developer/Xcode/DerivedData/webkitsh-cvtusoiishvhpsblaabvlhqspizf/Build/Products/Debug/webkitsh1.app/Contents/MacOS/
-#/Users/moyeasoft/Library/Developer/Xcode/DerivedData/webkitsh-acbabdfhxuqksogygygtqhybmyjx/Build/Products/Debug/webkitsh1.app/Contents/MacOS/
+cd `dirname $0`/../../new_o
+pwd
+no=$PWD
+
+#cvtusoiishvhpsblaabvlhqspizf
+#acbabdfhxuqksogygygtqhybmyjx
 cd ~/Library/Developer/Xcode/DerivedData/webkitsh-*/Build/Products/Debug/webkitsh1.app/Contents/MacOS/
 pwd
-ln -s ~/Documents/src/zhscript/trunk/new_o/l4.so .
-ln -s ~/Documents/src/zhscript/trunk/new_o/syn-zh .
-ln -s ~/Documents/src/zhscript/trunk/new_o/err-zh .
-ln -s ~/Documents/src/zhscript/trunk/new_o/lib .
-ln -s ~/Documents/src/zhscript/trunk/new_o/lib2 .
 
+ln -sf $no/l4.so .
+ln -sf $no/syn-zh .
+ln -sf $no/err-zh .
+ln -sfn $no/lib .
+ln -sfn $no/lib2 .
+ln -sfn $no/edit .
+
+for i in $@
+do
+	echo $i
+	ln -sf $i webkitsh1.zs
+done
