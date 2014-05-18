@@ -11,13 +11,7 @@
 #include "sh-base/extern.h"
 
 static string true_="true",false_="false";
-
-webkit_view___* webkit_view___::from__(WebKitWebView* page){
-	return (webkit_view___*)gtk_object_get_data(GTK_OBJECT(page),object_data_view_);
-}
-GtkWidget* webkit_view___::scrolled_from__(WebKitWebView* page){
-	return (GtkWidget*)gtk_object_get_data(GTK_OBJECT(page),object_data_scrolled_);
-}
+string webkit_view___::user_agent_;
 
 /*void webkit_view___::close__(int page_num){
 	GtkWidget* v=GTK_WIDGET(webview__(page_num));
@@ -126,6 +120,12 @@ GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {
 
 		g_signal_connect(webview,"window-object-cleared",G_CALLBACK(window_object_cleared__),NULL);
 		signal_connect__(webview);
+	}
+	if(!user_agent_.empty()) {
+		WebKitWebSettings* wws=webkit_web_view_get_settings(WEBKIT_WEB_VIEW(webview));
+		WebKitWebSettings* wws2=webkit_web_settings_copy(wws);
+		g_object_set((GObject*)wws2, "user-agent", user_agent_.c_str(), NULL);
+		webkit_web_view_set_settings(WEBKIT_WEB_VIEW(webview), wws2);
 	}
 
 	return webview;

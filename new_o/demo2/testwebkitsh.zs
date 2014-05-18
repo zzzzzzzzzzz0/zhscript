@@ -36,6 +36,9 @@
 								使主窗#down、内容、‘参数’如果‘态’等于ok那么“<hr><img src=file://‘文件’>”、基址为file:///。
 							上代码、by、down');
 					}
+					function go2__(to) {
+						z$('显示先使主窗、' + to + '了换行');
+					}
 					</script>
 					<style>body{font-size:10px;}</style>
 					<a href="zhscript:back">后退</a>
@@ -48,7 +51,8 @@
 					<input onclick="go__(this.value)" type=button value="销毁">
 					<br>
 					
-					<a href="javascript:z$('',1,' b b ',false);">控制台输出信息</a><br>
+					<a href="javascript:z$('',1,' b b ',false);">控制台输出信息</a>
+					<br>
 					
 					youku：
 					<a href="javascript:z$('使主窗#youku、新开');">新开</a> 
@@ -57,11 +61,16 @@
 					
 					<a href="javascript:down__()">下载</a><br>
 					
+					<input onclick="go2__(this.value)" type=button value="标签名">
+					<input onclick="go__(this.value)" type=button value="标签名、a">
+					<br>
+
 					<hr><span id=msg></span><hr>
 					
 					链接：<span id=lian></span><br>
 					进度：<span id=jindu></span><br>
 					请求：<span id=qingqiu></span><br>
+					类型请求：<span id=qingqiu2></span><br>
 					消息：<span id=xiaoxi></span><br>
 					装载完：<span id=zhuangwan></span><br>
 					装载完毕：<span id=zhuangbi></span><br>
@@ -100,6 +109,9 @@
 	上代码、
 	请求为下代码
 		使控制、插脚、htm__("qingqiu","先调用‘加反斜杠’、‘参数’、C了")。
+	上代码、
+	类型请求为下代码
+		使控制、插脚、htm__("qingqiu2","先调用‘加反斜杠’、‘参数’、C了")。
 	上代码、
 	标签页切换为下代码
 		使主窗、插脚、“z$("使主窗、标题、“"+document.title+"”")”。

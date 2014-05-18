@@ -21,3 +21,5 @@ do
 	echo $i
 	ln -sf $i webkitsh1.zs
 done
+
+ls -l

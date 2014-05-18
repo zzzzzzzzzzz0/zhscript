@@ -28,10 +28,10 @@
 				}
 			}
 			function shizhu__(s) {
-				z$('使主窗、' + s);
+				return shi__('主窗、' + s);
 			}
 			function shi__(s) {
-				z$('使' + s);
+				return z$('使' + s);
 			}
 			function mini_a__() {
 				z$('使主窗、最小化');
@@ -46,7 +46,9 @@
 			<br>
 			<input type=button value="alert" onclick="alert(this.value)">
 			<input type=button value="confirm" onclick="alert(confirm('hello?'))">
-			<input type=button value="使主窗、移动、100、100" onclick="z$(this.value);">
+			<input type=button value="移动、100、100" onclick="shizhu__(this.value);">
+			<input type=button value="大小、300、600" onclick="shizhu__(this.value);">
+			<input type=button value="大小、600,300" onclick="shizhu__(this.value);">
 			<hr>
 			<input type=button value="z$" onclick="log__(z$());">
 			<input type=button value="z$" onclick="log__(z$('',null));">
@@ -55,6 +57,7 @@
 			<input type=button value="‘保留字’" onclick="log__(z$(this.value));">
 			<input type=button value="false" onclick="log__(z$(this.value));">
 			<input type=button value="true" onclick="log__(z$(this.value));">
+			<input type=button value="大小" onclick="log__(shizhu__(this.value))">
 			<br>
 			<span id=log></span>
 			<hr>

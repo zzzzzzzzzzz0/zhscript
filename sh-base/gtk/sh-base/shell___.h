@@ -29,4 +29,5 @@ public:
 	virtual bool api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
 };
 
+extern void get_xid__(GtkWidget* w, char* buf);
 #endif /* SHELL____H_ */

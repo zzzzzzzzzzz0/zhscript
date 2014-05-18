@@ -59,6 +59,7 @@ private:
 	deque<view___*> views_;
 	GtkWidget* window_;
 	GtkWidget* notebook_;
+	GtkWidget* opener_;
 	string name_;
 	window_flag___ flag_;
 	bool is_main_;
@@ -80,6 +81,9 @@ public:
 	GtkLabel* label__(int page_num);
 	GtkWidget* close_button__(int page_num);
 	void close__(int page_num);
+	void close__(void* v) {
+		close__(page_num__(view___::scrolled_from__(v)));
+	}
 	GtkWidget* button_new__(int page_num,const char*name,
 			const char*iconame,GtkIconSize size,
 			const char* code, char clicked);
@@ -95,9 +99,10 @@ public:
 
 	int current_page__();
 	int n_pages__();
+	GtkWidget* nth_page__(int page_num);
 	void set_page__(int page_num);
-	const char* page_name__(int page_num);
 	int page_num__(const char* name);
+	int page_num__(GtkWidget* sw);
 	int page_check__(int page_num);
 };
 

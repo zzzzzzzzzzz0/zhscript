@@ -8,6 +8,13 @@
 #include "view___.h"
 #include "s1___.h"
 
+view___* view___::from__(void* v) {
+	return (view___*)gtk_object_get_data(GTK_OBJECT(v), object_data_view_);
+}
+GtkWidget* view___::scrolled_from__(void* v) {
+	return (GtkWidget*)gtk_object_get_data(GTK_OBJECT(v), object_data_scrolled_);
+}
+
 view___::view___(GtkWidget* scrolled2, void* window) {
 	widget_ = NULL;
 	window_ = window;

@@ -8,7 +8,35 @@
 #include "cairog_shell___.h"
 #include "sh-base/extern.h"
 #include "sh-base/extern2.h"
-#include "gif_surface___.h"
+
+static GdkWindow* get_w__(cairog_view___* v) {
+	return
+	#ifdef no_gtk_2_
+	gtk_widget_get_window(v->widget__())
+	#else
+	v->widget__()->window
+	#endif
+	;
+}
+
+static guint gif_timeout_ = 0;
+static deque<cairog_view___*> gifs_;
+gboolean gif_timeout_cb__(gpointer data) {
+	for(size_t i = 0; i < gifs_.size(); i++) {
+		cairog_view___* v = gifs_[i];
+		gif_surface___* gif = v->gif_;
+		if(gif->is_end__() && !v->gif_code_.empty()) {
+			const char* ret = call4__(v->gif_code_.c_str(), NULL, 0, NULL, 0);
+			if(ret[0]=='x' && !ret[1]) {
+				continue;
+			}
+		}
+		if(gif->next__()) {
+			gdk_window_invalidate_rect(get_w__(v), NULL, FALSE);
+		}
+	}
+	return true;
+}
 
 view___* cairog_shell___::new_view__(GtkWidget* scrolled2, window___* window) {
 	return new cairog_view___(scrolled2, window);
@@ -61,14 +89,7 @@ bool cairog_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf
 				v = (cairog_view___*)get_view__(p0, page_num, p1);
 				if(!v)
 					return true;
-				GdkWindow* w1 =
-					#ifdef no_gtk_2_
-					gtk_widget_get_window(v->widget__())
-					#else
-					v->widget__()->window
-					#endif
-					;
-				gdk_window_invalidate_rect (w1, NULL, FALSE);
+				gdk_window_invalidate_rect (get_w__(v), NULL, FALSE);
 				//gdk_flush
 				return true;
 			}
@@ -77,6 +98,28 @@ bool cairog_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf
 				if(!v)
 					return true;
 				v->huitu_ = s__(p,2);
+				return true;
+			}
+			if(p1 == "gif") {
+				if(p->size() <= 4) {
+					err_buzu__(p1.c_str());
+					return true;
+				}
+				v = (cairog_view___*)get_view__(p0, page_num, p1, false);
+				if(!v)
+					return true;
+				const string& p2 = s__(p,2);
+				gif_surface___ *image;
+				if(sscanf(p2.c_str(), "%ld", &image)) {
+					v->set_gif__(image, s2f__(s__(p,3)), s2f__(s__(p,4)),
+							p->size() > 5 ? (*p)[5].c_str() : "");
+					gifs_.push_back(v);
+					if(!gif_timeout_) {
+						gif_timeout_ = g_timeout_add(100, gif_timeout_cb__, NULL);
+					}
+				} else {
+					err_buzhichi__(p2, p1.c_str());
+				}
 				return true;
 			}
 		}

@@ -17,6 +17,15 @@
 #include "windows___.h"
 #include "extern2.h"
 
+void get_xid__(GtkWidget* w, char* buf) {
+	GdkWindow* w2=gtk_widget_get_window(w);
+	//GDK_DRAWABLE(w2)
+	sprintf(buf,"%lu",GDK_WINDOW_XID(w2));
+	/*sprintf(buf,"%lu",
+			gdk_x11_drawable_get_xid(
+					gtk_widget_get_window(GTK_WIDGET(w->widget__()))));*/
+}
+
 static void not_block__() {
 	while (gtk_events_pending ())
 	  gtk_main_iteration ();
@@ -140,6 +149,17 @@ const string& s__(const deque<string>* p, size_t i) {
 }
 const string& s__(const deque<string>& p, size_t i) {
 	return s__(&p, i);
+}
+
+class event_button___ {
+public:
+	string code_;
+};
+
+static gint event_button__(GtkWidget *widget, GdkEventButton *event, gpointer data) {
+	event_button___* eb = (event_button___*)data;
+	call4__(eb->code_.c_str(), NULL, 0, NULL, 0);
+	return FALSE;
 }
 
 static s1___* new_window_s1_ = new s1___("创建", "", 'w');
@@ -285,7 +305,19 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1=="标签名"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		cpy__(buf, w->page_name__(page_num), siz);
+		GtkWidget*sw = w->nth_page__(page_num);
+		if(p->size()<3){
+			string name2;
+			w->name2__(name2, sw);
+			cpy__(buf, name2.c_str(), siz);
+		} else {
+			const char* name = (*p)[2].c_str();
+			if(w->page_num__(name) != notebook_page_no_) {
+				err_wufa__(p1, name);
+				return true;
+			}
+			gtk_widget_set_name(sw, name);
+		}
 		return true;
 	}
 	if(p1=="标签数目"){
@@ -306,12 +338,37 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			gtk_label_set_markup(l, (*p)[2].c_str());
 		return true;
 	}
+	if(p1=="标签提示"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		GtkLabel* l=w->label__(page_num);
+		if(!l){
+			err_wufa__(p1,p0.c_str());
+			return true;
+		}
+		if(p->size()<3){
+		}else
+			gtk_widget_set_tooltip_markup(GTK_WIDGET(l), (*p)[2].c_str());
+		return true;
+	}
 	if(p1=="标题"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		if(p->size()<3){
 			cpy__(buf, gtk_window_get_title (w->window__()), siz);
 		}else
 			gtk_window_set_title (w->window__(), (*p)[2].c_str());
+		return true;
+	}
+	if(p1=="焦点"){
+		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
+		gtk_widget_grab_focus(v->widget__());
+		return true;
+	}
+	if(p1=="敏感"){
+		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
+		if(p->size()<3){
+			l2s__(gtk_widget_get_sensitive(v->widget__()), buf);
+		}else
+			gtk_widget_set_sensitive(v->widget__(), s2i__((*p)[2],0));
 		return true;
 	}
 	if(p1=="移动"){
@@ -361,11 +418,6 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		w->destroy__();
 		return true;
 	}
-	if(p1=="焦点"){
-		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
-		gtk_widget_grab_focus(v->widget__());
-		return true;
-	}
 	if(p0=="屏幕"){
 		if(p1 == "宽度") {
 			l2s__(gdk_screen_width(), buf);
@@ -392,6 +444,57 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	if(p1=="最大化"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_maximize (w->window__());
+		return true;
+	}
+	if(p1=="取消最大化"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_unmaximize (w->window__());
+		return true;
+	}
+	if(p1=="最小化"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_iconify (w->window__());
+		return true;
+	}
+	if(p1=="恢复"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_present (w->window__());
+		return true;
+	}
+	if(p1=="置顶" || p1=="取消置顶"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_set_keep_above (w->window__(), p1=="置顶");
+		return true;
+	}
+	if(p1=="无标签"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+	    gtk_notebook_set_show_tabs(w->notebook__(), false);
+		return true;
+	}
+	if(p1=="无边框"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_notebook_set_show_border(w->notebook__(), false);
+		return true;
+	}
+	if(p1=="不可关闭"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		GtkWidget* b=w->close_button__(page_num);
+		if(!b){
+			err_wufa__(p1,p0.c_str());
+			return true;
+		}
+		//gtk_widget_set_sensitive (b,false);
+		gtk_widget_hide (b);
+		return true;
+	}
+	if(p1=="居中"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_set_position(w->window__(),GTK_WIN_POS_CENTER);
+		return true;
+	}
+	if(p1=="显现"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		show_window__(w);
 		return true;
 	}
 	if(p1=="加钮"){
@@ -457,37 +560,6 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		}
 		return true;
 	}
-	if(p1=="无标签"){
-		w=get_window__(p0,page_num,p1);if(!w)return true;
-	    gtk_notebook_set_show_tabs(w->notebook__(), false);
-		return true;
-	}
-	if(p1=="无边框"){
-		w=get_window__(p0,page_num,p1);if(!w)return true;
-		gtk_notebook_set_show_border(w->notebook__(), false);
-		return true;
-	}
-	if(p1=="不可关闭"){
-		w=get_window__(p0,page_num,p1);if(!w)return true;
-		GtkWidget* b=w->close_button__(page_num);
-		if(!b){
-			err_wufa__(p1,p0.c_str());
-			return true;
-		}
-		//gtk_widget_set_sensitive (b,false);
-		gtk_widget_hide (b);
-		return true;
-	}
-	if(p1=="居中"){
-		w=get_window__(p0,page_num,p1);if(!w)return true;
-		gtk_window_set_position(w->window__(),GTK_WIN_POS_CENTER);
-		return true;
-	}
-	if(p1=="显现"){
-		w=get_window__(p0,page_num,p1);if(!w)return true;
-		show_window__(w);
-		return true;
-	}
 	if(p1=="侦听" || p1=="加侦听"){
 		w=get_window__(p0,page_num,p1,false);if(!w)return true;
 		bool is_add = p1=="加侦听";
@@ -527,6 +599,20 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 						w->codes_[i1] = p3;
 				}
 			}
+		}
+		return true;
+	}
+	if(p1 == "事件") {
+		w=get_window__(p0,page_num,p1,false);if(!w)return true;
+		for(size_t i2 = 2; i2 < p->size();) {
+			const string& p2 = (*p)[i2++];
+			if(err_buzu2__(p, i2))
+				return true;
+			const string& p3 = (*p)[i2++];
+			event_button___* eb = new event_button___();
+			eb->code_ = p3;
+			g_signal_connect(G_OBJECT(w->widget__()), p2.c_str(),
+					GTK_SIGNAL_FUNC(event_button__), eb);
 		}
 		return true;
 	}
@@ -622,7 +708,11 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1=="无修饰"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		gtk_window_set_decorated(w->window__(),false);
+		bool b = false;
+		if(p->size() > 2) {
+			b = !s2i__((*p)[2], b);
+		}
+		gtk_window_set_decorated(w->window__(), b);
 		return true;
 	}
 	if(p1=="鼠标穿透"){
@@ -641,12 +731,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1=="xid"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		GdkWindow* w2=gtk_widget_get_window(w->widget__());
-		//GDK_DRAWABLE(w2)
-		sprintf(buf,"%lu",GDK_WINDOW_XID(w2));
-		/*sprintf(buf,"%lu",
-				gdk_x11_drawable_get_xid(
-						gtk_widget_get_window(GTK_WIDGET(w->widget__()))));*/
+		get_xid__(w->widget__(), buf);
 		return true;
 	}
 	if(p0=="代码"){

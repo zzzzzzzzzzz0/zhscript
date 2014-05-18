@@ -81,19 +81,28 @@ static char cr_[32], callback_[64];
 static const char* argv_[] = {callback_, cr_, };
 static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpointer data) {
 	cairog_view___* w = (cairog_view___*)data;
-	if(w->huitu_.size() > 0) {
-		cairo_t *cr = gdk_cairo_create(
-			#ifdef no_gtk_2_
-			gtk_widget_get_window(widget)
-			#else
-			widget->window
-			#endif
-			);
-		sprintf(cr_, "%ld", (long)cr);
-		sprintf(callback_, "Z/%lx/${l%ld}", (long)callback__, (long)cr);
-		call4__(w->huitu_.c_str(), NULL, 2, argv_, 0);
-		cairo_destroy(cr);
+	cairo_t *cr = gdk_cairo_create(
+		#ifdef no_gtk_2_
+		gtk_widget_get_window(widget)
+		#else
+		widget->window
+		#endif
+		);
+	if(w->gif_) {
+		cairo_scale(cr, w->gif_sx_, w->gif_sy_);
+		cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+		if(w->gif_->pixbuf__()) {
+			gdk_cairo_set_source_pixbuf(cr, w->gif_->pixbuf__(), 0, 0);
+		}
+		cairo_paint(cr);
+	} else {
+		if(w->huitu_.size() > 0) {
+			sprintf(cr_, "%ld", (long)cr);
+			sprintf(callback_, "Z/%lx/${l%ld}", (long)callback__, (long)cr);
+			call4__(w->huitu_.c_str(), NULL, 2, argv_, 0);
+		}
 	}
+	cairo_destroy(cr);
 	return FALSE;
 }
 
@@ -102,4 +111,6 @@ cairog_view___::cairog_view___(GtkWidget* scrolled2, void* window):view___(scrol
     gtk_container_add (GTK_CONTAINER (scrolled2), widget_);
     gtk_widget_show(widget_);
     g_signal_connect(G_OBJECT(widget_), "expose-event", G_CALLBACK(expose_event__), this);
+
+    gif_ = NULL;
 }

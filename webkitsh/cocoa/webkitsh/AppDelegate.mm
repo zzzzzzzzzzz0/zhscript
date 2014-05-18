@@ -13,6 +13,7 @@
 //User Header Search Paths
 //$HOME/Documents/src/zhscript/new_gg
 #include "l4/l4___.cc"
+#include "l4/args_util.cc"
 #include "l4/keyword.h"
 #include "for_arg_.h"
 #include "def1.h"
@@ -445,19 +446,36 @@ OSStatus SendAppleEventToSystemProcess(AEEventID EventToSend)
         return;
     }
     if ([p1 isEqualToString:@"大小"]) {
-        if ([p count]<4) {
-            err_buzu__();
-            return;
-        }
         w=[self get_window__:p0 :page_num :p1];if(!w)return;
         NSWindow* w2=[w window__];
         NSRect r2=[w2 frame];
-        r2.size.width=[[p objectAtIndex:2]floatValue];
-        r2.size.height=[[p objectAtIndex:3]floatValue];
         NSRect r3=NSMakeRect(0,0,100,100);
         NSRect r4=[NSWindow contentRectForFrameRect:r3 styleMask:NSTitledWindowMask];
-        r2.size.height+=r3.size.height-r4.size.height;
-        [w2 setFrame:r2 display:true];
+        CGFloat title_height = r3.size.height - r4.size.height;
+        switch ([p count]) {
+            case 4:
+                r2.size.width=[[p objectAtIndex:2]floatValue];
+                r2.size.height=[[p objectAtIndex:3]floatValue];
+                break;
+            case 3:
+            {
+                float w = r2.size.width, h = r2.size.height;
+                sscanf([[p objectAtIndex:2]UTF8String], "%f,%f", &w, &h);
+                r2.size.width = w;
+                r2.size.height = h;
+                break;
+            }
+            case 2:
+                sprintf(buf, "%.f,%.f", r2.size.width, r2.size.height - title_height);
+                return;
+        }
+        switch ([p count]) {
+            case 4:
+            case 3:
+                r2.size.height += title_height;
+                [w2 setFrame:r2 display:true];
+                return;
+        }
         return;
     }
     if ([p1 isEqualToString:@"系统"]) {

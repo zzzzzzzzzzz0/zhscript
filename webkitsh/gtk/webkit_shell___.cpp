@@ -33,37 +33,46 @@ static webkit_download___ down_;
 static GtkWidget* widget__(WebKitWebView* page) {
 	return webkit_view___::scrolled_from__(page);
 }
-static window___* window__(webkit_view___* v) {
+static window___* window__(view___* v) {
 	return (window___*)v->window__();
 }
 static window___* window__(WebKitWebView* page) {
 	return window__(webkit_view___::from__(page));
 }
 
-static WebKitWebView* tabpg_new2__(const char* name, window___* window) {
+static webkit_view___* tabpg_new2__(const char* name, window___* window) {
 	if(window->notebook__()) {
 		GtkWidget* scrolled2 = window->tabpg_new__(name);
 		webkit_view___* v = new webkit_view___(scrolled2, window, window->is_app_paintable__());
 		gtk_widget_show_all (scrolled2);
-		return v->webview__();
+		return v;
 	}
-	return ((webkit_view___*)(window->view__(0)))->webview__();
+	return (webkit_view___*)(window->view__(0));
 }
 
 static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* frame){
-	webkit_view___* v=webkit_view___::from__(page);
+	webkit_view___* v=(webkit_view___*)webkit_view___::from__(page);
 	WebKitWebView* wv;
 	if(down_.is_add__(page)) {
 		wv = (WebKitWebView*)webkit_web_view_new ();
 		down_.signal__(wv);
 	} else {
+		webkit_view___* v2;
 		if(v->target_)
-			wv=((webkit_view___*)v->target_)->webview__();
+			v2=(webkit_view___*)v->target_;
 		else
-			wv=tabpg_new2__(NULL, window__(v));
+			v2=tabpg_new2__(NULL, window__(v));
+		wv=v2->webview__();
 		string name2;
-		window__(wv)->name2__(name2, widget__(wv));
-		call4__(widget__(page),window__(page),create_web_view_s1_,1,name2.c_str());
+		window___* w2 = window__(wv);
+		w2->name2__(name2, widget__(wv));
+		const char* ret=call4__(widget__(page),window__(page),create_web_view_s1_,1,name2.c_str());
+		if(ret[0]=='x' && !ret[1]) {
+			if(!v->target_) {
+				w2->close__(wv);
+			}
+			wv = NULL;
+		}
 	}
 	return wv;
 }
@@ -134,8 +143,10 @@ static gboolean mime_type_policy_decision_requested__(
 	const char* ret = call4__(widget__(page), window__(page),
 			mime_type_policy_decision_requested_s1_, 3, mime_type, uri,
 			webkit_web_view_can_show_mime_type(page, mime_type) ? "1" : "0");
-	if(ret[0] == 'x' && !ret[1])
+	if(ret[0] == 'x' && !ret[1]) {
+		webkit_web_policy_decision_ignore(decision);
 		return true;
+	}
     return false;
 }
 
@@ -183,6 +194,11 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			webkit_web_view_execute_script (v->webview__(), (*p)[2].c_str());
 			return true;
 		}
+		if(p1=="网址"){
+			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			*addr_ret=dup__(webkit_web_view_get_uri(v->webview__()));
+			return true;
+		}
 		if(p1=="内容"){
 			if(err_buzu2__(p, 3))
 				return true;
@@ -220,7 +236,7 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 				window___* w=get_window__(p0,page_num,p1, true, &page_num2);if(!w)return true;
 				v=(webkit_view___*)w->view__(page_num);
 				if(page_num2.empty() || !v){
-					wv = tabpg_new2__(page_num2.c_str(), w);
+					wv = tabpg_new2__(page_num2.c_str(), w)->webview__();
 				}else
 					wv = v->webview__();
 			} else {
@@ -268,14 +284,16 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			if(err_buzu2__(p, 3))
 				return true;
 			v=(webkit_view___*)get_view__(p0,page_num,p1,false);if(!v)return true;
-			webkit_view___* w2=(webkit_view___*)get_view__((*p)[2],page_num,p1,false);if(!w2)return true;
-			v->target_=w2;
+			webkit_view___* v2=(webkit_view___*)get_view__((*p)[2],page_num,p1,false);if(!v2)return true;
+			v->target_=v2;
 			return true;
 		}
-		if(p1=="代理"){
-			if(err_buzu2__(p, 3))
-				return true;
-			SoupURI *proxyUri = soup_uri_new((*p)[2].c_str());
+		if(p1=="user-agent"){
+			webkit_view___::user_agent_ = p0;
+			return true;
+		}
+		if(p1=="代理") {
+			SoupURI *proxyUri = soup_uri_new(p0.c_str());
 			g_object_set(webkit_get_default_session(), SOUP_SESSION_PROXY_URI, proxyUri, NULL);
 			soup_uri_free(proxyUri);
 			return true;
