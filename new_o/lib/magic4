@@ -1,0 +1,11 @@
+赋予“库名”以“【库】‘参数0’”。
+如果存在‘库名’那么退出。
+
+赋予‘库名’以调用“L”、“libmagic.so”。
+赋予“magic_open”以调用“Gl”、‘‘库名’’、“magic_open”、“i”。
+赋予“magic_load”以调用“G”、‘‘库名’’、“magic_load”、“l”、“l”。
+
+（MAGIC_SYMLINK 2 MAGIC_MIME_TYPE 16（0x10） MAGIC_ERROR 512（0x200））
+赋予“‘库名’柄”以调用‘magic_open’、如果存在“参数1”那么‘参数1’否则“2”。
+调用‘magic_load’、‘‘库名’柄’、“0”。
+赋予“【‘库名’】得文件类型方法”以调用“Gc*”、‘‘库名’’、“magic_file”、“${l‘‘库名’柄’}”、“c*”。
