@@ -8,11 +8,14 @@
 #include "for_arg_.h"
 #include "call_util.cpp"
 #include <stdio.h>
-#include <gtk/gtkdialog.h>
+
+/*#include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserdialog.h>
-#include <gtk/gtkstock.h>
+#include <gtk/gtkstock.h>*/
+#include <gtk/gtk.h>
+
 #include <string>
 #include <deque>
 using namespace std;

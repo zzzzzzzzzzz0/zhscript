@@ -12,6 +12,10 @@
 #include <sys/shm.h>
 #include<signal.h>
 #include <stdio.h>
+
+//osx 10.9 need
+#include <unistd.h>
+
 dlle___ void dlln___(end_fork_eval__)(char*id,char *shm_addr,char *shm2_addr){
 	pid_t child_pid;
 	int shm_id;

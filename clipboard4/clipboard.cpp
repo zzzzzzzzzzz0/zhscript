@@ -17,9 +17,18 @@ static GtkClipboard *cb__() {
 dlle___ void cb_set_text__(const char* s) {
 	if(!s)
 		return;
-	gtk_clipboard_set_text(cb__(), s, strlen(s));
+	GtkClipboard *cb = cb__();
+	if(!cb)
+		return;
+	gtk_clipboard_set_text(cb, s, strlen(s));
 }
 
 dlle___ void cb_get_text__(char** addr_ret) {
-	*addr_ret = dup__(gtk_clipboard_wait_for_text(cb__()));
+	GtkClipboard *cb = cb__();
+	if(!cb)
+		return;
+	const char* s = gtk_clipboard_wait_for_text(cb);
+	if(!s)
+		return;
+	*addr_ret = dup__(s);
 }

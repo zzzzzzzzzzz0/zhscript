@@ -19,7 +19,7 @@ export ver_="-D ver_mac_mini_"
 ./mk_.sh r gxx_lib_ socket4
 ./mk_.sh r gxx_lib_ vartable4
 ./mk_.sh r gxx_lib_ xml4 "-I /usr/include/libxml2/ -lxml2"
-./mk_.sh r gxx_lib_ txtotxt4
+./mk_.sh r gxx_lib_ txtotxt4 "-liconv"
 ./mk_.sh r gxx_lib_ curle4 "-lcurl"
 ./mk_.sh r gxx_lib_ sqlite4 "-lsqlite3"
 ./mk_.sh r gcc_lib_ md4

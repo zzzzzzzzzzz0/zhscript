@@ -10,5 +10,10 @@
 上代码。
 
 链接 /usr/lib/libwebkitgtk-1.0.so.0 为 libwebkit-1.0.so.2 。
-链接 /opt2/src/WebKit-r75891/.libs/libwebkitgtk-1.0.so.0.5.2 为 libwebkitgtk-1.0.so.0 。
+（链接 /opt2/src/WebKit-r75891/.libs/libwebkitgtk-1.0.so.0.5.2 为 libwebkitgtk-1.0.so.0 。）
+链接 /usr/lib/libwebkitgtk-1.0.so 为 libwebkitgtk-1.0.so.0 。
 
+链接 /usr/lib/libicudata.so 为 libicudata.so.42 。
+链接 /usr/lib/libicui18n.so 为 libicui18n.so.42 。
+链接 /usr/lib/libicuuc.so 为 libicuuc.so.42 。
+链接 /opt2/src/vte-0.35.1/src/.libs/libvte2_90.so.9 为 libvte2_90.so.9 。

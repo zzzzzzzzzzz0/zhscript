@@ -8,6 +8,9 @@
 #include<iostream>
 using namespace std;
 
+//osx 10.9 need
+#include <unistd.h>
+
 #include "def1.h"
 #include "for_arg_.h"
 #include "l4/keyword.h"

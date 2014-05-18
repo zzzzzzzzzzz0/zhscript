@@ -16,6 +16,9 @@
 #include <errno.h>
 #include "l4/keyword.h"
 
+//osx 10.9 need
+#include <unistd.h>
+
 #ifdef ver_mac_mini_
 #define no_empty_sub_expression__(exp) (!exp[0] ? ".*" : exp)
 #else
