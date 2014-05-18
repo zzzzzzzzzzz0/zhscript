@@ -15,8 +15,12 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include <linux/limits.h>
 #include <signal.h>
+
+//osx 10.9 need
+//#include <linux/limits.h>
+#include <limits.h>
+#include <unistd.h>
 
 static int exit_flag=0;
 static void signal_handler(int sig_num) {
