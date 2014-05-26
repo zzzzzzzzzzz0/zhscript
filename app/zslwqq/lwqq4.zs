@@ -47,7 +47,7 @@
 			赋予*.c以“‘*.c’ ../lib/‘名’”。
 		了。
 		调用‘dir.end’、‘搜’。）
-		编译“-I../lib -I. -Dver_pidgin_lwqq_ ”（“‘*.c’ -lcurl”）-llwqq。
+		编译“-I../lib -I. -Dver_pidgin_lwqq_ ”（“‘*.c’ -lcurl”）“-Llib -llwqq”。
 		赋予liblwqq.so以lib/liblwqq.so。
 		执行“ls -l ‘目标’”“ ‘liblwqq.so’*”。
 		执行显示“cp ‘liblwqq.so’.0.3.0 ‘bin’/liblwqq.so.0”换行。
