@@ -612,7 +612,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			event_button___* eb = new event_button___();
 			eb->code_ = p3;
 			g_signal_connect(G_OBJECT(w->widget__()), p2.c_str(),
-					GTK_SIGNAL_FUNC(event_button__), eb);
+					G_CALLBACK(event_button__), eb);
 		}
 		return true;
 	}

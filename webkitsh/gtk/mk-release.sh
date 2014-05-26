@@ -1,5 +1,7 @@
 #!/bin/bash
-cd `dirname $0`/Release
+dir=`dirname $0`/Release
+mkdir -p $dir
+cd $dir
 tag=../../../new_o/webkitsh
 echo dir=$PWD
 echo tag=$tag
