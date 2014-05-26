@@ -4,18 +4,10 @@
 function on_login_failed(msg) {
 	alert(msg);
 }
-function on_login_verifycode_failed(msg, vc_file) {
-	$("vc_span").style.display = "block";
-	$("vc_file").src = vc_file;
-}
 </script>
 <form action=zhscript:login>
 帐号: <input type=text name=u id=user><br>
 密码: <input type=password name=p id=pass><br>
-<span id=vc_span style="display:none;">
-校验码: <input type=text name=vc><br>
-<img id=vc_file>
-</span>
 <input type=submit value=登入>
 </form>
 <script>

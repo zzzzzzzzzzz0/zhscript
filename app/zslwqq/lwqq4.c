@@ -6,11 +6,16 @@
 #include <libgen.h>
 #include <pthread.h>
 
+#ifdef ver_pidgin_lwqq_
+#include "lwqq.h"
+#include "lwjs.h"
+#else
 #include "login.h"
 #include "logger.h"
 #include "info.h"
 #include "smemory.h"
 #include "msg.h"
+#endif
 
 #define bool int
 #include "def1.h"
@@ -18,8 +23,7 @@ static void* jsq_;
 static callback3_2___ cb_;
 static callback2_2___ cb2_;
 static void* main_qu_;
-static char* new_msg_code_ = NULL;
-static char* face_code_ = NULL;
+static char *new_msg_code_ = NULL, *face_code_ = NULL, *vc_code_ = NULL;
 void init__(void* jsq, callback3_2___ cb, callback2_2___ cb2, void* main_qu) {
 	jsq_ = jsq;
 	cb_ = cb;
@@ -27,39 +31,20 @@ void init__(void* jsq, callback3_2___ cb, callback2_2___ cb2, void* main_qu) {
 	main_qu_ = main_qu;
 }
 
+static void malloc__(char** p, const char* s) {
+    if(*p)
+    	free(*p);
+    *p = malloc(strlen(s) + 1);
+    strcpy(*p, s);
+}
+static void free__(char** p) { 
+    if(*p) {
+    	free(*p);
+    	*p = NULL;
+    }
+}
+
 static LwqqClient *lc = NULL;
-
-char vc_image[128] = {0};
-void vc_image__(char* buf) {
-	strcpy(buf, vc_image);
-}
-
-/*static char vc_file[128] = {0};
-void vc_file__(char* buf) {
-	strcpy(buf, vc_file);
-}
-
-static char *get_vc()
-{
-    char vc[128] = {0};
-    int vc_len;
-    FILE *f;
-
-    if ((f = fopen(vc_file, "r")) == NULL) {
-        return NULL;
-    }
-
-    if (!fgets(vc, sizeof(vc), f)) {
-        fclose(f);
-        return NULL;
-    }
-    
-    vc_len = strlen(vc);
-    if (vc[vc_len - 1] == '\n') {
-        vc[vc_len - 1] = '\0';
-    }
-    return s_strdup(vc);
-}*/
 
 void list__(int* err, void* shangji, char *user, const char* code)
 {
@@ -123,50 +108,82 @@ void qun_list__(int* err, void* shangji, char *user, const char* code)
 void send__(char *user, char* msg)
 {
     /* argv look like: {"send", "74357485" "hello"} */
+#ifdef ver_pidgin_lwqq_
+    lwqq_msg_send_simple(lc, LWQQ_MS_BUDDY_MSG, user, msg);
+#else
     lwqq_msg_send2(lc, user, msg);
+#endif
 }
 
-static LwqqErrorCode cli_login(char* verifycode)
+static char *get_vc(char* vc_file)
+{
+    char vc[128] = {0};
+    int vc_len;
+    FILE *f;
+
+    if ((f = fopen(vc_file, "r")) == NULL) {
+        return NULL;
+    }
+
+    if (!fgets(vc, sizeof(vc), f)) {
+        fclose(f);
+        return NULL;
+    }
+    
+    vc_len = strlen(vc);
+    if (vc[vc_len - 1] == '\n') {
+        vc[vc_len - 1] = '\0';
+    }
+    return s_strdup(vc);
+}
+
+static char* vc__(char* vc_image) {
+	char vc_file[128];
+    snprintf(vc_file, sizeof(vc_file), "/tmp/lwqq_%s.txt", lc->username);
+    /* Delete old verify image */
+    unlink(vc_file);
+
+	int err;
+	cb2_(jsq_, main_qu_, &err, NULL, vc_code_, 0, NULL, 2, vc_image, vc_file);
+
+    lwqq_log(LOG_NOTICE, "Need verify code to login, please check "
+             "image file %s, and input what you see to file %s\n",
+             vc_image, vc_file);
+    while (1) {
+        if (!access(vc_file, F_OK)) {
+            sleep(1);
+            break;
+        }
+        sleep(1);
+    }
+	return get_vc(vc_file);
+}
+
+static LwqqErrorCode cli_login()
 {
     LwqqErrorCode err;
 
 #ifdef ver_pidgin_lwqq_
+    LWQQ_SYNC_BEGIN(lc);
 	lwqq_login(lc, LWQQ_STATUS_ONLINE, &err);
 #else
     lwqq_login(lc, &err);
 #endif
-    if (err == LWQQ_EC_LOGIN_NEED_VC) {
-        snprintf(vc_image, sizeof(vc_image), "/tmp/lwqq_%s.jpeg", lc->username);
-        
-        if (!verifycode[0])
-            return err;
-        sleep(1);
-        lc->vc->str = s_strdup(verifycode);
-        
-        /*snprintf(vc_file, sizeof(vc_file), "/tmp/lwqq_%s.txt", lc->username);
-        unlink(vc_file);
-        lwqq_log(LOG_NOTICE, "Need verify code to login, please check "
-                 "image file %s, and input what you see to file %s\n",
-                 vc_image, vc_file);
-        while (1) {
-            if (!access(vc_file, F_OK)) {
-                sleep(1);
-                break;
-            }
-            sleep(1);
-        }
-        lc->vc->str = get_vc();
-        if (!lc->vc->str) {
-            return err;
-        }*/
-        
-        lwqq_log(LOG_NOTICE, "Get verify code: %s\n", lc->vc->str);
 #ifdef ver_pidgin_lwqq_
-		lwqq_login(lc, LWQQ_STATUS_ONLINE, &err);
 #else
-	    lwqq_login(lc, &err);
-#endif
+    if (err == LWQQ_EC_LOGIN_NEED_VC) {
+		char vc_image[128];
+		snprintf(vc_image, sizeof(vc_image), "/tmp/lwqq_%s.jpeg", lc->username);
+        lc->vc->str = vc__(vc_image);
+        if (lc->vc->str) {
+		    lwqq_log(LOG_NOTICE, "Get verify code: %s\n", lc->vc->str);
+		    lwqq_login(lc, &err);
+        }
     }
+#endif
+#ifdef ver_pidgin_lwqq_
+    LWQQ_SYNC_END(lc);
+#endif
     return err;
 }
 
@@ -310,25 +327,36 @@ static void handle_new_msg(LwqqRecvMsg *recvmsg)
     s_free(recvmsg);
 }
 
+#ifdef ver_pidgin_lwqq_
+static void received_msg(LwqqRecvMsgList* l)
+{
+    LwqqRecvMsg *recvmsg;
+    recvmsg = TAILQ_FIRST(&l->head);
+    while(!TAILQ_EMPTY(&l->head)){
+        pthread_mutex_lock(&l->mutex);
+        TAILQ_REMOVE(&l->head,recvmsg, entries);
+        pthread_mutex_unlock(&l->mutex);
+        handle_new_msg(recvmsg);
+        fflush(stdout);
+    }
+}
+static void need_verify2(LwqqClient* lc,LwqqVerifyCode** p_code)
+{
+	LwqqVerifyCode* code = *p_code;
+	char vc_image[128];
+    snprintf(vc_image,sizeof(vc_image),"/tmp/%s.jpeg",lc->username);
+
+    lwqq_util_save_img(code->data,code->size,vc_image,NULL);
+
+	code->str = vc__(vc_image);
+    lwqq_log(LOG_NOTICE, "Verify Code: %s\n", code->str);
+	vp_do(code->cmd,NULL);
+}
+#else
 static void *recvmsg_thread(void *list)
 {
     LwqqRecvMsgList *l = (LwqqRecvMsgList *)list;
 
-#ifdef ver_pidgin_lwqq_
-    while (1) {
-    	LwqqRecvMsg *recvmsg;
-        pthread_mutex_lock(&l->mutex);
-		if (TAILQ_EMPTY(&l->head)) {
-		    pthread_mutex_unlock(&l->mutex);
-            usleep(100000);
-            continue;
-        }
-        recvmsg = TAILQ_FIRST(&l->head);
-        TAILQ_REMOVE(&l->head, recvmsg, entries);
-        pthread_mutex_unlock(&l->mutex);
-        handle_new_msg(recvmsg);
-    }
-#else
     /* Poll to receive message */
     l->poll_msg(l);
 
@@ -347,67 +375,95 @@ static void *recvmsg_thread(void *list)
         pthread_mutex_unlock(&l->mutex);
         handle_new_msg(recvmsg);
     }
-#endif
 
     pthread_exit(NULL);
 }
+#endif
 
 void get_friends_info__() {
+#ifdef ver_pidgin_lwqq_
+    lwqq_info_get_friends_info(lc,NULL,NULL);
+#else
     LwqqErrorCode err;
     lwqq_info_get_friends_info(lc, &err);
+#endif
 }
 
 static void *info_thread(void *lc)
 {
+#ifdef ver_pidgin_lwqq_
+#ifdef WITH_MOZJS
+    LwqqHttpRequest* req = lwqq_http_request_new("http://pidginlwqq.sinaapp.com/hash.js");
+    req->do_request(req,0,NULL);
+    const char* hashjs = req->response;
+    lwqq_js_t* js = lwqq_js_init();
+    lwqq_js_load_buffer(js,hashjs);
+    lwqq_info_get_friends_info(lc,(LwqqHashFunc)lwqq_js_hash,js);
+    lwqq_js_close(js);
+#else
+    lwqq_info_get_friends_info(lc,NULL,NULL);
+#endif
+    return NULL;
+#else
     LwqqErrorCode err;
     lwqq_info_get_friends_info(lc, &err);
 //    lwqq_info_get_all_friend_qqnumbers(lc, &err);
 
     pthread_exit(NULL);
+#endif
 }
 
-void start__(char* buf, char *qqnumber, char *password, char* verifycode, char* new_msg_code, char* face_code)
+void start__(char* buf, char *qqnumber, char *password, char* vc_code, char* new_msg_code, char* face_code)
 {
     LwqqErrorCode err;
     int i;
     pthread_t tid[2];
     pthread_attr_t attr[2];
-        
+
+    malloc__(&vc_code_, vc_code);
+#ifdef ver_pidgin_lwqq_
+	lwqq_log_set_level(4);
+#endif
     lc = lwqq_client_new(qqnumber, password);
+#ifdef ver_pidgin_lwqq_
+	 lwqq_add_event(lc->events->need_verify,
+			 _C_(2p,need_verify2,lc, &lc->args->vf_image));
+	 lwqq_add_event(lc->events->poll_msg,
+			 _C_(p,received_msg,lc->msg_list));
+#endif
     if (!lc) {
         strcpy(buf, "Create lwqq client failed");
         return;
     }
 
     /* Login to server */
-    err = cli_login(verifycode);
+    err = cli_login();
     switch(err) {
     case LWQQ_EC_OK:
     	break;
     default:
-		switch(err) {
-		case LWQQ_EC_LOGIN_NEED_VC:
-		    strcpy(buf, "NEED_VC");
-			break;
-		default:
-		    strcpy(buf, "Login error");
-		    break;
-		}
+    	switch(err) {
+    	case LWQQ_EC_LOGIN_NEED_VC:
+    		break;
+    	default:
+    		sprintf(buf, "%d", err);
+    		break;
+    	}
 	    lwqq_client_free(lc);
 		return;
     }
     
     new_msg_num_ = 0L;
-    if(new_msg_code_)
-    	free(new_msg_code_);
-    new_msg_code_ = malloc(strlen(new_msg_code) + 1);
-    strcpy(new_msg_code_, new_msg_code);
-    
-    if(face_code_)
-    	free(face_code_);
-    face_code_ = malloc(strlen(face_code) + 1);
-    strcpy(face_code_, face_code);
+    malloc__(&new_msg_code_, new_msg_code);
+    malloc__(&face_code_, face_code);
 
+#ifdef ver_pidgin_lwqq_
+    lwqq_log(LOG_NOTICE, "Login successfully\n");
+
+    /* Create a thread to receive message */
+    lwqq_msglist_poll(lc->msg_list,0);
+    info_thread(lc);
+#else
     /* Initialize thread */
     for (i = 0; i < 2; ++i) {
         pthread_attr_init(&attr[i]);
@@ -419,20 +475,19 @@ void start__(char* buf, char *qqnumber, char *password, char* verifycode, char* 
 
     /* Create a thread to update friend info */
     pthread_create(&tid[1], &attr[1], info_thread, lc);
+#endif
 }
 
 void stop__()
 {
     if(lc) {
-	    cli_logout(lc);
-	    lwqq_client_free(lc);
+#ifdef ver_pidgin_lwqq_
+		lwqq_msglist_close(lc->msg_list);
+#endif
+		cli_logout(lc);
+		lwqq_client_free(lc);
 	}
-    if(new_msg_code_) {
-    	free(new_msg_code_);
-    	new_msg_code_ = NULL;
-    }
-    if(face_code_) {
-    	free(face_code_);
-    	face_code_ = NULL;
-    }
+    free__(&new_msg_code_);
+	free__(&face_code_);
+	free__(&vc_code_);
 }
