@@ -1,16 +1,22 @@
 #include "1.h"
+#include "gjk2.h"
 #include "for_arg_.h"
 
 static char a_[]="`~1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|;:\'\",<.>/?";
-static void case__(char* buf,char* s,int*i1,int ctrl){
+static void case__(char* buf,char* s,int i2_min,int i2_max,long siz,int*i1,int ctrl){
+	int s_len=strlen(s);
+	if(i2_max<=0)
+		i2_max+=s_len;
+	if(i2_min<0)
+		i2_min+=s_len;
 	int i2,i3;
 	char c;
 	int b;
-	if(s){
-		for(i2=-1;;){
-			c=s[++i2];
-			if(c==0)
-				break;
+	for(i2=-1;;){
+		c=s[++i2];
+		if(c==0)
+			break;
+		if(i2>=i2_min && i2<i2_max) {
 			for(;;){
 				if(ctrl & 1){
 					if(c>='a'&&c<='z'){
@@ -54,39 +60,60 @@ static void case__(char* buf,char* s,int*i1,int ctrl){
 				}
 				break;
 			}
-			buf[(*i1)++]=c;
 		}
+		if(*i1>=siz)
+			break;
+		buf[(*i1)++]=c;
 	}
 }
 
-_dle void shiftcase__(char* buf,long siz,int argc,...) {
+static void case2__(char* buf,long siz,int argc,va_list argv,int ctrl){
+	char* s=NULL;
+	int i2_min = 0, i2_max = 0;
+	int c4w4;
+	if(argc >= 1)
+		s = va_arg(argv, char*);
+	if(argc >= 2) {
+		i2_min = hs7chuan4_zheng3shu4(va_arg(argv, char*), 10, &c4w4);
+		if(c4w4)
+			return;
+	}
+	if(argc >= 3) {
+		i2_max = hs7chuan4_zheng3shu4(va_arg(argv, char*), 10, &c4w4);
+		if(c4w4)
+			return;
+	}
+	if(!s)
+		return;
 	int i1=0;
-    _for_args( argc )
-		case__(buf,s,&i1,1);
-    _next_args
+	case__(buf,s,i2_min,i2_max,siz,&i1,ctrl);
 	buf[i1]=0;
+}
+
+_dle void shiftcase__(char* buf,long siz,int argc,...) {
+	va_list argv;
+	va_start(argv, argc);
+	case2__(buf,siz,argc,argv,1);
+	va_end(argv);
 }
 
 _dle void shiftcase2__(char* buf,long siz,int argc,...) {
-	int i1=0;
-    _for_args( argc )
-		case__(buf,s,&i1,1|2);
-    _next_args
-	buf[i1]=0;
+	va_list argv;
+	va_start(argv, argc);
+	case2__(buf,siz,argc,argv,1|2);
+	va_end(argv);
 }
 
 _dle void unshiftcase__(char* buf,long siz,int argc,...) {
-	int i1=0;
-    _for_args( argc )
-		case__(buf,s,&i1,0x10);
-    _next_args
-	buf[i1]=0;
+	va_list argv;
+	va_start(argv, argc);
+	case2__(buf,siz,argc,argv,0x10);
+	va_end(argv);
 }
 
 _dle void unshiftcase2__(char* buf,long siz,int argc,...) {
-	int i1=0;
-    _for_args( argc )
-		case__(buf,s,&i1,0x10|0x20);
-    _next_args
-	buf[i1]=0;
+	va_list argv;
+	va_start(argv, argc);
+	case2__(buf,siz,argc,argv,0x10|0x20);
+	va_end(argv);
 }
