@@ -12,6 +12,7 @@
 #include <algorithm>
 #include "def1.h"
 #include "for_arg_.h"
+#include "l4/keyword.h"
 #include "call_util.cpp"
 using namespace std;
 
@@ -258,9 +259,19 @@ dlle___ void list_add__(vector<vector<string>*>* p, int colnum, int argc, ...) {
 }
 
 dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
-		const char* src0, const char* sep0) {
+		const char* src0, const char* sep0, int argc, ...) {
 	if(!ok__(p) || colnum <= 0 || !src0 || !sep0)
 		return;
+
+	bool can_empty = true;
+	_for_args( argc )
+		if(s[0] == 'n' && !s[1]) {
+			can_empty = false;
+		} else {
+			return;
+		}
+	_next_args
+
 	string src = src0, sep = sep0, s;
 	if(src.empty() || sep.empty())
 		return;
@@ -282,13 +293,15 @@ dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
 			pos_begin = comma_pos;
 		}
 
-		if(i1 >= colnum) {
-			v = new vector<string>();
-			p->push_back(v);
-			i1 = 0;
+		if(can_empty || (!can_empty && !s.empty())) {
+			if(i1 >= colnum) {
+				v = new vector<string>();
+				p->push_back(v);
+				i1 = 0;
+			}
+			v->push_back(s);
+			i1++;
 		}
-		v->push_back(s);
-		i1++;
 	}
 }
 
@@ -319,6 +332,14 @@ dlle___ void list_foreach__(int* err, void*ce, void* shangji,
 		for(size_t i = 0; i < argc; i++)
 			argv[i + add] = (*v)[i].c_str();
 		cb_(jsq_, shangji, err, ce, code, false, NULL, argc + add, argv, 0);
+		if(*err == jieshiqi_err_go_+keyword_continue_) {
+			*err=0;
+			continue;
+		}
+		if(*err == jieshiqi_err_go_+keyword_break_) {
+			*err=0;
+			break;
+		}
 		if(*err)
 			break;
 	}
