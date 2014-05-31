@@ -10,7 +10,9 @@ release*/
 *.dll
 *.exe
 /new_o/demo/z.zs
-/new_o/cairogsh
-/new_o/gtkmmsh
 /new_o/l
-/new_o/webkitsh
+/new_o/gtkmmsh
+/new_o/webkit*sh
+/new_o/cairogsh
+/new_o/vtesh
+/new_o/lib3/lib*
