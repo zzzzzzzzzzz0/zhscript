@@ -203,70 +203,62 @@ static unsigned long new_msg_num_;
 static void handle_new_msg(LwqqRecvMsg *recvmsg)
 {
     int err;
-    char buf1[8], buf2[32], buf3[32], buf4[32];
+    char buf1[16], buf2[32], buf3[32], buf4[32];
     char* buff1 = NULL;
     const char* argv[16] = {buf4, buf1};
 	int argc = 2;
 	sprintf(buf4, "%lu", ++new_msg_num_);
 	
 #ifdef ver_pidgin_lwqq_
-	int msg_type = recvmsg->msg->type;
-	switch(lwqq_mt_bits(msg_type)) {
-	case LWQQ_MT_MESSAGE:
+	LwqqMsg *msg = recvmsg->msg;
+	int msg_type = msg->type;
+	switch (msg_type) {
+	case LWQQ_MS_BUDDY_MSG:
+	case LWQQ_MS_GROUP_MSG:
+	{
 		switch (msg_type) {
-		case LWQQ_MS_BUDDY_MSG:
-		case LWQQ_MS_GROUP_MSG:
-		{
-			switch (msg_type) {
-            case LWQQ_MS_GROUP_MSG:
-            case LWQQ_MS_DISCU_MSG:
-			    strcpy(buf1, "qun-msg");
-			    break;
-            case LWQQ_MS_SESS_MSG:
-			    strcpy(buf1, "sess-msg");
-			    break;
-			default:
-			    strcpy(buf1, "msg");
-			    break;
-			}
-		    argv[argc++] = NULL;
-		    argv[argc++] = buff1 = malloc(8192);
-			argv[argc++] = buf3;
-		    argv[argc++] = NULL;
-		    LwqqMsgContent *c;
-		    LwqqMsgMessage *mmsg = (LwqqMsgMessage*)recvmsg->msg;
-		    buff1[0] = 0;
-		    TAILQ_FOREACH(c, &mmsg->content, entries) {
-		    	if(mmsg->buddy.from->uin)
-		        	argv[2] = mmsg->buddy.from->uin;
-		        if (c->type == LWQQ_CONTENT_STRING) {
-		            strcat(buff1, c->data.str);
-		        } else {
-		            sprintf (buf2, "%d", c->data.face);
-		            strcat(buff1, cb2_(jsq_, main_qu_, &err, NULL, face_code_, 0, NULL, 1, buf2));
-		        }
-		        sprintf (buf3, "%ld", mmsg->time);
-		        if(mmsg->discu.did)
-					argv[5] = mmsg->discu.did;
-		    }
+        case LWQQ_MS_GROUP_MSG:
+		    strcpy(buf1, "qun-msg");
+		    break;
+		default:
+		    strcpy(buf1, "msg");
 		    break;
 		}
-		}
-		break;
+	    argv[argc++] = NULL;
+	    argv[argc++] = buff1 = malloc(8192);
+		argv[argc++] = buf3;
+	    argv[argc++] = NULL;
+	    LwqqMsgContent *c;
+	    LwqqMsgMessage *mmsg = (LwqqMsgMessage*)msg;
+	    buff1[0] = 0;
+	    TAILQ_FOREACH(c, &mmsg->content, entries) {
+	    	if(mmsg->buddy.from->uin)
+	        	argv[2] = mmsg->buddy.from->uin;
+	        if (c->type == LWQQ_CONTENT_STRING) {
+	            strcat(buff1, c->data.str);
+	        } else {
+	            sprintf (buf2, "%d", c->data.face);
+	            strcat(buff1, cb2_(jsq_, main_qu_, &err, NULL, face_code_, 0, NULL, 1, buf2));
+	        }
+	        sprintf (buf3, "%ld", mmsg->time);
+	        if(mmsg->discu.did)
+				argv[5] = mmsg->discu.did;
+	    }
+	    break;
+	}
     case LWQQ_MT_STATUS_CHANGE:
     {
         strcpy(buf1, "status");
-        LwqqMsgStatusChange *status = (LwqqMsgStatusChange*)recvmsg->msg;
+        LwqqMsgStatusChange *status = (LwqqMsgStatusChange*)msg;
         argv[argc++] = status->who;
         argv[argc++] = status->status;
         break;
     }
     default:
 	    sprintf(buf1, "%d", msg_type);
-        strcpy(buf2, "unknow message");
-        argv[argc++] = buf2;
+        argv[argc++] = "unknow message";
         break;
-    }
+	}
 #else
     LwqqMsg *msg = recvmsg->msg;
     
@@ -314,8 +306,7 @@ static void handle_new_msg(LwqqRecvMsg *recvmsg)
     }
     default:
 	    sprintf(buf1, "%d", msg->type);
-        strcpy(buf2, "unknow message");
-        argv[argc++] = buf2;
+        argv[argc++] = "unknow message";
         break;
     }
 #endif
@@ -416,14 +407,14 @@ static void *info_thread(void *lc)
 void start__(char* buf, char *qqnumber, char *password, char* vc_code, char* new_msg_code, char* face_code)
 {
     LwqqErrorCode err;
+#ifdef ver_pidgin_lwqq_
+	lwqq_log_set_level(4);
+#else
     int i;
     pthread_t tid[2];
     pthread_attr_t attr[2];
-
-    malloc__(&vc_code_, vc_code);
-#ifdef ver_pidgin_lwqq_
-	lwqq_log_set_level(4);
 #endif
+    malloc__(&vc_code_, vc_code);
     lc = lwqq_client_new(qqnumber, password);
 #ifdef ver_pidgin_lwqq_
 	 lwqq_add_event(lc->events->need_verify,

@@ -38,7 +38,7 @@
 		设置目标。
 		别名lwqq源以p。
 		进入lwqq源目录。
-		（赋予*.c以。
+		赋予*.c以。
 		赋予搜以调用‘dir.begin’、../lib、\.c$。
 		循环先
 			赋予名以调用‘dir.next’、‘搜’。
@@ -46,11 +46,11 @@
 			如果‘名’等于win32.c或者等于async_libuv.c那么再来。
 			赋予*.c以“‘*.c’ ../lib/‘名’”。
 		了。
-		调用‘dir.end’、‘搜’。）
-		编译“-I../lib -I. -Dver_pidgin_lwqq_ ”（“‘*.c’ -lcurl”）“-Llib -llwqq”。
+		调用‘dir.end’、‘搜’。
+		编译“-Dver_pidgin_lwqq_ -I../lib -I. ”“-I/usr/include/js ‘*.c’ -lcurl -lmozjs185”（“-Llib -llwqq”）。
 		赋予liblwqq.so以lib/liblwqq.so。
 		执行“ls -l ‘目标’”“ ‘liblwqq.so’*”。
-		执行显示“cp ‘liblwqq.so’.0.3.0 ‘bin’/liblwqq.so.0”换行。
+		（执行显示“cp ‘liblwqq.so’.0.3.0 ‘bin’/liblwqq.so.0”换行。）
 	上代码、
 	l | lwqq | -l | -lwqq、源‘l’、0、下代码
 		设置目标。
