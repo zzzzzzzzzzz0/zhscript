@@ -171,6 +171,8 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 		int i2_old = i2;
 		for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
 			clpars_item___* ci=*cii;
+			if(ci->pause_)
+				continue;
 			bool b=false;
 			switch(scan) {
 			case 0:
@@ -329,6 +331,27 @@ void clpars___::info__(char*buf,int* err,void*ce,void* shangji,char* code){
     }
 }
 
+void clpars___::pause__(bool pause, int argc, char** argv) {
+	for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
+		clpars_item___* ci=*cii;
+		if(ci->flag_.empty())
+			continue;
+		if(argc <= 0)
+			ci->pause_ = pause;
+		else {
+			for(int i = 0; i < argc; i++) {
+				for(list<string>::iterator si=ci->flags_.begin();si!=ci->flags_.end();si++){
+					if((*si) == argv[i]) {
+						ci->pause_ = pause;
+						break;
+					}
+				}
+			}
+		}
+    }
+
+}
+
 dlle___ void del__(clpars___* clp){
 	if(clp)
 		delete clp;
@@ -379,4 +402,22 @@ dlle___ void info3__(int* err,char*buf,void*ce,void* shangji,clpars___* clp,char
 	if(!clp)
 		clp=&clpars_;
 	clp->info__(buf,err,ce,shangji,code);
+}
+
+dlle___ void pause__(clpars___* clp,bool pause,int argc,...){
+	if(!clp)
+		clp=&clpars_;
+	char** argv = NULL;
+	if(argc > 0) {
+		argv = new char*[argc];
+		va_list argv1;
+		va_start(argv1, argc);
+	    for (int i = 0; i < argc; ++i){
+	        argv[i] = va_arg(argv1, char*);
+	    }
+		va_end(argv1);
+	}
+	clp->pause__(pause, argc, argv);
+	if(argv)
+		delete argv;
 }

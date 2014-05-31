@@ -21,6 +21,7 @@ public:
 	int argc_;
 	string code_;
 	char type_;
+	bool pause_;
 	clpars_item___(const char*flag,const char*info,const char*code,
 			int argc1,char type){
 		flag_=flag;
@@ -28,6 +29,8 @@ public:
 		code_=code;
 		argc_=argc1;
 		type_=type;
+
+		pause_ = false;
 
     	stringstream ss(flag);
     	string s;
@@ -50,6 +53,7 @@ public:
 	void par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no);
 	void info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange);
 	void info__(char*buf,int* err,void*ce,void* shangji,char* code);
+	void pause__(bool pause, int argc, char** argv);
 };
 
 #endif /* CLPARS____H_ */
