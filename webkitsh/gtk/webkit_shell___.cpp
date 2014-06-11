@@ -40,16 +40,6 @@ static window___* window__(WebKitWebView* page) {
 	return window__(webkit_view___::from__(page));
 }
 
-static webkit_view___* tabpg_new2__(const char* name, window___* window) {
-	if(window->notebook__()) {
-		GtkWidget* scrolled2 = window->tabpg_new__(name);
-		webkit_view___* v = new webkit_view___(scrolled2, window, window->is_app_paintable__());
-		gtk_widget_show_all (scrolled2);
-		return v;
-	}
-	return (webkit_view___*)(window->view__(0));
-}
-
 static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* frame){
 	webkit_view___* v=(webkit_view___*)webkit_view___::from__(page);
 	WebKitWebView* wv;
@@ -60,8 +50,12 @@ static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* fra
 		webkit_view___* v2;
 		if(v->target_)
 			v2=(webkit_view___*)v->target_;
-		else
-			v2=tabpg_new2__(NULL, window__(v));
+		else {
+			window___* w = window__(v);
+			v2=(webkit_view___*)shell___::new_page__(NULL, w);
+			if(!v2)
+				v2 = (webkit_view___*)w->view__(0);
+		}
 		wv=v2->webview__();
 		string name2;
 		window___* w2 = window__(wv);
@@ -69,7 +63,7 @@ static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* fra
 		const char* ret=call4__(widget__(page),window__(page),create_web_view_s1_,1,name2.c_str());
 		if(ret[0]=='x' && !ret[1]) {
 			if(!v->target_) {
-				w2->close__(wv);
+				w2->c__()->close__(wv);
 			}
 			wv = NULL;
 		}
@@ -236,7 +230,10 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 				window___* w=get_window__(p0,page_num,p1, true, &page_num2);if(!w)return true;
 				v=(webkit_view___*)w->view__(page_num);
 				if(page_num2.empty() || !v){
-					wv = tabpg_new2__(page_num2.c_str(), w)->webview__();
+					v=(webkit_view___*)new_page__(page_num2.c_str(), w);
+					if(!v)
+						v = (webkit_view___*)w->view__(0);
+					wv = v->webview__();
 				}else
 					wv = v->webview__();
 			} else {

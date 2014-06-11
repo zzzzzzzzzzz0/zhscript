@@ -14,7 +14,7 @@
 
 class shell___ {
 private:
-	window___* new_window__(const char* name, window_flag___* flag);
+	window___* new_window__(const char* name, window_flag___* flag, container___* c);
 	window___* new_window__(const char* name, bool is_main);
 protected:
 	window___* get_window__(const string& name, int& page_num, const string& help,
@@ -26,6 +26,7 @@ public:
 	virtual ~shell___() {};
 	int with__(int argc, char *argv[], char* env[]);
 	virtual view___* new_view__(GtkWidget* scrolled2, window___* window);
+	static view___* new_page__(const char* name, window___* window);
 	virtual bool api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
 };
 

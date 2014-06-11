@@ -26,4 +26,6 @@ using namespace std;
 #define no_gtk_2_
 #endif
 
+extern void container_add__(GtkWidget* w, GtkWidget* scrolled);
+
 #endif /* BASE__H_ */
