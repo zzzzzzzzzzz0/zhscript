@@ -1,3 +1,4 @@
+#!bin/zhscript/vtesh --。
 加载lib/defi。
 加载lib/gjk4。
 加载lib/menu4。
