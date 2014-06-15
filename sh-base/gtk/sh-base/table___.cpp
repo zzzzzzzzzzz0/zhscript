@@ -95,3 +95,16 @@ GtkWidget* table___::page_new__(const char* name) {
 
 	return scrolled2;
 }
+
+#include "window___.h"
+
+int table___::current_page__() {
+	GtkWindow* w = ((window___*)window_)->window__();
+	for(int i = 0; i < n_pages__(); i++) {
+		if(gtk_window_get_focus(w) == views_[i]->widget__()) {
+			current_page_ = i;
+			break;
+		}
+	}
+	return current_page_;
+}

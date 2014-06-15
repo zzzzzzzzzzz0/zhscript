@@ -25,9 +25,7 @@ public:
 
 	GtkWidget* page_new__(const char* name);
 
-	int current_page__() {
-		return current_page_;
-	}
+	int current_page__();
 };
 
 #endif /* TABLE____H_ */

@@ -51,7 +51,7 @@ void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool
 		buf2[1]=0;
 	}
 	char buf1[32];
-	const char*val1[8];
+	const char*val1[64];
 #define val1_length sizeof(val1)/sizeof(const char*)
 	if(len2>val1_length)
 		len2=val1_length;
