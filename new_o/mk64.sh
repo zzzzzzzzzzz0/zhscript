@@ -38,6 +38,9 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
+./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-2.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-2.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-2.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ wnck4 "$p_lib3 -DWNCK_I_KNOW_THIS_IS_UNSTABLE `pkg-config libwnck-1.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ unique4 "$p_lib3 `pkg-config --cflags --libs gtk+-2.0 unique-1.0`"
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
@@ -75,6 +78,7 @@ dir="`pwd`/.."
 
 $dir/webkitsh/gtk/mk-release.sh
 $dir/cairogsh/mk-release.sh
+$dir/vtesh/mk-release.sh
 
 find "$dir/new_o/" -name "*.d" -printf "rm '%p'\n" | sh
 
