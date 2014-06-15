@@ -3,12 +3,13 @@ echo "可能需要输入 apt-get install 时所须密码"
 sudo apt-get install g++ pkg-config \
 libcurl4-gnutls-dev \
 libsqlite3-dev \
-libgtkmm-2.4-dev \
-libglademm-2.4-dev \
+libgtk-3-dev \
 libwebkit-dev \
 libwnck-dev \
 libunique-dev
-sudo apt-get install libgtksourceviewmm-2.0-dev 
+sudo apt-get install libgtkmm-2.4-dev \
+libglademm-2.4-dev \
+libgtksourceviewmm-2.0-dev 
 
 p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
 export ver_="-D ver_64_"
@@ -38,10 +39,10 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
-./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-2.0 --cflags --libs`"
-./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-2.0 --cflags --libs`"
-./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-2.0 --cflags --libs`"
-./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-2.0 --cflags --libs`"
+./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ wnck4 "$p_lib3 -DWNCK_I_KNOW_THIS_IS_UNSTABLE `pkg-config libwnck-1.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ unique4 "$p_lib3 `pkg-config --cflags --libs gtk+-2.0 unique-1.0`"
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
