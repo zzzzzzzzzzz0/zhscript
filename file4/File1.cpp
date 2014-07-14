@@ -1,11 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
 #include<string>
 using namespace std;
 #include"def1.h"
 #include"for_arg_.h"
 #include<string.h>
-#include"call_util.cpp"
 
 dlle___
 void extractfilename___(char* buf,long siz,char* name0,int flag){
@@ -106,120 +103,6 @@ void extractfilename___(char* buf,long siz,char* name0,int flag){
 		buf[i1++]=name[i++];
 	}
 	buf[i1]=0;
-}
-dlle___ void urldecode__(int*c4w4,char**addr_ret,char*url,int argc,...){
-	if(!url)
-		return;
-
-	string mask;
-	_for_args( argc )
-	switch(i){
-	case 0:
-		mask+=s;
-		break;
-	}
-	_next_args
-
-	string out;
-	char buf[8];
-	buf[2]=0;
-	unsigned int im=0;
-	for(;;url++){
-		unsigned char c=*url;
-		if(!c)
-			break;
-		switch(c){
-		case'%':
-			if(!(buf[0]=*++url))
-				break;
-			if(!(buf[1]=*++url))
-				break;
-			sscanf(buf,"%X",&c);
-			break;
-		case'+':
-			c=' ';
-			break;
-		}
-		if(mask.size()>0){
-			c^=mask[im];
-			if(++im>=mask.size())
-				im=0;
-		}
-		out+=c;
-	}
-	*addr_ret=dup__(out.c_str());
-}
-
-dlle___ void urlencode__(int*c4w4,char**addr_ret,char*url,int argc,...){
-	if(!url)
-		return;
-
-	string unchr;
-	string mask;
-	_for_args( argc )
-	switch(i){
-	case 0:
-		mask+=s;
-		break;
-	case 1:
-		unchr+=s;
-		break;
-	}
-	_next_args
-
-	string out;
-	char buf[8];
-	unsigned int im=0;
-	for(;;url++){
-		unsigned char c=*url;
-		if(!c)
-			break;
-		if(mask.size()>0){
-			c^=mask[im];
-			if(++im>=mask.size())
-				im=0;
-		}
-		bool b=false;
-		if(unchr.find(c)!=string::npos)
-			b=true;
-		else if((c>='a'&&c<='z')||(c>='A'&&c<='Z')||(c>='0'&&c<='9'))
-			b=true;
-		else{
-			switch(c){
-			case',':
-			case'.':
-			case'/':
-			case';':
-			case'\'':
-			case'[':
-			case']':
-			case'\\':
-			case'-':
-			case'`':
-			case'~':
-			case'!':
-			case'$':
-			case'^':
-			case'*':
-			case'(':
-			case')':
-			case'_':
-			case'{':
-			case'}':
-			case'|':
-			case':':
-				b=true;
-				break;
-			}
-		}
-		if(b){
-			out+=c;
-		}else{
-			sprintf(buf,"%%%02X",c);
-			out+=buf;
-		}
-	}
-	*addr_ret=dup__(out.c_str());
 }
 
 char* strstr__(const char* s, const char* s1) {
