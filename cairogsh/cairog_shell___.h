@@ -13,6 +13,9 @@
 
 class cairog_shell___ : public shell___ {
 public:
+	cairog_shell___() : shell___() {
+		window___::has_event_box_ = true;
+	}
 	view___* new_view__(GtkWidget* scrolled2, window___* window);
 	bool api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
 };

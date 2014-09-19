@@ -33,9 +33,11 @@ private:
 	window_flag___ flag_;
 	container___* c_;
 	bool is_main_;
+	GtkWidget* event_box_;
 public:
 	string code_;
 	map<int, string> codes_;
+	static bool has_event_box_;
 
 	window___(const char* name, bool is_main = false);
 	const string& name__(){return name_;}
@@ -45,6 +47,7 @@ public:
 	container___* c__() {return c_;}
 	GtkWidget* widget__(){return window_;}
 	GtkWindow* window__(){return GTK_WINDOW (window_);}
+	GtkWidget* event_box__(){return event_box_;}
 	static window___* from__(GtkWidget* widget);
 	GtkWidget* new__(window_flag___* flag, container___* c);
 	void destroy__();

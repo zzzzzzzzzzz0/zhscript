@@ -20,6 +20,7 @@ static s1___* load_committed_s1_ = new s1___("装载完", "load-committed", 'v')
 static s1___* load_finished_s1_ = new s1___("装载完毕",	"load-finished",			'v');
 static s1___* resource_request_starting_s1_ = new s1___("请求", "resource-request-starting", 'v');
 static s1___* mime_type_policy_decision_requested_s1_ = new s1___("类型请求", "mime-type-policy-decision-requested", 'v');
+//static s1___* run_file_chooser_s1_ = new s1___("上传请求", "run-file-chooser", 'v');
 static s1___* console_message_s1_ = new s1___("消息", "console-message", 'v');
 static s1___* script_alert_s1_ = new s1___("警告", "script-alert", 'v');
 static s1___* script_confirm_s1_ = new s1___("确认", "script-confirm", 'v');
@@ -144,6 +145,10 @@ static gboolean mime_type_policy_decision_requested__(
     return false;
 }
 
+/*static gboolean run_file_chooser__(WebKitWebView*, WebKitFileChooserRequest* request, gpointer data)
+	return false;
+}*/
+
 static gboolean script_alert__(
 	WebKitWebView  *page,
 	WebKitWebFrame *frame,
@@ -232,10 +237,13 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 				if(page_num2.empty() || !v){
 					v=(webkit_view___*)new_page__(page_num2.c_str(), w);
 					if(!v)
-						v = (webkit_view___*)w->view__(0);
+						wv = NULL;
+					else
+						wv = v->webview__();
+				}else{
+					w->c__()->set_page__(page_num);
 					wv = v->webview__();
-				}else
-					wv = v->webview__();
+				}
 			} else {
 				v=(webkit_view___*)get_view__(p0,page_num,p1, true, &page_num2);if(!v)return true;
 				if(page_num == notebook_page_no_)
@@ -313,6 +321,7 @@ webkit_shell___::webkit_shell___() {
 	load_finished_s1_->cb_ = (G_CALLBACK(load_finished__));
 	resource_request_starting_s1_->cb_ = (G_CALLBACK(resource_request_starting__));
 	mime_type_policy_decision_requested_s1_->cb_ = (G_CALLBACK(mime_type_policy_decision_requested__));
+	//run_file_chooser_s1_->cb_ = (G_CALLBACK(run_file_chooser__));
 	console_message_s1_->cb_ = (G_CALLBACK(console_message__));
 	script_alert_s1_->cb_ = (G_CALLBACK(script_alert__));
 	script_confirm_s1_->cb_ = (G_CALLBACK(script_confirm__));

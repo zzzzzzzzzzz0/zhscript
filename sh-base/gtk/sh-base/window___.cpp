@@ -67,15 +67,30 @@ GtkWidget* window___::new__(window_flag___* flag, container___* c){
 #endif
 	}
 
-	GtkWidget* scrolled;
-	scrolled = gtk_scrolled_window_new (NULL, NULL);
+	GtkWidget* scrolled = gtk_scrolled_window_new (NULL, NULL);
 	//g_object_ref_sink(scrolled);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
 								  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_container_add (GTK_CONTAINER (window_), scrolled);
+
+	if(!has_event_box_) {
+		event_box_ = NULL;
+		gtk_container_add (GTK_CONTAINER (window_), scrolled);
+	} else {
+		event_box_ = gtk_event_box_new ();
+		gtk_event_box_set_above_child (GTK_EVENT_BOX (event_box_), FALSE);
+		gtk_container_add (GTK_CONTAINER (event_box_), scrolled);
+		gtk_container_add (GTK_CONTAINER (window_), event_box_);
+		gtk_widget_set_events(event_box_, 0
+				| GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK
+				| GDK_BUTTON_PRESS | GDK_BUTTON_RELEASE
+				| GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
+		gtk_widget_realize (event_box_);
+	}
 
 	return c__()->new__(scrolled);
 }
+
+bool window___::has_event_box_ = false;
 
 void window___::name2__(string& name2, GtkWidget *sw) {
 	name2 = name_;

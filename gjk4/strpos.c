@@ -110,3 +110,35 @@ _dle int strpos_2a2s__(char* s,char* ss){
 _dle int strpos_2a2e__(char* s,char* ss){
 	return strpos_2__(s,ss,0,_strpos_right|_strpos_with);
 }
+
+#include "for_arg_.h"
+_dle int strpos_3__(int ctrl, char* s1, int argc, ...){
+	char* ss = "\r\n\t ";
+	_for_args( argc )
+		ss = s;
+	_next_args
+	if(!s1 || !ss)
+		return _strpos_result_no;
+	int s_len=strlen(s1);
+	switch(ctrl) {
+	case 0:
+		i = 0;
+		break;
+	default:
+		i = s_len - 1;
+		break;
+	}
+	for(; i >= 0 && i < s_len;) {
+		if(!strchr(ss, s1[i]))
+			return i;
+		switch(ctrl) {
+		case 0:
+			i++;
+			break;
+		default:
+			i--;
+			break;
+		}
+	}
+	return i;
+}

@@ -96,22 +96,28 @@ void err_buzhichi__(const string& s3,const char* s=NULL){
 	err__(s,"不支持",s3.c_str());
 }
 
-const char* call4__(const char* code,const char* src2,int argc,const char**argv2,int from){
-	int err;
-	const char* ret=l4_.l4_callback3_2__(l4_.l4__(),&err,NULL,code,false,src2,l4_main_qu_,
+const char* call4__(int* err,const char* code,const char* src2,int argc,const char**argv2,int from){
+	const char* ret=l4_.l4_callback3_2__(l4_.l4__(),err,NULL,code,false,src2,l4_main_qu_,
 			argc,argv2,from);
-	switch(err){
+	switch(*err){
 	case 0:
-	case jieshiqi_go_+keyword_exit_:
+	case jieshiqi_go_+keyword_break_:
+	case jieshiqi_go_+keyword_continue_:
 		break;
 	case jieshiqi_go_+keyword_end_:
 		windows_.main__()->destroy__();
+	case jieshiqi_go_+keyword_exit_:
+		*err = 0;
 		break;
 	default:
-		err__(err,ret);
+		err__(*err,ret);
 		break;
 	}
 	return ret;
+}
+const char* call4__(const char* code,const char* src2,int argc,const char**argv2,int from){
+	int err;
+	return call4__(&err, code, src2, argc, argv2, from);
 }
 const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
 	const char*argv2[16];
@@ -156,14 +162,36 @@ const string& s__(const deque<string>& p, size_t i) {
 	return s__(&p, i);
 }
 
-class event_button___ {
+class event___ {
 public:
-	string code_;
+	string code_, arg0_;
 };
 
-static gint event_button__(GtkWidget *widget, GdkEventButton *event, gpointer data) {
-	event_button___* eb = (event_button___*)data;
-	call4__(eb->code_.c_str(), NULL, 0, NULL, 0);
+static gint event_mouse__(GtkWidget *widget, GdkEventButton *event, gpointer data) {
+	event___* e = (event___*)data;
+	switch(event->type){
+	case GDK_BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
+	{
+		char s1[32], s2[32], s3[32];
+		const char* a[] = {s1, s2, s3};
+		sprintf(s1, "%d", event->button);
+		sprintf(s2, "%.2f", event->x);
+		sprintf(s3, "%.2f", event->y);
+		call4__(e->code_.c_str(), e->arg0_.c_str(), 3, a, 0);
+		break;
+	}
+	default:
+		call4__(e->code_.c_str(), e->arg0_.c_str(), 0, NULL, 0);
+		break;
+	}
+	return FALSE;
+}
+
+static bool event_key__(GtkWidget *widget, GdkEventKey *event, gpointer data) {
+	event___* e = (event___*)data;
+	const char* a[] = {gdk_keyval_name(event->keyval)};
+	call4__(e->code_.c_str(), e->arg0_.c_str(), 1, a, 0);
 	return FALSE;
 }
 
@@ -179,13 +207,13 @@ static void show_window__(window___* w){
 
 static void destroy__(GtkWidget *widget,gpointer gdata) {
 	window___* w=window___::from__(widget);
-	windows_.erase__(w);
 	const char* ret=call4__(NULL,w,window_destroy_s1_,0);
 	if(ret[0]=='x'&&!ret[1])
 		return;
 	if(w->is_main__()){
 		gtk_main_quit();
 	}
+	windows_.erase__(w);
 }
 
 static void switch_page__(GtkNotebook *notebook, gpointer *page,gint page_num){
@@ -431,6 +459,13 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		w->destroy__();
 		return true;
 	}
+	if(p1=="遍历"){
+		if(err_buzu2__(p, 3))
+			return true;
+		w = get_window__(p0,page_num,p1);if(!w)return true;
+		w->c__()->for__((*p)[2].c_str());
+		return true;
+	}
 	if(p0=="屏幕"){
 		if(p1 == "宽度") {
 			l2s__(gdk_screen_width(), buf);
@@ -441,6 +476,13 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			return true;
 		}
 		err_buzhichi__(p0, p1.c_str());
+		return true;
+	}
+	if(p1 == "宽度" || p1 == "高度") {
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gint w1 = 0, h1 = 0;
+		gtk_window_get_size (w->window__(), &w1, &h1);
+		l2s__(p1 == "宽度" ? w1 : h1, buf);
 		return true;
 	}
 	if(p1=="大小"){
@@ -472,6 +514,16 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	if(p1=="恢复"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_present (w->window__());
+		return true;
+	}
+	if(p1=="全屏"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_fullscreen(w->window__());
+		return true;
+	}
+	if(p1=="取消全屏"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_unfullscreen(w->window__());
 		return true;
 	}
 	if(p1=="置顶" || p1=="取消置顶"){
@@ -617,15 +669,23 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1 == "事件") {
 		w=get_window__(p0,page_num,p1,false);if(!w)return true;
+		if(!w->event_box__()) {
+			err_buzhichi__(p1);
+			return true;
+		}
 		for(size_t i2 = 2; i2 < p->size();) {
 			const string& p2 = (*p)[i2++];
 			if(err_buzu2__(p, i2))
 				return true;
 			const string& p3 = (*p)[i2++];
-			event_button___* eb = new event_button___();
-			eb->code_ = p3;
-			g_signal_connect(G_OBJECT(w->widget__()), p2.c_str(),
-					G_CALLBACK(event_button__), eb);
+			event___* e = new event___();
+			e->code_ = p3;
+			e->arg0_ = p2;
+			string head = "key_";
+			if(p2.compare(0, head.size(), head) == 0)
+				g_signal_connect(G_OBJECT(w->event_box__()), p2.c_str(), G_CALLBACK(event_key__), e);
+			else
+				g_signal_connect(G_OBJECT(w->event_box__()), p2.c_str(), G_CALLBACK(event_mouse__), e);
 		}
 		return true;
 	}

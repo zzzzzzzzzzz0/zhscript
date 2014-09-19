@@ -233,6 +233,8 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 				} else {
 					err_wufa__(p1);
 				}
+			} else {
+				w->c__()->set_page__(page_num);
 			}
 			return true;
 		}

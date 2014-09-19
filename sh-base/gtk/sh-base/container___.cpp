@@ -8,6 +8,9 @@
 #include "container___.h"
 #include "extern2.h"
 #include <algorithm>
+#include "extern.h"
+#include"l4/keyword.h"
+#include"def1.h"
 
 void container_add__(GtkWidget* w, GtkWidget* scrolled) {
 #ifdef no_gtk_2_
@@ -151,6 +154,25 @@ int container___::page_num__(GtkWidget* sw) {
 			return i;
 	}
 	return notebook_page_no_;
+}
+
+void container___::for__(const char* code) {
+	const char* a[1];
+	int err;
+	for(int i = 0; i < n_pages__(); i++) {
+		string name2;
+		name2__(name2, nth_page__(i));
+		a[0] = name2.c_str();
+		call4__(&err, code, NULL, 1, a, 0);
+		switch(err) {
+		case 0:
+			break;
+		case jieshiqi_go_+keyword_continue_:
+			continue;
+		default:
+			return;
+		}
+	}
 }
 
 int container___::page_check__(int page_num){
