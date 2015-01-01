@@ -12,5 +12,5 @@ sudo apt-get install libgtk-3-dev libvte-2.90-dev
 pkg="gtk+-3.0 vte-2.90"
 
 g++ $f `pkg-config --cflags $pkg` -O3 ../*.cpp ../sh-base/*.cpp &&\
-g++ *.o `pkg-config --libs $pkg` -o"$tag"  
+g++ *.o `pkg-config --libs $pkg` -ldl -o"$tag"  
 
