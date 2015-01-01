@@ -30,9 +30,11 @@
 								<option id="gnu.cpp.compiler.so.debug.option.debugging.level.1857963014" name="Debug Level" superClass="gnu.cpp.compiler.so.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.155934048" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="xdebug_liucheng_"/>
+									<listOptionValue builtIn="false" value="ver_64_"/>
 									<listOptionValue builtIn="false" value="debug_1_"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1977393357" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fPIC" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.828731732" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.150682915" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.debug.1707748836" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.debug">
@@ -91,7 +93,7 @@
 								<option id="gnu.cpp.compiler.so.release.option.optimization.level.770130644" name="Optimization Level" superClass="gnu.cpp.compiler.so.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.so.release.option.debugging.level.1219540102" name="Debug Level" superClass="gnu.cpp.compiler.so.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1009436085" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fPIC" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.115619221" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.115619221" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2051176918" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.release.1496410353" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release">
@@ -1107,4 +1109,21 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/new_l432_so"/>
+		</configuration>
+		<configuration configurationName="release liucheng">
+			<resource resourceType="PROJECT" workspacePath="/new_l432_so"/>
+		</configuration>
+		<configuration configurationName="debug liucheng">
+			<resource resourceType="PROJECT" workspacePath="/new_l432_so"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/new_l432_so"/>
+		</configuration>
+		<configuration configurationName="exe">
+			<resource resourceType="PROJECT" workspacePath="/new_l432_so"/>
+		</configuration>
+	</storageModule>
 </cproject>

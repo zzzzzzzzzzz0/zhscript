@@ -24,6 +24,8 @@
 			var d = new__("span");
 			htm__(d, line + "<br>");
 			ins__(d, __("log"), 0);
+			if(on_log__)
+				on_log__(line);
 		}, 20);
 	} else {
 		alert("缺少 id 为 log 的元素");

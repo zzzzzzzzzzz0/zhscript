@@ -53,7 +53,9 @@ dlle___ const char* l4_jieshi2__(jieshiqi___* l4,int* err,const char* src,bool s
 			l4->args_.src_=src;
 			l4->args_.src_is_file_=src_is_file;
 		}
-		*err=l4->jieshi__(shangji,buf);
+		int err2 = l4->jieshi__(shangji,buf);
+		if(err)
+			*err=err2;
 	}
 	return buf.c_str();
 }

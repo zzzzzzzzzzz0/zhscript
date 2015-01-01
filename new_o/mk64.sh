@@ -7,9 +7,8 @@ libgtk-3-dev \
 libwebkit-dev \
 libwnck-dev \
 libunique-dev
-sudo apt-get install libgtkmm-2.4-dev \
-libglademm-2.4-dev \
-libgtksourceviewmm-2.0-dev 
+sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev
+sudo apt-get install libgtksourceviewmm-2.0-dev
 
 p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
 export ver_="-D ver_64_"
@@ -34,12 +33,12 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ txtotxt4
 ./mk_.sh r gxx_lib_ curle4 "-lcurl"
 ./mk_.sh r gxx_lib_ inotify4
-./mk_.sh r gxx_lib_ sqlite4 "-lsqlite3"
+./mk_.sh r gxx_lib2_ sqlite4 "-lsqlite3"
 ./mk_.sh r gcc_lib_ md4
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
-./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gcc_lib2_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-3.0 --cflags --libs`"
@@ -82,5 +81,4 @@ $dir/webkitsh/gtk/mk-release.sh
 $dir/cairogsh/mk-release.sh
 $dir/vtesh/mk-release.sh
 
-find "$dir/new_o/" -name "*.d" -printf "rm '%p'\n" | sh
-
+find "$dir" \( -name '*.o' -o -name '*.d' \) -exec rm "{}" \;

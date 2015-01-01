@@ -106,9 +106,9 @@ void Robot::set_m_pipe()
 ////////////////////////////////////////////////////////////////
 
 	Robot::Robot()
-	:is_running(false)
+	:child_pid(-1)
+	,is_running(false)
 	,is_pause(false)
-	 ,child_pid(-1)
 {
 	child_tem = -1;
 	child_tem2 = -1;
@@ -133,12 +133,12 @@ void Robot::wait_robot_exit(GPid pid, int)
 
 }
 
-void Robot::start()
+void Robot::start(const char* filename)
 {
 	//printf("%s:%d\n",__func__,__LINE__);
 	signal_start().emit();
 	const char* argv[2];
-	argv[0]="eleeye_engine";
+	argv[0]=filename;
 	argv[1]=NULL;
 	my_system((char* const *)argv);
 
@@ -147,7 +147,7 @@ void Robot::start()
 
 int Robot::my_system(char* const argv[])
 {
-	extern char **environ;
+	//extern char **environ;
 	create_pipe();
 	assert(!out_slot.empty());
 	//printf("%s:%d\n",__func__,__LINE__);

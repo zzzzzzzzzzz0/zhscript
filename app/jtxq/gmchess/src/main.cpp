@@ -89,7 +89,7 @@ dlle___ void robot_init__(callback2___ cb,void* jsq,void* shangji,const char* sc
 }
 
 dlle___ bool robot_start__(){
-	robot_.start();
+	robot_.start("eleeye_engine");
 	if(!robot_.running())
 		return false;
 	robot_.send_ctrl_command("ucci\n");

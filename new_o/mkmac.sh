@@ -4,8 +4,8 @@ cd "`dirname $0`"
 
 export ver_="-D ver_mac_mini_"
 
-./mk_.sh r gxx_l4_
-./mk_.sh r gxx_l4_ "-D debug_liucheng_" -d
+./mk_.sh r gxx_l4_ "-install_name libzhscript.so"
+./mk_.sh r gxx_l4_ "-install_name libzhscript-d.so -D debug_liucheng_" -d
 
 ./mk_.sh r gxx_lib_ test4
 ./mk_.sh r gcc_lib_ gjk4

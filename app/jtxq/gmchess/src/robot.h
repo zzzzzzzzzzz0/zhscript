@@ -29,7 +29,7 @@ class Robot {
 		void send_ctrl_command(const char* c);
 		void pause(); 
 		void stop();
-		void start();
+		void start(const char* filename);
 
 		bool running() const;
 		bool pausing() const { return is_pause; }

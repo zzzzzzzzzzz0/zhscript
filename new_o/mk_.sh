@@ -33,16 +33,24 @@ gcc_(){
 	echo $z
 	$z
 }
+gxx_lib2_(){
+	cd "$dir/$1"
+	gxx_ *.cpp $2 -o ../new_o/lib/$1.so $s1 $f1 $i1
+}
 gxx_lib_(){
 	cd "$dir/$1"
 	gxx_ -o ../new_o/lib/$1.so $s1 $f1 $i1 $2 *.cpp
+}
+gcc_lib2_(){
+	cd "$dir/$1"
+	gcc_ *.c $2 -o ../new_o/lib/$1.so $s1 $f1 $i1
 }
 gcc_lib_(){
 	cd "$dir/$1"
 	gcc_ -o ../new_o/lib/$1.so $s1 $f1 $i1 $2 *.c
 }
 gxx_gtkmm2_(){
-	gxx_ $@ `pkg-config gtkmm-2.4 libglademm-2.4 --cflags --libs`
+	gxx_ $@ `pkg-config gtkmm-2.4 libglademm-2.4 --cflags --libs` -ldl
 }
 gxx_gtkmm_(){
 	cd "$dir/gtkmmsh"

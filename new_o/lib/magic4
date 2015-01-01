@@ -1,7 +1,7 @@
 赋予“库名”以“【库】‘参数0’”。
 如果存在‘库名’那么退出。
 
-赋予‘库名’以调用“L”、“libmagic.so”。
+赋予‘库名’以调用“L”、“libmagic.so”、“libmagic.so.1”。
 赋予“magic_open”以调用“Gl”、‘‘库名’’、“magic_open”、“i”。
 赋予“magic_load”以调用“G”、‘‘库名’’、“magic_load”、“l”、“l”。
 
