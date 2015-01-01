@@ -65,10 +65,74 @@ dlle___ void find_and_get__(int*err,char**addr_ret,const char*src1,int from,
 		if(code){
 			char i[8]="-1";
 			if(*src)
-				sprintf(i,"%d",src-src1);
+				sprintf(i,"%ld",src-src1);
 			callback_(jsq_,shangji,err,ce,code,false,NULL,1,i);
 		}
 	}
+	*addr_ret=dup__(buf.c_str());
+}
+
+dlle___ void tag_replace__(int*err,char**addr_ret,char*src1,void*ce,void*shangji,const char*code,int argc,...)
+{
+	if(!src1){
+		return;
+	}
+
+	list<const char*> begin, end;
+	_for_args( argc ) {
+		if(s) {
+			switch(s[0]) {
+			case '1':
+				begin.push_back(s + 1);
+				continue;
+			case '2':
+				end.push_back(s + 1);
+				continue;
+			}
+			*addr_ret=dup__(s);
+		}
+		*err = 1;
+		return;
+	} _next_args
+	if(begin.size() == 0 || end.size() == 0) {
+		*err = 10;
+		return;
+	}
+
+	string buf;
+	for(char*src=src1;*src;){
+		bool b=false;
+		for(list<const char*>::iterator li=begin.begin();li!=begin.end() && !b;li++){
+			const char*sp=*li;
+			if(startswith__(src,sp)){
+				char*src2=src;
+				src2+=strlen(sp);
+				for(;*src2;src2++){
+					for(list<const char*>::iterator li2=end.begin();li2!=end.end() && !b;li2++){
+						const char*sp2=*li2;
+						if(startswith__(src2,sp2)){
+							char c = src2[0];
+							src2[0] = 0;
+							src+=strlen(sp);
+							const char*ret = callback_(jsq_,shangji,err,ce,code,false,NULL,3, sp,src, sp2);
+							if(*err) {
+								return;
+							}
+							buf += ret;
+							src2[0] = c;
+							src2+=strlen(sp2);
+							src = src2;
+							b=true;
+						}
+					}
+				}
+			}
+		}
+		if(b)
+			continue;
+		buf+=*src++;
+	}
+
 	*addr_ret=dup__(buf.c_str());
 }
 
