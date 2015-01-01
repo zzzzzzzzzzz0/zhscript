@@ -9,6 +9,7 @@
 #include "mongoose-xg.h"
 
 #include "def1.h"
+#include "for_arg_.h"
 #include "l4/vartype.h"
 #include "l4/keyword.h"
 #include "l4/errinfo.h"
@@ -21,6 +22,20 @@
 //#include <linux/limits.h>
 #include <limits.h>
 #include <unistd.h>
+
+dlle___ void log__(const char* s, int i) {
+	flockfile(stdout);
+	switch(i) {
+	case 1:
+		puts(s);
+		break;
+	default:
+		printf("%s", s);
+		break;
+	}
+	fflush(stdout);
+	funlockfile(stdout);
+}
 
 static int exit_flag=0;
 static void signal_handler(int sig_num) {
@@ -48,8 +63,7 @@ static l4_delete_qu___ qu_delete_;
 static var_new___ var_new_;
 static void* shangji_;
 static std::string kw_echo_,echo_def_fmt_,
-	name_get_header_,code_get_header_,
-	name_get_option_,code_get_option_;
+	name_get_header_, name_get_option_, name_send_file_,code_fmt2_;
 
 dlle___ void init__(callback2___ cb,void* jsq,
 		l4_err___ l4_err,
@@ -59,8 +73,7 @@ dlle___ void init__(callback2___ cb,void* jsq,
 		var_new___ var_new,
 		void* shangji,
 		char* kw_echo,char*echo_def_fmt,
-		char* name_get_header,char*code_get_header,
-		char* name_get_option,char*code_get_option){
+		char* name_get_header, char* name_get_option, char* name_send_file,char*code_fmt2){
 	jsq_=jsq;
 	cb_=cb;
 	l4_err_=l4_err;
@@ -74,9 +87,9 @@ dlle___ void init__(callback2___ cb,void* jsq,
 	kw_echo_=kw_echo;
 	echo_def_fmt_=echo_def_fmt;
 	name_get_header_=name_get_header;
-	code_get_header_=code_get_header;
 	name_get_option_=name_get_option;
-	code_get_option_=code_get_option;
+	name_send_file_=name_send_file;
+	code_fmt2_=code_fmt2;
 }
 
 static void qu_var_new_form_url__(void* shangji,const char* url, int is_form_url_encoded,int* err){
@@ -136,6 +149,14 @@ dlle___ void filenaming_code__(char*s){
 	filenaming_code_=s;
 }
 
+#include <list>
+static std::list<std::string> wzs2_;
+dlle___ void wzs2_add__(int argc, ...){
+	_for_args( argc )
+			wzs2_.push_back(s);
+	_next_args
+}
+
 static std::string _wzs_ = ".wzs";
 
 static void *callback__(enum mg_event event, struct mg_connection *conn) {
@@ -150,6 +171,24 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 				substitute_index_file(conn, path, sizeof(path), &st);
 			script=path;
 			is_zs=(script.rfind(_wzs_)==script.length()-_wzs_.length());
+			if(!is_zs) {
+				std::string uri = conn->request_info.uri;
+				for(std::list<std::string>::iterator i = wzs2_.begin();;) {
+					if( i == wzs2_.end())
+						break;
+					if(uri.find(*i) != std::string::npos) {
+						is_zs = true;
+					}
+					i++;
+					if( i == wzs2_.end())
+						break;
+					if(is_zs) {
+						script = *i;
+						break;
+					}
+					i++;
+				}
+			}
 		}
 		if(is_zs){
 			if(script.find(uploadir_) == 0) {
@@ -162,21 +201,29 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 			for(;;){
 				{
 					size_t size=echo_def_fmt_.size();
-					if(code_get_header_.size()>size)
-						size=code_get_header_.size();
 					char* code_buf=new char[size+32];
+
 					sprintf(code_buf,echo_def_fmt_.c_str(),sprintf,mg_printf,conn,out);
 					err=var_new_(jsq_,qu,kw_echo_.c_str(),code_buf,true,vartype_def_,false);
 					if(err){
 						delete code_buf;
 						break;
 					}
-					sprintf(code_buf,code_get_header_.c_str(),mg_get_header,conn);
+
+					sprintf(code_buf,code_fmt2_.c_str(),mg_get_header,conn);
 					err=var_new_(jsq_,qu,name_get_header_.c_str(),code_buf,true,vartype_def_,false);
 					if(err){
 						delete code_buf;
 						break;
 					}
+
+					sprintf(code_buf,code_fmt2_.c_str(),mg_send_file,conn);
+					err=var_new_(jsq_,qu,name_send_file_.c_str(),code_buf,true,vartype_def_,false);
+					if(err){
+						delete code_buf;
+						break;
+					}
+
 					delete code_buf;
 				}
 				if((err=var_new_(jsq_,qu,"ip",inet_ntoa(conn->client.rsa.sin.sin_addr),true,vartype_var_,false)))
@@ -310,9 +357,8 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 					}
 				}
 
-				/*for(int i=0;i<request_info->num_headers;i++){
-					printf("%s\t%s\n",request_info->http_headers[i].name,request_info->http_headers[i].value);
-				}*/
+				if((err=var_new_(jsq_,qu,"uri",conn->request_info.uri,true,vartype_var_,false)))
+						break;
 
 				char* qs=conn->request_info.query_string;
 				if(qs){
@@ -324,7 +370,12 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 				qu_delete_(qu);
 				break;
 			}
+
 			//printf("out%s\n",out);
+			/*for(int i=0;i<conn->request_info.num_headers;i++){
+				printf("%s\t%s\n",conn->request_info.http_headers[i].name,conn->request_info.http_headers[i].value);
+			}*/
+
 			switch(err){
 			case jieshiqi_err_go_+keyword_end_:
 			case jieshiqi_err_go_+keyword_exit_:
@@ -354,7 +405,6 @@ dlle___ void stop__(){
 		mg_stop(ctx_);
 }
 
-#include "for_arg_.h"
 dlle___ int start__(int argc,...) {
 	const char *options[64] = {
 			"listening_ports", "8083",
@@ -382,9 +432,9 @@ dlle___ int start__(int argc,...) {
 
 	ctx_ = mg_start(&callback__, NULL, options);
 	if(ctx_){
-		size_t size=code_get_option_.size();
+		size_t size=code_fmt2_.size();
 		char* code_buf=new char[size+32];
-		sprintf(code_buf,code_get_option_.c_str(),mg_get_option,ctx_);
+		sprintf(code_buf,code_fmt2_.c_str(),mg_get_option,ctx_);
 		/*err=*/var_new_(jsq_,shangji_,name_get_option_.c_str(),code_buf,true,vartype_def_,false);
 		delete code_buf;
 	}

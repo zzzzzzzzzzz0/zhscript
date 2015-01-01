@@ -20,12 +20,18 @@ max-height:200px;
 body{
 font-size:12px;
 }
-div{
+.fengmian{
 float:left;
 padding:10px;
 text-align:center;
 border: 1px solid #DEDEDE;
 width:200px;
+}
+.title{
+width:200px;
+text-overflow:ellipsis;
+white-space:nowrap;
+overflow:hidden;
 }
 </style>”。
 赋予搜以调用‘dir.begin’、‘目录’、\.txt$、s l o0。
@@ -41,6 +47,13 @@ width:200px;
 		上代码、png、jpg、gif。
 		赋予封面以index.jpg。
 	了。
-	显示“<div><a href="?f=‘名’"><img src="‘封面’"><br>‘名2’</a> <a href="?f=‘名’&c=gb18030">gbk</a></div>”。
+	赋予名3以调用‘urlencode’、‘名’。
+	显示“<div class=fengmian>
+	<a href="?f=‘名3’">
+	<img src="‘封面’">
+	<br><div class=title>‘名2’</div>
+	</a>
+	<a href="?f=‘名3’&c=gb18030">gbk</a>
+	</div>”。
 了。
 调用‘dir.end’、‘搜’。
