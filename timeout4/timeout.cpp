@@ -39,7 +39,8 @@ dlle___ void init__(void* jsq, callback3_2___ cb3,
 
 deque<item___*> timeouts_;
 
-gboolean timeout_cb__(gpointer data) {
+//boolean timeout_cb__(gpointer data)
+int timeout_cb__(void* data) {
 	((item___*)data)->on__();
 	return true;
 }
@@ -95,7 +96,8 @@ dlle___ void timeout_add__(char* name, char* time, bool is_loop, char* code, int
 		t->arg_.add__(s);
 	_next_args
 
-	guint time1 = 1000;
+	//guint
+	unsigned int time1 = 1000;
 	int x = 1;
 	switch(time2[time2.size() - 1]) {
 	case 'h':
@@ -107,8 +109,10 @@ dlle___ void timeout_add__(char* name, char* time, bool is_loop, char* code, int
 		time2.erase(time2.size() - 1, 1);
 		break;
 	}
-	sscanf(time2.c_str(), "%u", &time1);
-	time1 *= x;
+	float time3;
+	if(sscanf(time2.c_str(), "%f", &time3) == 1) {
+		time1 = time3 * x;
+	}
 
 	t->code__(code);
 	t->id__(g_timeout_add(time1, timeout_cb__, t));
