@@ -387,6 +387,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			return true;
 		}
 		if(p->size()<3){
+			cpy__(buf, gtk_widget_get_tooltip_markup(GTK_WIDGET(l)), siz);
 		}else
 			gtk_widget_set_tooltip_markup(GTK_WIDGET(l), (*p)[2].c_str());
 		return true;
@@ -400,7 +401,17 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="焦点"){
-		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		if(p->size() >= 3) {
+			const string& p2 = (*p)[2];
+			if(p2 == "盒") {
+				gtk_widget_grab_focus(w->c__()->box__(page_num, NULL));
+				return true;
+			}
+			err_wufa__(p1, p2.c_str());
+			return true;
+		}
+		view___*v = w->c__()->view__(page_num);if(!v) return true;
 		gtk_widget_grab_focus(v->widget__());
 		return true;
 	}

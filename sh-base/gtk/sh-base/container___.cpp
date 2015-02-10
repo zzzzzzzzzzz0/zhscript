@@ -70,13 +70,20 @@ GtkWidget* container___::page_new1__(const char* name) {
 	return scrolled2;
 }
 
-GtkWidget* container___::button_new__(int page_num,
-		const char*name, const char*iconame,GtkIconSize size,
-		const char* code,char clicked){
+GtkWidget* container___::box__(int page_num, GtkWidget** scrolled) {
 	if((page_num=page_check__(page_num))<0)
 		return NULL;
 	GtkWidget* scrolled2 = nth_page__(page_num);
-	GtkWidget* box = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(scrolled2),object_data_box_));
+	if(scrolled)
+		*scrolled = scrolled2;
+	return GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(scrolled2),object_data_box_));
+}
+
+GtkWidget* container___::button_new__(int page_num,
+		const char*name, const char*iconame,GtkIconSize size,
+		const char* code,char clicked){
+	GtkWidget* scrolled2;
+	GtkWidget* box = box__(page_num, &scrolled2);
 	if(!box)
 		return NULL;
 	return button_new__(box, scrolled2, name, iconame, size, code, clicked);

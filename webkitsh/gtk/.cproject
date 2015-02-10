@@ -168,6 +168,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/libxml2"/>
 									<listOptionValue builtIn="false" value="/usr/include/webkitgtk-3.0"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.other.pic.1367794945" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1486949063" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1518504823" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
@@ -178,6 +179,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.24007707" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
 							<tool command="g++" commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1998450001" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.flags.2010372066" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3 `pkg-config --libs gtk+-3.0 webkitgtk-3.0`" valueType="string"/>
+								<option id="gnu.cpp.link.option.libs.1751802304" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="dl"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.964389060" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

@@ -51,6 +51,7 @@ public:
 	GtkWidget* button_new__(GtkWidget* box, GtkWidget* scrolled2,
 			const char*name,const char*iconame,GtkIconSize size,
 			const char* code,char clicked);
+	GtkWidget* box__(int page_num, GtkWidget** scrolled2);
 
 	virtual int n_pages__() {
 		return views_.size();
