@@ -1,4 +1,4 @@
-#!../webkitsh --。
+#!/usr/lib/zhscript/webkitsh --。
 加载lib/defi。
 加载lib2/js.zs。
 
@@ -10,6 +10,7 @@
 		使主窗、内容、<script>‘js函数集’</script>
 			你好。
 	上代码。
-使代码为下代码
+
+（使代码为下代码
 	显示‘参数0’--‘参数’换行。
-上代码。
+上代码。）
