@@ -3,6 +3,7 @@ using namespace std;
 #include"def1.h"
 #include"for_arg_.h"
 #include<string.h>
+#include<stdio.h>
 
 dlle___
 void extractfilename___(char* buf,long siz,char* name0,int flag){
@@ -175,7 +176,7 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 		return;
 
 	bool quhouzhui=false;
-	char fengefu='/';
+	char* fengefu="/";
 	bool qukongceng=true;
 	_for_args( argc )
 			switch(s[0]){
@@ -183,7 +184,7 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 				quhouzhui=true;
 				break;
 			case'/':
-				fengefu=s[1];
+				fengefu=s + 1;
 				break;
 			case'_':
 				qukongceng=false;
@@ -232,6 +233,11 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 				continue;
 			}
 			for(int i7=ss[i5].size();i7>0;i7--){
+				if(i7 == 1) {
+					char c = ss[i5][0];
+					if(c < ' ' || c > '~')
+						continue;
+				}
 				string s=ss[i5].substr(0,i7);
 				if(ss[i6].find(s)==0){
 					ss[i6]=ss[i6].substr(s.size());
