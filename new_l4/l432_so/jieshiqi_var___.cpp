@@ -695,10 +695,7 @@ int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,i
 #endif
 	offi+=syn_[kw2].length();
 	string buf3;
-	if(eval_p)
-		err=find__(qu,offi,to,kwsm_juhao_,from2,to2,kw2,buf3,true,NULL,NULL,keyword_no_,kwsm_1_,maskt,eval_p);
-	else
-		err=find__(qu,offi,to,kwsm_juhao_,from2,to2,kw2,buf3,false,NULL,NULL,keyword_no_,kwsm_1_,maskt);
+	err=find__(qu,offi,to,kwsm_juhao_,from2,to2,kw2,buf3,eval_p != NULL,NULL,NULL,keyword_no_,kwsm_1_,maskt,eval_p);
 	if(err)
 		return err;
 	if(kw2>keyword_no_)
@@ -706,6 +703,22 @@ int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,i
 
 	if((err=jieshi__(qu,from2,to2,buf3,NULL,NULL,kw,kwsm_1_,maskt)))
 		return err;
+
+	if(rems.size() > 0) {
+		qu___* qu3 = qu2;
+		for(; qu3;) {
+			map<string, var___>::iterator mi = qu3->vars_.find(buf2);
+			if(mi != qu3->vars_.end()) {
+				var___* var = &mi->second;
+				if(var->has_huashen__(&rems)) {
+					qu2 = qu3;
+					break;
+				}
+			}
+			qu3 = qu3->shangji_;
+		}
+	}
+
 	if((err=var_new__(qu2,buf2,buf3,readonly,type,is_noparam,is_lib,&rems))){
 		return err;
 	}
