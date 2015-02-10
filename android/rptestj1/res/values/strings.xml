@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">开源的算命机</string>
+    <string name="action_settings">结束。</string>
+    <string name="hello_world">（不）怎么样</string>
+    <string name="go_about">webview::go、about.html。</string>
+    <string name="go_index">webview::go、index.html。</string>
+
+</resources>
