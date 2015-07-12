@@ -17,7 +17,9 @@
 using namespace std;
 
 char*ltoa(long l,char*buf,char fmt1='d'){
-	char fmt[]={'%',fmt1,0};
+	char fmt[]={'%',fmt1, 0, 0};
+	if(fmt1 == 'l')
+		fmt[2] = 'd';
 	sprintf(buf,fmt,l);
 	return buf;
 }
@@ -41,7 +43,7 @@ dlle___ void dlln___(fileinfo__)(char*buf,int siz,char*filename,char*fmt){
 			case 0:
 				continue;
 			case's':
-				s+=ltoa(stt.st_size,s1);
+				s+=ltoa(stt.st_size,s1, 'l');
 				break;
 			case'm':
 				s+=ltoa(stt.st_mode,s1,'x');
@@ -97,13 +99,13 @@ dlle___ void dlln___(fileinfo__)(char*buf,int siz,char*filename,char*fmt){
 				}
 				break;
 			case'i':
-				s+=ltoa(stt.st_ino,s1);
+				s+=ltoa(stt.st_ino,s1, 'l');
 				break;
 			case'B':
 				s+=ltoa(stt.st_blksize,s1);
 				break;
 			case'b':
-				s+=ltoa(stt.st_blocks,s1);
+				s+=ltoa(stt.st_blocks,s1, 'l');
 				break;
 			case'r':
 				s+=ltoa(stt.st_rdev,s1);

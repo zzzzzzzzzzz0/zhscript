@@ -30,7 +30,24 @@ static int strmid__(char* s1,long s1_len,char* s,int i1,int i2,char* s2){
 	if(len > s1_len)
 		return s1_len;
 
-	__strcpyn(s1,s+i1,len);
+	//__strcpyn(s1,s+i1,len);
+	int i, i3 = 0, i4;
+	for(i = 0; i < i2;) {
+		unsigned char c = s[i];
+		int n;
+		if(c >= 224)
+			n = 3;
+		else if(c >= 192)
+			n = 2;
+		else
+			n = 1;
+		if(i >= i1) {
+			for(i4 = 0; i4 < n; i4++)
+				s1[i3++] = s[i++];
+		} else
+			i += n;
+	}
+	s1[i3] = 0;
 	return 0;
 }
 

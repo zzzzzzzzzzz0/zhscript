@@ -96,9 +96,10 @@ void err_buzhichi__(const string& s3,const char* s=NULL){
 	err__(s,"不支持",s3.c_str());
 }
 
-const char* call4__(int* err,const char* code,const char* src2,int argc,const char**argv2,int from){
-	const char* ret=l4_.l4_callback3_2__(l4_.l4__(),err,NULL,code,false,src2,l4_main_qu_,
-			argc,argv2,from);
+const char* call4__(int* err, void*ce, const char* code, const char* src2,void* shangji,
+		int argc, const char**argv2, int from) {
+	const char* ret=l4_.l4_callback3_2__(l4_.l4__(), err, ce, code, false, src2, shangji,
+			argc, argv2, from);
 	switch(*err){
 	case 0:
 	case jieshiqi_go_+keyword_break_:
@@ -115,6 +116,9 @@ const char* call4__(int* err,const char* code,const char* src2,int argc,const ch
 	}
 	return ret;
 }
+const char* call4__(int* err,const char* code,const char* src2,int argc,const char**argv2,int from){
+	return call4__(err, NULL, code, src2, l4_main_qu_, argc, argv2, from);
+}
 const char* call4__(const char* code,const char* src2,int argc,const char**argv2,int from){
 	int err;
 	return call4__(&err, code, src2, argc, argv2, from);
@@ -125,7 +129,7 @@ const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
 		argv2[i]=s;
 	_next_args
 	const char* code=NULL;
-	if(w) {
+	if(w && s1) {
 		map<int, string>::iterator it = w->codes_.find(s1->i__());
 		if(it != w->codes_.end())
 			code=(*it).second.c_str();
@@ -148,12 +152,16 @@ const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
 		w->name2__(name2, sw);
 		argv2[argc++]=name2.c_str();
 	}
-	return call4__(code,s1->src2__(),argc,argv2,0);
+	const char* src2 = NULL;
+	if(s1)
+		src2 = s1->src2__();
+	return call4__(code,src2,argc,argv2,0);
 }
 
 const string& s__(const deque<string>* p, size_t i) {
 	if(i >= p->size()) {
-		err_buzu__((*p)[0].c_str());
+		if(p->size() > 0)
+			err_buzu__((*p)[0].c_str());
 		throw 's';
 	}
 	return (*p)[i];
@@ -164,35 +172,29 @@ const string& s__(const deque<string>& p, size_t i) {
 
 class event___ {
 public:
-	string code_, arg0_;
+	string code_, name_;
+	gboolean b_;
 };
-
-static gint event_mouse__(GtkWidget *widget, GdkEventButton *event, gpointer data) {
+static gboolean event_mouse__(GtkWidget *widget, GdkEventButton *event, gpointer data) {
 	event___* e = (event___*)data;
-	switch(event->type){
-	case GDK_BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-	{
-		char s1[32], s2[32], s3[32];
-		const char* a[] = {s1, s2, s3};
-		sprintf(s1, "%d", event->button);
-		sprintf(s2, "%.2f", event->x);
-		sprintf(s3, "%.2f", event->y);
-		call4__(e->code_.c_str(), e->arg0_.c_str(), 3, a, 0);
-		break;
-	}
-	default:
-		call4__(e->code_.c_str(), e->arg0_.c_str(), 0, NULL, 0);
-		break;
-	}
-	return FALSE;
+	char s1[32], s2[32], s3[32];
+	sprintf(s1, "%d", event->button);
+	sprintf(s2, "%.2f", event->x);
+	sprintf(s3, "%.2f", event->y);
+	const char* a[] = {s1, s2, s3};
+	call4__(e->code_.c_str(), e->name_.c_str(), 3, a, 0);
+	return e->b_;
 }
-
-static bool event_key__(GtkWidget *widget, GdkEventKey *event, gpointer data) {
+static gboolean event_key__(GtkWidget *widget, GdkEventKey *event, gpointer data) {
 	event___* e = (event___*)data;
 	const char* a[] = {gdk_keyval_name(event->keyval)};
-	call4__(e->code_.c_str(), e->arg0_.c_str(), 1, a, 0);
-	return FALSE;
+	call4__(e->code_.c_str(), e->name_.c_str(), 1, a, 0);
+	return e->b_;
+}
+static gboolean event_other__(GtkWidget *widget, GdkEvent *event, gpointer data) {
+	event___* e = (event___*)data;
+	call4__(e->code_.c_str(), e->name_.c_str(), 0, NULL, 0);
+	return e->b_;
 }
 
 static s1___* new_window_s1_ = new s1___("创建", "", 'w');
@@ -415,14 +417,6 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		gtk_widget_grab_focus(v->widget__());
 		return true;
 	}
-	if(p1=="敏感"){
-		view___*v = get_view__(p0,page_num,p1);if(!v) return true;
-		if(p->size()<3){
-			l2s__(gtk_widget_get_sensitive(v->widget__()), buf);
-		}else
-			gtk_widget_set_sensitive(v->widget__(), s2i__((*p)[2],0));
-		return true;
-	}
 	if(p1=="移动"){
 		if(err_buzu2__(p, 4))
 			return true;
@@ -431,11 +425,56 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		gtk_window_get_position(w->window__(),&x,&y);
 		x=s2i__((*p)[2],x);
 		y=s2i__((*p)[3],y);
-		if(x<0)
-			x+=gdk_screen_width();
-		if(y<0)
-			y+=gdk_screen_height();
-		gtk_window_move(w->window__(),x,y);
+		if(p->size() > 4) {
+			gtk_window_move(w->window__(),x,y);
+			const string& eo_code = (*p)[4];
+			if(!eo_code.empty()) {
+				gint w1 = 0, h1 = 0;
+				gtk_window_get_size (w->window__(), &w1, &h1);
+				string arg0 = "";
+				int x2 = x, y2 = y;
+				if(x<0) {
+					arg0 += "x-";
+					x2 = 0;
+				} else {
+					int x3 = gdk_screen_width() - w1;
+					if(x > x3) {
+						arg0 += "x+";
+						x2 = x3;
+					}
+				}
+				if(y<0) {
+					arg0 += "y-";
+					y2 = 0;
+				} else {
+					int y3 = gdk_screen_height() - h1;
+					if(y > y3) {
+						arg0 += "y+";
+						y2 = y3;
+					}
+				}
+				if(!arg0.empty()) {
+					char x1[8], y1[8];
+					sprintf(x1, "%d", x2);
+					sprintf(y1, "%d", y2);
+					const char* argv[] = {arg0.c_str(), x1, y1};
+					call4__(eo_code.c_str(), NULL, 3, argv, 0);
+				}
+			}
+		} else {
+			if(x<0)
+				x+=gdk_screen_width();
+			if(y<0)
+				y+=gdk_screen_height();
+			gtk_window_move(w->window__(),x,y);
+		}
+		return true;
+	}
+	if(p1 == "x" || p1 == "y") {
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		int x,y;
+		gtk_window_get_position(w->window__(),&x,&y);
+		l2s__(p1 == "x" ? x : y, buf);
 		return true;
 	}
 	if(p1=="活动"){
@@ -474,7 +513,43 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		if(err_buzu2__(p, 3))
 			return true;
 		w = get_window__(p0,page_num,p1);if(!w)return true;
-		w->c__()->for__((*p)[2].c_str());
+		w->c__()->for__((*p)[2].c_str(), ce, shangji);
+		return true;
+	}
+	if(p1=="敏感"){
+		w = get_window__(p0,page_num,p1);if(!w)return true;
+		if(p->size() > 2) {
+			gtk_widget_set_sensitive(w->widget__(), bool__((*p)[2]));
+		} else {
+			l2s__(gtk_widget_get_sensitive(w->widget__()), buf);
+		}
+		return true;
+	}
+	if(p1=="光标形状"){
+		w = get_window__(p0,page_num,p1);if(!w)return true;
+		if(w->cursor_) {
+			//gdk_cursor_destroy(w->cursor_);
+			gdk_cursor_unref(w->cursor_);
+		}
+		if(p->size() <= 2)
+			w->cursor_ = NULL;
+		else {
+			const string& p2 = (*p)[2];
+			int i;
+			if(p2 == "移动")
+				i = GDK_FLEUR;
+			else if(sscanf(p2.c_str(), "%d", &i) != 1) {
+				err_buzhichi__(p1, p2.c_str());
+				return true;
+			}
+			w->cursor_ = gdk_cursor_new((GdkCursorType)i);
+			if(!w->cursor_) {
+				err_buzhichi__(p1, p2.c_str());
+				return true;
+			}
+		}
+		gdk_window_set_cursor(gtk_widget_get_window(w->widget__()), w->cursor_);
+		//gdk_flush();
 		return true;
 	}
 	if(p0=="屏幕"){
@@ -496,15 +571,19 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		l2s__(p1 == "宽度" ? w1 : h1, buf);
 		return true;
 	}
-	if(p1=="大小"){
+	if(p1=="大小" || p1 == "定大小"){
 		if(err_buzu2__(p, 4))
 			return true;
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		int w1 = s2i__((*p)[2], gdk_screen_width()),
-			h1 = s2i__((*p)[3], gdk_screen_height());
-		gtk_window_set_default_size (w->window__(), w1, h1);
-		//gtk_widget_set_usize(w->widget__(), w1, h1);
-		gtk_window_resize (w->window__(), w1, h1);
+		const string &w2 = (*p)[2], &h2 = (*p)[3];
+		int w1, h1;
+		w1 = s2i__(w2, gdk_screen_width());
+		h1 = s2i__(h2, gdk_screen_height());
+		if(p1=="大小") {
+			gtk_window_set_default_size (w->window__(), w1, h1);
+			gtk_window_resize (w->window__(), w1, h1);
+		} else
+			gtk_widget_set_size_request(w->widget__(), w1, h1);
 		return true;
 	}
 	if(p1=="最大化"){
@@ -540,6 +619,11 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	if(p1=="置顶" || p1=="取消置顶"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_set_keep_above (w->window__(), p1=="置顶");
+		return true;
+	}
+	if(p1=="禁大小"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_set_resizable(w->window__(), p->size() > 2 ? !bool__((*p)[2]) : false);
 		return true;
 	}
 	if(p1=="无标签"){
@@ -680,10 +764,6 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1 == "事件") {
 		w=get_window__(p0,page_num,p1,false);if(!w)return true;
-		if(!w->event_box__()) {
-			err_buzhichi__(p1);
-			return true;
-		}
 		for(size_t i2 = 2; i2 < p->size();) {
 			const string& p2 = (*p)[i2++];
 			if(err_buzu2__(p, i2))
@@ -691,12 +771,22 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 			const string& p3 = (*p)[i2++];
 			event___* e = new event___();
 			e->code_ = p3;
-			e->arg0_ = p2;
-			string head = "key_";
-			if(p2.compare(0, head.size(), head) == 0)
+			e->name_ = p2;
+			e->b_ = TRUE;
+			string head = "key";
+			if(p2.compare(0, head.size(), head) == 0) {
 				g_signal_connect(G_OBJECT(w->event_box__()), p2.c_str(), G_CALLBACK(event_key__), e);
-			else
+				continue;
+			}
+			head = "button";
+			if(p2.compare(0, head.size(), head) == 0 || p2 == "motion-notify-event") {
 				g_signal_connect(G_OBJECT(w->event_box__()), p2.c_str(), G_CALLBACK(event_mouse__), e);
+				continue;
+			}
+			if(p2 == "configure-event") {
+				e->b_ = FALSE;
+			}
+			g_signal_connect(G_OBJECT(w->event_box__()), p2.c_str(), G_CALLBACK(event_other__), e);
 		}
 		return true;
 	}
@@ -767,7 +857,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p1=="鼠标穿透"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-#ifndef no_gtk_2_
+#ifndef ver_gtk3_
 		GdkRegion *region = gdk_region_new ();
 		gdk_window_input_shape_combine_region (w->widget__()->window, region, 0, 0);
 		gdk_region_destroy (region);
@@ -782,6 +872,13 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	if(p1=="xid"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		get_xid__(w->widget__(), buf);
+		return true;
+	}
+	if(p1=="类名"){
+		if(err_buzu2__(p, 4))
+			return true;
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_set_wmclass(w->window__(), (*p)[2].c_str(), (*p)[3].c_str());
 		return true;
 	}
 	if(p0=="代码"){
@@ -894,7 +991,6 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 		s+=ky;s+=l2x__((long)this,buf);s+=by;s+=d;
 		s+=bs;s+=zs;s+=sj;s+=zz;s+=cb;s+='1';s+=bz;s+=d;
 		s+=bs;s+=c;s+=bz;s+=j;
-		//让
 		err=l4_.def_new__("使",s.c_str(),true,false,l4_main_qu_);
 	}
 	if(!err){
@@ -907,15 +1003,16 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 	if(err)
 		return 255;
 
-	{
-		window___* w = windows_.main__();
-		if(!main_window_c_)
-			main_window_c_ = new simple___(w);
-		new_window0__(w, &main_window_flag_, main_window_c_, this);
-		show_window__(w);
+	if(l4_.exit_code__() == 0) {
+		{
+			window___* w = windows_.main__();
+			if(!main_window_c_)
+				main_window_c_ = new simple___(w);
+			new_window0__(w, &main_window_flag_, main_window_c_, this);
+			show_window__(w);
+		}
+		gtk_main ();
 	}
-	gtk_main ();
-
 	return l4_.exit_code__();
 }
 

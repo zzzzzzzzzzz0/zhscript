@@ -88,22 +88,22 @@ static void window_object_cleared__(
 	gpointer        user_data)
 {
 	const char* name0 = "z$";
-    JSStringRef name = JSStringCreateWithUTF8CString(name0);
+	JSStringRef name = JSStringCreateWithUTF8CString(name0);
 
-    JSObjectRef func;
-    //func = JSObjectMakeFunctionWithCallback(ctx, name, zs__);
-    {
-    	JSClassDefinition cd = kJSClassDefinitionEmpty;
+	JSObjectRef func;
+	//func = JSObjectMakeFunctionWithCallback(ctx, name, zs__);
+	{
+		JSClassDefinition cd = kJSClassDefinitionEmpty;
 		cd.className = name0;
 		cd.callAsFunction = zs__;
 		JSClassRef cr = JSClassCreate (&cd);
 		func = JSObjectMake (ctx, cr, NULL);
-    }
+	}
 
-    JSObjectRef o = JSContextGetGlobalObject(ctx);
-    JSObjectSetProperty(ctx, o, name, func, kJSPropertyAttributeNone, NULL);
-    JSStringRelease(name);
-    /*bool b=*/JSObjectSetPrivate(func, (void*)webkit_view___::from__(wv));
+	JSObjectRef o = JSContextGetGlobalObject(ctx);
+	JSObjectSetProperty(ctx, o, name, func, kJSPropertyAttributeNone, NULL);
+	JSStringRelease(name);
+	/*bool b=*/JSObjectSetPrivate(func, (void*)webkit_view___::from__(wv));
 }
 
 GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {

@@ -31,3 +31,9 @@ float s2f__(const string& s,float d=0.0){
 	sscanf(s.c_str(),"%f",&d);
 	return d;
 }
+
+bool bool__(const string& s) {
+	if(s == "" || s == "0" || s == "false")
+		return false;
+	return true;
+}

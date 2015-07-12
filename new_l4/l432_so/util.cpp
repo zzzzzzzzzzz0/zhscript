@@ -63,8 +63,12 @@ string l2x__(long l){
 
 long x2l__(const string& s){
 	unsigned long i;
+#ifdef ver_sstream_too_bad_
+	sscanf(s.c_str(), "%lx", &i);
+#else
 	istringstream ss(s);
 	ss>>hex>>i;
+#endif
 	return i;
 }
 

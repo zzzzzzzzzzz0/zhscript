@@ -57,7 +57,7 @@ void dir___::dir__(int*err1,char*buf,long siz,
 			opt.dir_not_tongpei_=!opt.dir_not_tongpei_;
 			continue;
 		case'n':
-			opt.test_lnk_is_dir_=!opt.test_lnk_is_dir_;
+			opt.dirlnk_is_dir_=!opt.dirlnk_is_dir_;
 			continue;
 		case'p':
 			switch(*++opt1){
@@ -193,12 +193,15 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 				is_dir=true;
 			else if(S_ISLNK(st_mode)){
 				if(opt->a_lnk_){
-					if(opt->test_lnk_is_dir_){
-						DIR* d2;
-						if((d2=opendir(name))){
-							closedir(d2);
-							is_dir=true;
-						}
+					DIR* d2;
+					if((d2=opendir(name))){
+						closedir(d2);
+						is_dir=true;
+					}
+					if(!opt->dirlnk_is_dir_ && is_dir) {
+						if(!opt->a_dir_)
+							continue;
+						is_dir = false;
 					}
 				}else
 					continue;

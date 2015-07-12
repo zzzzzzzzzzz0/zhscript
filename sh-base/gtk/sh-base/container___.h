@@ -64,7 +64,7 @@ public:
 	int page_check__(int page_num);
 	gpointer get_data__(int page_num, const char *key);
 
-	void for__(const char* code);
+	void for__(const char* code, void*ce, void* shangji);
 
 	GtkLabel* label__(int page_num);
 	GtkWidget* close_button__(int page_num);

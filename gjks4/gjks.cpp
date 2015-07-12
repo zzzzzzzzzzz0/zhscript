@@ -54,11 +54,12 @@ static int cmp__(const string& s1, const string& s2) {
 			ret = 1;
 			break;
 		}
-		if(s1[i] < s2[i]) {
+		unsigned char c1 = s1[i], c2 = s2[i];
+		if(c1 < c2) {
 			ret = cmp__(s1, s2, i, -1);
 			break;
 		}
-		if(s1[i] > s2[i]) {
+		if(c1 > c2) {
 			ret = cmp__(s1, s2, i, 1);
 			break;
 		}
@@ -325,7 +326,7 @@ dlle___ void list_foreach__(int* err, void*ce, void* shangji,
 		argc = v->size();
 		size_t add = 0;
 		if(has_num) {
-			sprintf(num, "%d", i1 + 1);
+			sprintf(num, "%lu", i1 + 1);
 			argv[0] = num;
 			add++;
 		}
@@ -401,9 +402,9 @@ dlle___ void list_find__(char* buf, vector<vector<string>*>* p, char* s, int i_o
 				if((*v)[i] == s) {
 					i1++;
 					if(i_only < 0)
-						sprintf(buf, "%d,%d", i1, i + 1);
+						sprintf(buf, "%lu,%lu", i1, i + 1);
 					else
-						sprintf(buf, "%d", i1);
+						sprintf(buf, "%lu", i1);
 					return;
 				}
 			}

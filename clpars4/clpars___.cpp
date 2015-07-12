@@ -19,6 +19,28 @@ dlle___ void init__(void* jsq,callback3_2___ cb2){
 	cb2_=cb2;
 }
 
+#include <sstream>
+void clpars_item___::flags__() {
+	string s;
+#ifdef ver_sstream_too_bad_
+	for(size_t i = 0; i < flag_.size(); i++) {
+		char c = flag_[i];
+		if(c == '|') {
+			flags_.push_back(s);
+			s.clear();
+			continue;
+		}
+		s += c;
+	}
+	if(!flag_.empty())
+		flags_.push_back(s);
+#else
+	stringstream ss(flag_);
+	while(getline(ss,s,'|'))
+		flags_.push_back(s);
+#endif
+}
+
 clpars___::clpars___() {
 }
 
@@ -34,63 +56,63 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 	const char*code;
 	const char*s;
 	int argc1;
-    for (int i = 0; i < argc; ){
-        flag = va_arg(argv, const char*); i++;
-        if(i <= argc){
+	for (int i = 0; i < argc; ){
+		flag = va_arg(argv, const char*); i++;
+		if(i <= argc){
 			if(sp){
 				if(flag[0]=='-'&&flag[1]=='-'&&flag[2]=='-'&&flag[3]=='-'&&!flag[4]){
 					*sp=i;
 					break;
 				}
 			}
-        }
-        info = va_arg(argv, const char*); i++;
-        s = va_arg(argv, const char*); i++;
-        code = va_arg(argv, const char*); i++;
-        if(i>argc){
-        	sprintf(buf,"no arg");
-        	*err=1;
-        	return;
-        }
-        if(!flag||!code||!s){
-        	sprintf(buf,"is null");
-        	*err=10;
-        	return;
-        }
-        char type=' ';
-        switch(s[0]) {
-        case 'a':
-        case 'b':
-        case 'e':
-        case 'c':
-        case 'h':
+		}
+		info = va_arg(argv, const char*); i++;
+		s = va_arg(argv, const char*); i++;
+		code = va_arg(argv, const char*); i++;
+		if(i>argc){
+			sprintf(buf,"no arg");
+			*err=1;
+			return;
+		}
+		if(!flag||!code||!s){
+			sprintf(buf,"is null");
+			*err=10;
+			return;
+		}
+		char type=' ';
+		switch(s[0]) {
+		case 'a':
+		case 'b':
+		case 'e':
+		case 'c':
+		case 'h':
 			type=s[0];
-        	if(!s[1]) {
+			if(!s[1]) {
 				argc1=0;
 				break;
-        	}
-        	s++;
-        default:
-            if(sscanf(s,"%d",&argc1)!=1){
-            	sprintf(buf,"no int");
-            	*err=2;
-            	return;
-            }
-            switch(argc1){
-            case -1:
-            	type='b';
-            	break;
-            case -2:
-            	type='e';
-            	break;
-            case -3:
-            	type='c';
-            	break;
-            }
-        }
+			}
+			s++;
+		default:
+			if(sscanf(s,"%d",&argc1)!=1){
+				sprintf(buf,"no int");
+				*err=2;
+				return;
+			}
+			switch(argc1){
+			case -1:
+				type='b';
+				break;
+			case -2:
+				type='e';
+				break;
+			case -3:
+				type='c';
+				break;
+			}
+		}
 		clpars_item___* item=new clpars_item___(flag,info,code,argc1,type);
 		item_.push_back(item);
-    }
+	}
 }
 
 class comp___ {
@@ -106,11 +128,11 @@ public:
 		src2_=src2;
 		arg1_=arg1;
 	}
-    bool operator () (string& s2) {
-        return bool__(s2, s_, type_, src2_,arg1_);
-    }
-    bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
-    	bool b=false;
+	bool operator () (string& s2) {
+		return bool__(s2, s_, type_, src2_,arg1_);
+	}
+	bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
+		bool b=false;
 		switch(type){
 		case 'b':case 'e':case 'c':
 			{
@@ -128,7 +150,8 @@ public:
 					b=(i == 0);
 					break;
 				case 'e':
-					b=(i == s.size()-s2.size());
+					if(s.size() >= s2.size())
+						b=(i == s.size()-s2.size());
 					break;
 				case 'c':
 					b=(i != string::npos);
@@ -155,7 +178,7 @@ public:
 			break;
 		}
 		return b;
-    }
+	}
 };
 
 int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
@@ -264,28 +287,28 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 			}
 		}
 	}
-    delete argv2;
+	delete argv2;
 	return has;
 }
 
 int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,bool no)
 {
-    if(!flag){
-    	sprintf(buf,"is null");
-    	*err=10;
-    	return 1;
-    }
-    i++;
+	if(!flag){
+		sprintf(buf,"is null");
+		*err=10;
+		return 1;
+	}
+	i++;
 
-    int has=cb__(flag,by_help,no,i1,i,buf,err,ce,shangji,argc,argv);
+	int has=cb__(flag,by_help,no,i1,i,buf,err,ce,shangji,argc,argv);
 	if(*err)
 		return 1;
-    if(has)
-    	return 0;
+	if(has)
+		return 0;
 
-    if(by_help)
-    	return 0;
+	if(by_help)
+		return 0;
 
 	sprintf(buf,"no parse");
 	*err=3;
@@ -318,7 +341,7 @@ void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char*
 			info+=t2;
 		info+=ci->info_;
 		info+=n;
-    }
+	}
 	*addr_ret=dup__(info.c_str());
 }
 
@@ -338,7 +361,7 @@ void clpars___::info__(char*buf,int* err,void*ce,void* shangji,char* code){
 		cb2_(jsq_,shangji,err,ce,code,false,NULL,argc2,argv2,0);
 		if(*err)
 			break;
-    }
+	}
 }
 
 void clpars___::pause__(bool pause, int argc, char** argv) {
@@ -358,6 +381,6 @@ void clpars___::pause__(bool pause, int argc, char** argv) {
 				}
 			}
 		}
-    }
+	}
 
 }

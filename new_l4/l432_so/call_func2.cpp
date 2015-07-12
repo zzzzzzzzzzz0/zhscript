@@ -465,17 +465,17 @@ int call_func__(deque<string>* p,string& buf0,err___* err0,const string& null,
 			if(ret_type & calltype_ret_err_)
 				argv[argc++]=(call_data_type___)&err_ret;
 		}
-		if(argc>
+		if(
 #if defined( ver_loongson_ ) || defined( ver_64_ )
-					128
+				argc>128
 #elif ver_no_asm_16_
-					16
+				argc>16
 #elif ver_no_asm_32_
-					32
+				argc>32
 #elif ver_mac_mini_
-					69
+				argc>69
 #else
-					10000
+					false
 #endif
 					)
 			return err_free__(errinfo_param_over_,argv,buf);

@@ -157,13 +157,16 @@ dlle___ int dlln___(wait_exit_code__)(pid_t child_pid){
 	return WEXITSTATUS(status);
 }
 
+#ifndef ver_no_spawn_
 #include <spawn.h>
 #include <sys/wait.h>
 #ifdef __APPLE__
 #include <crt_externs.h>
 #define environ (*_NSGetEnviron())
 #endif
+#endif
 dlle___ void spawn__(char* buf, int argc, ...){
+#ifndef ver_no_spawn_
 	const char** argv2=new const char*[argc + 1];
 	_for_args( argc )
 		argv2[i] = s;
@@ -184,4 +187,5 @@ dlle___ void spawn__(char* buf, int argc, ...){
     waitpid(pid,&stat,0);*/
 
     delete argv2;
+#endif
 }

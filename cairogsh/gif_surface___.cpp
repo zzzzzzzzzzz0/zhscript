@@ -17,6 +17,12 @@ gif_surface___::gif_surface___(const char* file) {
 		if(iter_)
 			pixbuf_ = gdk_pixbuf_animation_iter_get_pixbuf(iter_);
 	}
+
+	sx_ = sy_ = 1;
+	hudu_ = 0;
+	px_ = py_ = 0;
+	end_code_ = next_code_ = "";
+	pause_ = false;
 }
 
 gif_surface___::~gif_surface___() {
@@ -50,3 +56,5 @@ bool gif_surface___::is_end__() {
 		return true;
 	return gdk_pixbuf_animation_iter_on_currently_loading_frame(iter_);
 }
+
+#include "arg___.cpp"

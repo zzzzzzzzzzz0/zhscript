@@ -60,7 +60,7 @@ GtkWidget* window___::new__(window_flag___* flag, container___* c){
 
 	if(flag->is_app_paintable_) {
 		gtk_widget_set_app_paintable(window_, TRUE);
-#ifndef no_gtk_2_
+#ifndef ver_gtk3_
 		GdkScreen *screen = gtk_widget_get_screen(window_);
 		GdkColormap *colormap = gdk_screen_get_rgba_colormap(screen);
 		gtk_widget_set_colormap(window_, colormap);
@@ -72,25 +72,25 @@ GtkWidget* window___::new__(window_flag___* flag, container___* c){
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
 								  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-	if(!has_event_box_) {
-		event_box_ = NULL;
-		gtk_container_add (GTK_CONTAINER (window_), scrolled);
-	} else {
+	if(add_event_box_) {
 		event_box_ = gtk_event_box_new ();
 		gtk_event_box_set_above_child (GTK_EVENT_BOX (event_box_), FALSE);
 		gtk_container_add (GTK_CONTAINER (event_box_), scrolled);
 		gtk_container_add (GTK_CONTAINER (window_), event_box_);
-		gtk_widget_set_events(event_box_, 0
-				| GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK
-				| GDK_BUTTON_PRESS | GDK_BUTTON_RELEASE
-				| GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
 		gtk_widget_realize (event_box_);
+	} else {
+		event_box_ = NULL;
+		gtk_container_add (GTK_CONTAINER (window_), scrolled);
 	}
+	gtk_widget_set_events(window_, gtk_widget_get_events(window_)
+			| GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK
+			| GDK_BUTTON_PRESS | GDK_BUTTON_RELEASE
+			| GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
 
 	return c__()->new__(scrolled);
 }
 
-bool window___::has_event_box_ = false;
+bool window___::add_event_box_ = false;
 
 void window___::name2__(string& name2, GtkWidget *sw) {
 	name2 = name_;
@@ -101,4 +101,5 @@ window___::window___(const char* name, bool is_main){
 	is_main_ = is_main;
 	name_ = name;
 	window_ = NULL;
+	cursor_ = NULL;
 }

@@ -7,13 +7,14 @@
 
 #ifndef CLPARS____H_
 #define CLPARS____H_
-#include <sstream>
 #include <string>
 #include <list>
 using namespace std;
 #include <stdarg.h>
 
 class clpars_item___ {
+private:
+	void flags__();
 public:
 	string flag_;
 	list<string> flags_;
@@ -32,10 +33,7 @@ public:
 
 		pause_ = false;
 
-    	stringstream ss(flag);
-    	string s;
-    	while(getline(ss,s,'|'))
-    		flags_.push_back(s);
+		flags__();
 	}
 };
 

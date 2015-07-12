@@ -33,19 +33,19 @@ gcc_(){
 	echo $z
 	$z
 }
-gxx_lib2_(){
+gxx_lib_(){
 	cd "$dir/$1"
 	gxx_ *.cpp $2 -o ../new_o/lib/$1.so $s1 $f1 $i1
 }
-gxx_lib_(){
+gxx_lib_old_(){
 	cd "$dir/$1"
 	gxx_ -o ../new_o/lib/$1.so $s1 $f1 $i1 $2 *.cpp
 }
-gcc_lib2_(){
+gcc_lib_(){
 	cd "$dir/$1"
 	gcc_ *.c $2 -o ../new_o/lib/$1.so $s1 $f1 $i1
 }
-gcc_lib_(){
+gcc_lib_old_(){
 	cd "$dir/$1"
 	gcc_ -o ../new_o/lib/$1.so $s1 $f1 $i1 $2 *.c
 }

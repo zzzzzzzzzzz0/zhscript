@@ -15,9 +15,9 @@ dlle___ void del__(clpars___* clp){
 
 dlle___ void one__(int*err,char*buf,void*ce,void* shangji,bool no,int argc,...){
 	clpars___ clp;
-    va_list argv;
-    va_start(argv, argc);
-    int sp;
+	va_list argv;
+	va_start(argv, argc);
+	int sp;
 	clp.set__(buf,err,false,argc,argv,&sp);
 	if(!*err)
 		clp.par__(buf,err,ce,shangji,argc,argv,sp,no);
@@ -32,9 +32,9 @@ dlle___ clpars___* set__(int*err,char*buf,bool need_new,bool add,int argc,...){
 		clp=new clpars___();
 	else
 		clp=&clpars_;
-    va_list argv;
-    va_start(argv, argc);
-    clp->set__(buf,err,add,argc,argv,NULL);
+	va_list argv;
+	va_start(argv, argc);
+	clp->set__(buf,err,add,argc,argv,NULL);
 	va_end(argv);
 	return clp;
 }
@@ -42,9 +42,9 @@ dlle___ clpars___* set__(int*err,char*buf,bool need_new,bool add,int argc,...){
 dlle___ void par__(int* err,char*buf,void*ce,void* shangji,clpars___* clp,bool no,int argc,...){
 	if(!clp)
 		clp=&clpars_;
-    va_list argv;
-    va_start(argv, argc);
-    clp->par__(buf,err,ce,shangji,argc,argv,0,no);
+	va_list argv;
+	va_start(argv, argc);
+	clp->par__(buf,err,ce,shangji,argc,argv,0,no);
 	va_end(argv);
 }
 
@@ -68,9 +68,9 @@ dlle___ void pause__(clpars___* clp,bool pause,int argc,...){
 		argv = new char*[argc];
 		va_list argv1;
 		va_start(argv1, argc);
-	    for (int i = 0; i < argc; ++i){
-	        argv[i] = va_arg(argv1, char*);
-	    }
+		for (int i = 0; i < argc; ++i){
+			argv[i] = va_arg(argv1, char*);
+		}
 		va_end(argv1);
 	}
 	clp->pause__(pause, argc, argv);

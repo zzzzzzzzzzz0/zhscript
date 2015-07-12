@@ -90,7 +90,8 @@ int file___::get__(const string& filename,string& filename1,string& ret){
 	}
 	ifstream* f=new ifstream(filename1.c_str());
 
-	streampos o=f->tellg();
+	//streampos
+	ifstream::pos_type o=f->tellg();
 	f->seekg(0,ios::end);
 	int bufsiz=f->tellg();
 	f->seekg(o);

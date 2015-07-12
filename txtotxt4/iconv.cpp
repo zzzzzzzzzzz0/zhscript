@@ -6,6 +6,7 @@
  */
 
 #include"txtotxt.h"
+#ifndef ver_no_iconv_
 #include <iconv.h>
 #include"for_arg_.h"
 #include <string.h>
@@ -13,8 +14,10 @@
 #include <stdio.h>
 
 #define bufsiz_ 512
+#endif
 
 dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
+#ifndef ver_no_iconv_
 	if(!src)
 		return;
 	const char *from="gb18030";
@@ -109,4 +112,5 @@ dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
 		delete inbuf0;
 	}
 	*addr_ret=dup__(ret.c_str());
+#endif
 }

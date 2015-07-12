@@ -20,14 +20,15 @@ static void callback__(cairo_t *cr, int argc, ...) {
 	try {
 		const string& p0 = s__(p,0);
 		if(p0 == "源") {
-			cairo_surface_t *image;
-			if(sscanf(s__(p,1).c_str(), "%ld", &image))
-				cairo_set_source_surface(cr, image, s2f__(s__(p,2)), s2f__(s__(p,3)));
+			long l;
+			if(sscanf(s__(p,1).c_str(), "%ld", &l))
+				cairo_set_source_surface(cr, (cairo_surface_t *)l, s2f__(s__(p,2)), s2f__(s__(p,3)));
 			return;
 		}
 		if(p0 == "动画源") {
-			gif_surface___ *image;
-			if(sscanf(s__(p,1).c_str(), "%ld", &image)) {
+			long l;
+			if(sscanf(s__(p,1).c_str(), "%ld", &l)) {
+				gif_surface___ *image = (gif_surface___ *)l;
 				if(image->pixbuf__()) {
 					gdk_cairo_set_source_pixbuf(cr, image->pixbuf__(),
 							s2f__(s__(p,2)), s2f__(s__(p,3)));
@@ -82,21 +83,31 @@ static const char* argv_[] = {callback_, cr_, };
 static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpointer data) {
 	cairog_view___* w = (cairog_view___*)data;
 	cairo_t *cr = gdk_cairo_create(
-		#ifdef no_gtk_2_
+		#ifdef ver_gtk3_
 		gtk_widget_get_window(widget)
 		#else
 		widget->window
 		#endif
 		);
+
 	if(w->gif_) {
-		cairo_scale(cr, w->gif_sx_, w->gif_sy_);
+		gif_surface___* gif = w->gif_;
+		cairo_scale(cr, gif->sx_, gif->sy_);
 		cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-		if(w->gif_->pixbuf__()) {
-			gdk_cairo_set_source_pixbuf(cr, w->gif_->pixbuf__(), 0, 0);
+
+		if(gif->hudu_ > 0 || gif->hudu_ < 0) {
+			double x = 0.5 * gif->w__() + gif->px_, y = 0.5 * gif->h__() + gif->py_;
+			cairo_translate (cr, x, y);
+			cairo_rotate (cr, gif->hudu_);
+			cairo_translate (cr, -x, -y);
+		}
+
+		if(gif->pixbuf__()) {
+			gdk_cairo_set_source_pixbuf(cr, gif->pixbuf__(), gif->px_, gif->py_);
 		}
 		cairo_paint(cr);
 	} else {
-		if(w->huitu_.size() > 0) {
+		if(!w->huitu_.empty()) {
 			sprintf(cr_, "%ld", (long)cr);
 			sprintf(callback_, "Z/%lx/${l%ld}", (long)callback__, (long)cr);
 			call4__(w->huitu_.c_str(), NULL, 2, argv_, 0);

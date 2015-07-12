@@ -21,6 +21,7 @@ static s1___* load_finished_s1_ = new s1___("装载完毕",	"load-finished",			'
 static s1___* resource_request_starting_s1_ = new s1___("请求", "resource-request-starting", 'v');
 static s1___* mime_type_policy_decision_requested_s1_ = new s1___("类型请求", "mime-type-policy-decision-requested", 'v');
 //static s1___* run_file_chooser_s1_ = new s1___("上传请求", "run-file-chooser", 'v');
+static s1___* close_web_view_s1_ = new s1___("关闭", "close-web-view", 'v');
 static s1___* console_message_s1_ = new s1___("消息", "console-message", 'v');
 static s1___* script_alert_s1_ = new s1___("警告", "script-alert", 'v');
 static s1___* script_confirm_s1_ = new s1___("确认", "script-confirm", 'v');
@@ -111,6 +112,11 @@ static WebKitNavigationResponse navigation_requested__(WebKitWebView *page, WebK
 	return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
 }
 
+static gboolean close_web_view__(WebKitWebView *page, gpointer user_data) {
+	call4__(widget__(page),window__(page),close_web_view_s1_,0);
+	return true;
+}
+
 static gboolean console_message__(WebKitWebView* page,gchar*message,gint line,gchar*source_id,gpointer user_data){
 	char s[16];
 	l2s__(line,s);
@@ -155,7 +161,9 @@ static gboolean script_alert__(
 	gchar          *message,
 	gpointer        user_data)
 {
-	call4__(widget__(page),window__(page),script_alert_s1_,1,message);
+	const char* ret = call4__(widget__(page),window__(page),script_alert_s1_,1,message);
+	if(ret[0] == 'x' && !ret[1])
+		return true;
 	return false;
 }
 
@@ -202,7 +210,7 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			if(err_buzu2__(p, 3))
 				return true;
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			const char*base_uri=NULL;
+			const char*base_uri="file:";
 			const char*mime_type=NULL;//"text/html";
 			const char*encoding=NULL;//"utf-8";
 			for(size_t i=3;i<p->size();){
@@ -293,14 +301,41 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			v->target_=v2;
 			return true;
 		}
-		if(p1=="user-agent"){
-			webkit_view___::user_agent_ = p0;
+		if(p1 == "配置") {
+			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			void *wws = webkit_web_view_get_settings(v->webview__());
+			char type = 's';
+			for(size_t i = 2; i < p->size();) {
+				const string& p2 = (*p)[i++];
+				if(p2 == "s" || p2 == "b") {
+					type = p2[0];
+					continue;
+				}
+				if(i >= p->size()) {
+					err_buzu__(p2.c_str());
+					return true;
+				}
+				const string& p3 = (*p)[i++];
+				switch(type) {
+				case 's':
+					g_object_set(wws, p2.c_str(), p3.c_str(), NULL);
+					break;
+				case 'b':
+					g_object_set(wws, p2.c_str(), bool__(p3), NULL);
+					break;
+				}
+				return true;
+			}
 			return true;
 		}
 		if(p1=="代理") {
 			SoupURI *proxyUri = soup_uri_new(p0.c_str());
 			g_object_set(webkit_get_default_session(), SOUP_SESSION_PROXY_URI, proxyUri, NULL);
 			soup_uri_free(proxyUri);
+			return true;
+		}
+		if(p1=="user-agent"){
+			webkit_view___::user_agent_ = p0;
 			return true;
 		}
 	}
@@ -322,6 +357,7 @@ webkit_shell___::webkit_shell___() {
 	resource_request_starting_s1_->cb_ = (G_CALLBACK(resource_request_starting__));
 	mime_type_policy_decision_requested_s1_->cb_ = (G_CALLBACK(mime_type_policy_decision_requested__));
 	//run_file_chooser_s1_->cb_ = (G_CALLBACK(run_file_chooser__));
+	close_web_view_s1_->cb_ = G_CALLBACK(close_web_view__);
 	console_message_s1_->cb_ = (G_CALLBACK(console_message__));
 	script_alert_s1_->cb_ = (G_CALLBACK(script_alert__));
 	script_confirm_s1_->cb_ = (G_CALLBACK(script_confirm__));

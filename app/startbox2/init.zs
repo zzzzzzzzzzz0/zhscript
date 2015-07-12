@@ -1,7 +1,8 @@
 加载lib/defi。
 加载lib/gjk4。
 赋予【主】~以调用‘得环境变量方法’、HOME。
-赋予【主】配置目录以‘~’/.config/startbox_zs。
+赋予应用名【主】以startbox。
+赋予【主】配置目录以‘~’/.config/‘应用名’_zs。
 赋予【主】配置文件以‘配置目录’/init2.zs。
 加载lib/file4。
 赋予【主】所在目录以调用‘得目录名’、先调用‘最终文件名’、‘【上】参数0’了。
@@ -36,8 +37,16 @@
 	/usr/share/icons/Humanity/apps/48/application-default-icon.svg。
 上代码。
 
-定义【主】刷新图标夹以下代码
+定义清空图标夹【主】以下代码
 	使主窗、插脚、htm__("icons", "")。
+	如果‘参数1【上】’等于啊那么先
+		读所有配置文件。
+		使不堵塞。
+	了。
+上代码。
+
+定义【主】刷新图标夹以下代码
+	清空图标夹。
 	赋予号以0。
 	循环先
 		赋予号以算术‘号’+1。
@@ -61,13 +70,15 @@
 			赋予加以kai。
 		了。
 		赋予内容以“
-<a href="javascript:" onclick="click‘加’__(‘号’)" title="”先如果不‘加’那么‘标题’否则‘项目之‘号’之夹名’了“">
-<div class="img baibantou_bg" id=bg‘号’><img ”。
+<a href="javascript:" onclick="click‘加’__(‘号’)" 
+title="”先如果不‘加’那么‘标题’否则‘项目之‘号’之夹名’了“">
+<div><div class="img baibantou_bg" id=bg‘号’><img ”。
 		如果调用‘exist’、‘封面’否则先
 			赋予封面以‘所在目录’no1.png。
 		了。
 		赋予内容以‘内容’“
-src="file://‘封面’"></div><div class=title><span class=title2 id=title‘号’>‘标题’</span></div></a>”。
+src="file://‘封面’"></div></div>
+<div class=title><span class=title2 id=title‘号’>‘标题’</span></div></a>”。
 		增加图标‘号’、‘内容’。
 	了。
 上代码。
@@ -123,7 +134,7 @@ body{
 a {
 	text-decoration:none;
 }
-.fengmian{
+.fengmian {
 	float:left;
 	padding:6;
 	text-align:center;
@@ -189,14 +200,17 @@ function clickkai__(i) {
 		如果‘返回码’不等于0那么弹出提示‘参数1’↙返回码是‘返回码’，退出。
 	了。
 了。
-如果存在参数3并且‘参数3’那么退出。
-如果‘后退’那么结束。
+如果不‘后退’那么退出。
+如果存在参数3并且‘参数3’那么使主窗、最小化，退出。
+结束。
 ”。
 
-赋予号以0。
-循环先
-	赋予号以算术‘号’+1。
-	如果‘号’大于3那么跳出。
-	加载先如果调用‘exist’、‘配置文件’.‘号’那么‘配置文件’.‘号’否则init2.zs.‘号’了。
-了。
-
+定义读所有配置文件【主】以下代码
+	赋予号以0。
+	循环先
+		赋予号以算术‘号’+1。
+		如果‘号’大于3那么跳出。
+		加载先如果调用‘exist’、‘配置文件’.‘号’那么‘配置文件’.‘号’否则init2.zs.‘号’了。
+	了。
+上代码。
+读所有配置文件。

@@ -22,7 +22,7 @@ public:
 	int sort_;
 	bool dir_not_tongpei_;
 	bool out_dir_enter_,out_dir_exit_;
-	bool test_lnk_is_dir_;
+	bool dirlnk_is_dir_;
 	bool not_;
 	dir_opt___(){
 		subdir_=false;
@@ -32,7 +32,7 @@ public:
 		sort_=-1;
 		dir_not_tongpei_=true;
 		out_dir_enter_=out_dir_exit_=false;
-		test_lnk_is_dir_=true;
+		dirlnk_is_dir_=true;
 		not_=false;
 	}
 };

@@ -92,11 +92,26 @@ dlle___ void init__(callback2___ cb,void* jsq,
 	code_fmt2_=code_fmt2;
 }
 
+static bool isdigit__(char x) {
+	return x >= '0' && x <= '9';
+}
+static bool isxdigit__(char x) {
+	if(isdigit__(x))
+		return true;
+	return x >= 'A' && x <= 'F';
+}
+static char hextoi__(char x) {
+	return isdigit__(x) ? x - '0' : x - 'W';
+}
+static char tolower__(char x) {
+	if(x >= 'A' && x <= 'Z')
+		return x - 'A' + 'a';
+	return x;
+}
 static void qu_var_new_form_url__(void* shangji,const char* url, int is_form_url_encoded,int* err){
 	std::string value,name;
 	bool is2=false;
 	int a, b;
-#define HEXTOI(x) (isdigit(x) ? x - '0' : x - 'W')
 	for(int i=0;;i++){
 		char c=url[i];
 		if(c=='&'||!c){
@@ -104,10 +119,10 @@ static void qu_var_new_form_url__(void* shangji,const char* url, int is_form_url
 				std::string value2;
 				for(size_t i1=0;i1<value.length();i1++){
 					char c=value[i1];
-					if(c == '%' && i1+2<value.length() && isxdigit(value[i1+1]) && isxdigit(value[i1+2])){
-						a = tolower(value[i1+1]);
-						b = tolower(value[i1+2]);
-						value2+= (char) ((HEXTOI(a) << 4) | HEXTOI(b));
+					if(c == '%' && i1+2<value.length() && isxdigit__(value[i1+1]) && isxdigit__(value[i1+2])){
+						a = tolower__(value[i1+1]);
+						b = tolower__(value[i1+2]);
+						value2+= (char) ((hextoi__(a) << 4) | hextoi__(b));
 						i1 += 2;
 					} else if (is_form_url_encoded && c == '+') {
 						value2+= ' ';

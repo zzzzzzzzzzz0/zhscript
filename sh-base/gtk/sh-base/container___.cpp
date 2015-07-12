@@ -13,7 +13,7 @@
 #include"def1.h"
 
 void container_add__(GtkWidget* w, GtkWidget* scrolled) {
-#ifdef no_gtk_2_
+#ifdef ver_gtk3_
 	GtkWidget *viewport = gtk_viewport_new (NULL,NULL);
 	gtk_container_add (GTK_CONTAINER(scrolled), viewport);
 	gtk_widget_show(viewport);
@@ -163,14 +163,15 @@ int container___::page_num__(GtkWidget* sw) {
 	return notebook_page_no_;
 }
 
-void container___::for__(const char* code) {
-	const char* a[1];
+void container___::for__(const char* code, void*ce, void* shangji) {
+	const char* a[2];
 	int err;
 	for(int i = 0; i < n_pages__(); i++) {
 		string name2;
 		name2__(name2, nth_page__(i));
 		a[0] = name2.c_str();
-		call4__(&err, code, NULL, 1, a, 0);
+		a[1] = i == current_page__() ? "1" : "";
+		call4__(&err, ce, code, NULL, shangji, 2, a, 0);
 		switch(err) {
 		case 0:
 			break;

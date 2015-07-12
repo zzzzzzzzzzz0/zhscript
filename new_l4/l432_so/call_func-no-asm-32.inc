@@ -9,7 +9,7 @@ if(argc <= 0) {
 	return ((func___)func)();
 }
 if(!ret) {
-typedef void (*func___)(...);
+	typedef void (*func___)(...);
 switch(argc) {
 case 1:
 	((func___)func)(argv[0]);
@@ -108,6 +108,7 @@ case 32:
 	((func___)func)(argv[0], argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10], argv[11], argv[12], argv[13], argv[14], argv[15], argv[16], argv[17], argv[18], argv[19], argv[20], argv[21], argv[22], argv[23], argv[24], argv[25], argv[26], argv[27], argv[28], argv[29], argv[30], argv[31]);
 	break;
 }
+	return 0;
 }
 typedef unsigned long int (*func___)(...);
 switch(argc) {

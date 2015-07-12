@@ -37,7 +37,8 @@ private:
 public:
 	string code_;
 	map<int, string> codes_;
-	static bool has_event_box_;
+	GdkCursor *cursor_;
+	static bool add_event_box_;
 
 	window___(const char* name, bool is_main = false);
 	const string& name__(){return name_;}
@@ -47,7 +48,10 @@ public:
 	container___* c__() {return c_;}
 	GtkWidget* widget__(){return window_;}
 	GtkWindow* window__(){return GTK_WINDOW (window_);}
-	GtkWidget* event_box__(){return event_box_;}
+	GtkWidget* event_box__(){
+		//return event_box_;
+		return window_;
+	}
 	static window___* from__(GtkWidget* widget);
 	GtkWidget* new__(window_flag___* flag, container___* c);
 	void destroy__();

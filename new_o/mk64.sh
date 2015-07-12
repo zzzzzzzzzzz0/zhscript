@@ -5,8 +5,9 @@ libcurl4-gnutls-dev \
 libsqlite3-dev \
 libgtk-3-dev \
 libwebkit-dev \
-libwnck-dev \
-libunique-dev
+libwnck-3-dev \
+libunique-dev \
+libgnomeui-dev
 sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev
 sudo apt-get install libgtksourceviewmm-2.0-dev
 
@@ -33,17 +34,18 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ txtotxt4
 ./mk_.sh r gxx_lib_ curle4 "-lcurl"
 ./mk_.sh r gxx_lib_ inotify4
-./mk_.sh r gxx_lib2_ sqlite4 "-lsqlite3"
+./mk_.sh r gxx_lib_ sqlite4 "-lsqlite3"
 ./mk_.sh r gcc_lib_ md4
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
-./mk_.sh r gcc_lib2_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-3.0 --cflags --libs`"
-./mk_.sh r gxx_lib_ wnck4 "$p_lib3 -DWNCK_I_KNOW_THIS_IS_UNSTABLE `pkg-config libwnck-1.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ wnck4 "$p_lib3 -DWNCK_I_KNOW_THIS_IS_UNSTABLE `pkg-config libwnck-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ unique4 "$p_lib3 `pkg-config --cflags --libs gtk+-2.0 unique-1.0`"
+./mk_.sh r gxx_lib_ gnomeu4 "`pkg-config libgnomeui-2.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
 
 ./mk_.sh r gxx_l_

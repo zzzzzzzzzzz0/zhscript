@@ -23,7 +23,8 @@
 （分析后直接在当前区分配变量，共4个命名变量、把键值对参数对应分配个）
 赋予“【‘库名’】urlparse”以调用“GE”、‘‘库名’’、“url_parse__”、“$1”、“c*”（url）、“${*锚点}”、“${*协议名}”、“${*域名}”、“${*路径}”。
 
-赋予“【‘库名’】fileinfo”以调用“GSZ”、‘‘库名’’、“_fileinfo__”、“c*”（文件名）、“c*”（格式：%后s大小、m、t时间（后a访问、m修改、c建立），其他原样）。
+赋予“【‘库名’】fileinfo”以调用“GSZ”、‘‘库名’’、“_fileinfo__”、“c*”（文件名）、“c*”（
+格式：%后s大小、m属性、M、o、t时间（后a访问、m修改、c建立）、i ino、b blocks、B blksize、r rdev、u uid、g gid、n nlink、d dev，其他原样）。
 
 赋予“【‘库名’】得符号链接”以调用“GS”、‘‘库名’’、“_symlnk_get__”、“c*”（path）。
 赋予“【‘库名’】建符号链接”以调用“Gi”、‘‘库名’’、“_symlnk_create__”、“c*”（path2）、“c*”（path）、“i”（force）。
