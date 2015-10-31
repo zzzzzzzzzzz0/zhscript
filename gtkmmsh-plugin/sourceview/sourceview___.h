@@ -11,6 +11,8 @@
 #include <plugin_base___.h>
 #include <gtksourceviewmm.h>
 using namespace gtksourceview;
+/*#include <gtksourceview/gtksourceview.h>
+#define SourceView GtkSourceView*/
 using namespace Glib;
 
 #define ver_all_

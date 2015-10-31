@@ -1,5 +1,7 @@
 #!/bin/bash
-cd `dirname $0`/Debug
+d=`dirname $0`/Debug
+mkdir -p $d
+cd $d
 tag=../../../new_o/webkitsh
 echo dir=$PWD
 echo tag=$tag
@@ -12,7 +14,9 @@ p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
 f="-Wall -c -fmessage-length=0 -MMD -MP -I ../../../new_gg $p_lib3"
 if [ "$1" == "r" ]
 then
-	cd $PWD/../Release
+	d=$PWD/../Release
+	mkdir -p $d
+	cd $d
 	echo dir=$PWD
 	g++ $f `pkg-config --cflags webkit-1.0` -O3 ../*.cpp
 else

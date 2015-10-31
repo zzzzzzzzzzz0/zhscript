@@ -6,7 +6,7 @@
  */
 
 #include "notebook___.h"
-#include "extern2.h"
+#include "../extern2.h"
 
 gpointer notebook___::get_data__(GtkNotebook *notebook, int page_num, const char *key){
 	GtkWidget *sw = gtk_notebook_get_nth_page(notebook, page_num);
@@ -157,7 +157,7 @@ void notebook___::set_page__(int page_num){
 		gtk_notebook_set_page (notebook__(),page_num);
 }
 
-#include "window___.h"
+#include "../window___.h"
 
 void notebook___::close__(int page_num){
 	GtkNotebook* nb=notebook__();

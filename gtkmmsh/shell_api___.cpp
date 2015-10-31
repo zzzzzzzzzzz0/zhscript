@@ -62,7 +62,11 @@ void shell___::api__(void*shangji,void*ce,std::deque<Glib::ustring>* p,char*buf,
 		return;
 	}
 	if((*p)[0]=="窗口"){
+#ifdef ver_gtk3_
+		cpy__(buf,(long)main_win_->get_child(), siz);
+#else
 		cpy__(buf,(long)main_win_->gobj()->default_widget,siz);
+#endif
 		return;
 	}
 	if((*p)[0]=="窗"){

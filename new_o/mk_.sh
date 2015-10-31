@@ -64,12 +64,12 @@ gxx_l4_(){
 	cd "$dir/new_l4/l432_so"
 	gxx_ $1 $f1 $s2 -c `echo *.cpp|sed 's/call_func\.cpp//g'`
 	gxx_ $1 $f2 $s2 -c call_func.cpp
-	gxx_ -o ../../new_o/l4$2.so $s1 $f1 *.o
+	gxx_ -o ../../new_o/l4$2.so $s1 $f1 $3 *.o
 }
 gxx_l_(){
 	cd "$dir/new_l/l32"
 	gxx_ -o ../../new_o/l $f1 $i1 l.cpp -ldl
 }
 
-$2 "$3" "$4"
+$2 "$3" "$4" "$5"
 

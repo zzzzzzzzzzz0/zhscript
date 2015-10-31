@@ -39,6 +39,7 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ timer4
 ./mk_.sh r gcc_lib_ gtkmain4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-3.0 --cflags --libs`"
@@ -47,6 +48,8 @@ cd "`dirname $0`"
 ./mk_.sh r gxx_lib_ unique4 "$p_lib3 `pkg-config --cflags --libs gtk+-2.0 unique-1.0`"
 ./mk_.sh r gxx_lib_ gnomeu4 "`pkg-config libgnomeui-2.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
+./mk_.sh r gxx_lib_ slave4 "`pkg-config glib-2.0 glibmm-2.4 --libs --cflags`"
+./mk_.sh r gxx_lib_ transform4
 
 ./mk_.sh r gxx_l_
 

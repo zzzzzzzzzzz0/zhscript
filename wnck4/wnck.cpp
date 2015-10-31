@@ -38,11 +38,21 @@ dlle___ void init__(callback2___ cb,void* jsq, void* main_qu, l4_err_out___ l4_e
 
 dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
 	GList *window_l;
-	char p1[32];
+	char p1[32], p2[] = {0, 0}, p3[32];
+	WnckWorkspace *aws = wnck_screen_get_active_workspace(screen);
 	for (window_l = wnck_screen_get_windows (screen); window_l != NULL; window_l = window_l->next){
 		WnckWindow *window = WNCK_WINDOW (window_l->data);
 		sprintf(p1,"%lx",(long)window);
-		cb_(jsq_,shangji,err,code,false,1,p1);
+		p2[0] = wnck_window_is_skip_tasklist(window) ? '0' : '1';
+
+		WnckWorkspace *ws = wnck_window_get_workspace(window);
+		int i = wnck_workspace_get_number(ws) + 1;
+		//wnck_window_is_on_workspace(window, aws)
+		if(ws == aws)
+			i = -i;
+		sprintf(p3, "%d", i);
+
+		cb_(jsq_,shangji,err,code,false, 3, p1, p2, p3);
 		if(*err){
 			if(*err==jieshiqi_err_go_+keyword_continue_){
 				*err=0;
@@ -70,11 +80,15 @@ dlle___ void window_set_geometry__(char* buf, WnckWindow* ww, char* x, char* y, 
 			x1, y1, w1, h1);
 }
 
-static string code_window_opened_;
-static void window_opened__(WnckScreen *screen, WnckWindow *window) {
+static void z__(const string& code) {
 	int err;
-	const char* ret = cb_(jsq_, main_qu_, &err, code_window_opened_.c_str(), false, 0);
+	const char* ret = cb_(jsq_, main_qu_, &err, code.c_str(), false, 0);
 	l4_err_out_(jsq_, ret, err, 1);
+}
+
+static string code_window_opened_;
+static void window_opened__(WnckScreen *screen, WnckWindow *window, gpointer user_data) {
+	z__(code_window_opened_);
 }
 dlle___ void on_window_opened__(const char*code, WnckScreen *screen) {
 	code_window_opened_ = code;
@@ -82,12 +96,19 @@ dlle___ void on_window_opened__(const char*code, WnckScreen *screen) {
 }
 
 static string code_window_closed_;
-static void window_closed__(WnckScreen *screen, WnckWindow *window) {
-	int err;
-	const char* ret = cb_(jsq_, main_qu_, &err, code_window_closed_.c_str(), false, 0);
-	l4_err_out_(jsq_, ret, err, 1);
+static void window_closed__(WnckScreen *screen, WnckWindow *window, gpointer user_data) {
+	z__(code_window_closed_);
 }
 dlle___ void on_window_closed__(const char*code, WnckScreen *screen) {
 	code_window_closed_ = code;
 	g_signal_connect (screen, "window-closed", G_CALLBACK (window_closed__), NULL);
+}
+
+static string code_active_workspace_changed_;
+static void active_workspace_changed__(WnckScreen *screen, WnckWorkspace *previously_active_space, gpointer user_data) {
+	z__(code_active_workspace_changed_);
+}
+dlle___ void on_active_workspace_changed__(const char*code, WnckScreen *screen) {
+	code_active_workspace_changed_ = code;
+	g_signal_connect (screen, "active-workspace-changed", G_CALLBACK (active_workspace_changed__), NULL);
 }

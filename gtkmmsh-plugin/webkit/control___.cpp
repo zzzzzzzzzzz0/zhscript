@@ -292,7 +292,10 @@ control___::control___(Gtk::ScrolledWindow* sw,std::deque<Glib::ustring>* p,shel
 
 control___::control___(Gtk::Notebook* n,std::deque<Glib::ustring>* p,shell___*sh,direct___ d,const char* zhao){
 	n_=n;
+#ifdef ver_gtk3_
+#else
 	n_->signal_switch_page().connect(sigc::mem_fun(*this,&control___::switch_page__) );
+#endif
 	init__(p,sh,d,zhao);
 	new_wwv__(NULL);
 	n->set_data("ctl",this);

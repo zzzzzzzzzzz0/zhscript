@@ -58,7 +58,7 @@ static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* fra
 			if(!v2)
 				v2 = (webkit_view___*)w->view__(0);
 		}
-		wv=v2->webview__();
+		wv=v2->handle__();
 		string name2;
 		window___* w2 = window__(wv);
 		w2->name2__(name2, widget__(wv));
@@ -198,12 +198,12 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 			if(err_buzu2__(p, 3))
 				return true;
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			webkit_web_view_execute_script (v->webview__(), (*p)[2].c_str());
+			webkit_web_view_execute_script (v->handle__(), (*p)[2].c_str());
 			return true;
 		}
 		if(p1=="网址"){
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			*addr_ret=dup__(webkit_web_view_get_uri(v->webview__()));
+			*addr_ret=dup__(webkit_web_view_get_uri(v->handle__()));
 			return true;
 		}
 		if(p1=="内容"){
@@ -233,7 +233,7 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 				err_buzhichi__(p3,p1.c_str());
 				return true;
 			}
-			webkit_web_view_load_string (v->webview__(), (*p)[2].c_str(), mime_type, encoding, base_uri);
+			webkit_web_view_load_string (v->handle__(), (*p)[2].c_str(), mime_type, encoding, base_uri);
 			return true;
 		}
 		if(p1=="访问"||p1==create_web_view_s1_->src2__()){
@@ -247,17 +247,17 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 					if(!v)
 						wv = NULL;
 					else
-						wv = v->webview__();
+						wv = v->handle__();
 				}else{
 					w->c__()->set_page__(page_num);
-					wv = v->webview__();
+					wv = v->handle__();
 				}
 			} else {
 				v=(webkit_view___*)get_view__(p0,page_num,p1, true, &page_num2);if(!v)return true;
 				if(page_num == notebook_page_no_)
 					wv = NULL;
 				else
-					wv = v->webview__();
+					wv = v->handle__();
 			}
 			if(!wv) {
 				err_wufa__(p1, p0.c_str());
@@ -268,7 +268,7 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 		}
 		if(p1=="下载"){
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			switch(down_.add__(v->webview__(), p)) {
+			switch(down_.add__(v->handle__(), p)) {
 			case 1:
 				err_buzu__(p1.c_str());
 				return true;
@@ -280,17 +280,32 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 		}
 		if(p1=="刷新"){
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			webkit_web_view_reload (v->webview__());
+			webkit_web_view_reload (v->handle__());
 			return true;
 		}
 		if(p1=="前进"){
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			webkit_web_view_go_forward (v->webview__());
+			webkit_web_view_go_forward (v->handle__());
 			return true;
 		}
 		if(p1=="后退"){
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			webkit_web_view_go_back (v->webview__());
+			webkit_web_view_go_back (v->handle__());
+			return true;
+		}
+		/*if(p1=="Cut" || p1 == "Copy" || p1 == "Paste" || p1 == "SelectAll" || p1 == "Undo" || p1 == "Redo"){
+			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			webkit_web_view_execute_editing_command(v->webview__(), p1.c_str());
+			return true;
+		}*/
+		if(p1 == "复制到剪贴板") {
+			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			webkit_web_view_copy_clipboard(v->handle__());
+			return true;
+		}
+		if(p1 == "从剪贴板粘贴") {
+			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			webkit_web_view_paste_clipboard(v->handle__());
 			return true;
 		}
 		if(p1=="目标"){
@@ -303,7 +318,7 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 		}
 		if(p1 == "配置") {
 			v=(webkit_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			void *wws = webkit_web_view_get_settings(v->webview__());
+			void *wws = webkit_web_view_get_settings(v->handle__());
 			char type = 's';
 			for(size_t i = 2; i < p->size();) {
 				const string& p2 = (*p)[i++];

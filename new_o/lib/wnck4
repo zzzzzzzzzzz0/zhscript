@@ -7,8 +7,10 @@
 
 赋予“窗打开时【‘库名’】”以调用“G”、‘‘库名’’、“on_window_opened__”、“c*”（代码）、“&”（屏）。
 赋予“窗关闭时【‘库名’】”以调用“G”、‘‘库名’’、“on_window_closed__”、“c*”（代码）、“&”（屏）。
+赋予“区激活时【‘库名’】”以调用“G”、‘‘库名’’、“on_active_workspace_changed__”、“c*”（代码）、“&”（屏）。
 
 （赋予“‘库名’*”以调用“L”、“libwnck-3.so”、“libwnck-3.so.0.2.2”。）
+
 赋予“屏得【‘库名’】”以调用“G&”、‘‘库名’’、“wnck_screen_get_default”。
 赋予“屏强更【‘库名’】”以调用“G”、‘‘库名’’、“wnck_screen_force_update”、“&”。
 赋予“窗得【‘库名’】”以调用“G&”、‘‘库名’’、“wnck_window_get”、“lu”。
@@ -16,11 +18,14 @@
 赋予“窗得xid【‘库名’】”以调用“Glu”、‘‘库名’’、“wnck_window_get_xid”、“&”。
 赋予“窗得类例名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_class_instance_name”、“&”。
 赋予“窗得类组名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_class_group_name”、“&”。
+赋予“窗得图标名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_icon_name”、“&”。
 
 赋予“窗设几何【‘库名’】”以调用“GB”、‘‘库名’’、“window_set_geometry__”、“&”、“c*”、“c*”、“c*”、“c*”。
 赋予“窗激活【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_activate”、“&”（、“${l0}”）。
 赋予“窗关闭【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_close”、“&”（、“${l0}”）。
 赋予“窗最小化【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_minimize”、“&”。
+赋予“窗设跳过任务栏【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_set_skip_tasklist”、“&”、“i”。
+赋予“窗移区【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_move_to_workspace”、“&”、“&”。
 
 赋予“区得【‘库名’】”以调用“G&”、‘‘库名’’、“wnck_window_get_workspace”、“&”。
 赋予“区激活【‘库名’】”以调用“G”、‘‘库名’’、“wnck_workspace_activate”、“&”（、“${l0}”）。

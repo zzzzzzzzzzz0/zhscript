@@ -6,7 +6,7 @@
  */
 
 #include "table___.h"
-#include "extern2.h"
+#include "../extern2.h"
 
 table___::table___(int rows, int cols, void* w) : container___(w), rows_(rows), cols_(cols) {
 	last_row_ = -1;
@@ -96,7 +96,7 @@ GtkWidget* table___::page_new__(const char* name) {
 	return scrolled2;
 }
 
-#include "window___.h"
+#include "../window___.h"
 
 int table___::current_page__() {
 	GtkWindow* w = ((window___*)window_)->window__();

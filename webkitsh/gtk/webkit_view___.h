@@ -22,7 +22,7 @@ public:
 
 	webkit_view___(GtkWidget* scrolled2, void* window, bool is_app_paintable);
 
-	WebKitWebView* webview__() {return WEBKIT_WEB_VIEW(widget_);}
+	WebKitWebView* handle__() {return WEBKIT_WEB_VIEW(widget_);}
 };
 
 #endif /* WEBKIT_VIEW____H_ */

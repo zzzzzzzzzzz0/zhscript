@@ -75,12 +75,28 @@ int nostdw___::proc__(std::deque<Glib::ustring>* p,char*buf,long siz,char**addr_
 				cout<<c1<<"="<<c.to_string()<<endl;
 				w2->set_background(c);
 			}else{
+#ifdef ver_gtk3_
+				//gtk_layout_put(w, , 0, 0);
+
+				/*GtkCssProvider *provider = gtk_css_provider_new ();
+				gtk_style_context_add_provider_for_screen (w2->get_screen()->gobj(),
+					GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+				Glib::ustring s = "GtkWindow {background-image:url('" + p1 + "');}";
+				gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider), s.c_str(), -1, NULL);
+				g_object_unref (provider);*/
+
+				/*pb_=Gdk::Pixbuf::create_from_file(p1,w->get_width(),w->get_height(),false);
+				GtkStyle *style = gtk_style_new ();
+				style->bg_pixmap [0] = pb_->gobj();
+				gtk_widget_set_style (w, style);*/
+#else
 				pb_=Gdk::Pixbuf::create_from_file(p1,w->get_width(),w->get_height(),false);
 				Glib::RefPtr<Gdk::Pixmap> pm;
 				Glib::RefPtr<Gdk::Bitmap> bm;
 				pb_->render_pixmap_and_mask(pm,bm,128);
 				w->shape_combine_mask(bm,0,0);
 				w2->set_back_pixmap(pm,false);
+#endif
 			}
 		}
 

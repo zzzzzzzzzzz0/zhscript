@@ -8,9 +8,9 @@
 #include "sourceview___.h"
 #include"plugin_def.h"
 #include"util.cpp"
-#include <gtksourceviewmm/sourceview.h>
+/*#include <gtksourceviewmm/sourceview.h>
 #include <gtksourceviewmm/sourcelanguage.h>
-#include <gtksourceviewmm/sourcelanguagemanager.h>
+#include <gtksourceviewmm/sourcelanguagemanager.h>*/
 
 #ifdef ver_all_
 int s2i_plus__(const ustring& s,int defa){

@@ -19,7 +19,7 @@ private:
 	GPid  pid_;
 public:
 	vte_view___(GtkWidget* scrolled2, void* window);
-	VteTerminal* vte__() {return VTE_TERMINAL(widget_);}
+	VteTerminal* handle__() {return VTE_TERMINAL(widget_);}
 
 	int fork_command__(const char* cmd, const char* env,
 			const char* wd);

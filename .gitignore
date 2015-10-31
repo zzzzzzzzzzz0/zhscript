@@ -5,7 +5,9 @@ Release/
 exe/
 debug*/
 release*/
+Debug3/
 *.o
+*.d
 *.so
 *.dll
 *.exe

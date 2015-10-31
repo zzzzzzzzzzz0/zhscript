@@ -17,9 +17,9 @@
 #include "windows___.h"
 #include "extern2.h"
 
-#include "simple___.h"
-#include "notebook___.h"
-#include "table___.h"
+#include "container/simple___.h"
+#include "container/notebook___.h"
+#include "container/table___.h"
 
 void get_xid__(GtkWidget* w, char* buf) {
 	GdkWindow* w2=gtk_widget_get_window(w);
@@ -462,9 +462,9 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 				}
 			}
 		} else {
-			if(x<0)
+			if(x<0 && x >= -gdk_screen_width())
 				x+=gdk_screen_width();
-			if(y<0)
+			if(y<0 && y >= -gdk_screen_height())
 				y+=gdk_screen_height();
 			gtk_window_move(w->window__(),x,y);
 		}
@@ -601,6 +601,11 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		gtk_window_iconify (w->window__());
 		return true;
 	}
+	if(p1=="取消最小化"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_deiconify (w->window__());
+		return true;
+	}
 	if(p1=="恢复"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_present (w->window__());
@@ -619,6 +624,16 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	if(p1=="置顶" || p1=="取消置顶"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gtk_window_set_keep_above (w->window__(), p1=="置顶");
+		return true;
+	}
+	if(p1=="所有桌面"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_stick(w->window__());
+		return true;
+	}
+	if(p1=="取消所有桌面"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		gtk_window_unstick(w->window__());
 		return true;
 	}
 	if(p1=="禁大小"){
@@ -875,10 +890,11 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 		return true;
 	}
 	if(p1=="类名"){
-		if(err_buzu2__(p, 4))
+		if(err_buzu2__(p, 3))
 			return true;
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		gtk_window_set_wmclass(w->window__(), (*p)[2].c_str(), (*p)[3].c_str());
+		const string& cc = (*p)[p->size() > 3 ? 3 : 2];
+		gtk_window_set_wmclass(w->window__(), (*p)[2].c_str(), cc.c_str());
 		return true;
 	}
 	if(p0=="代码"){

@@ -26,7 +26,7 @@ int vte_view___::fork_command__(const char* cmd, const char* env,
 	//G_SPAWN_SEARCH_PATH
 	GSpawnFlags sf = (GSpawnFlags)(0);
 	GPid pid = 0;
-	vte_terminal_fork_command_full(vte__(),
+	vte_terminal_fork_command_full(handle__(),
 			pf, wd, argv, envv,
 			sf, NULL, NULL, &pid, &error);
 	g_error_free (error);
@@ -48,7 +48,7 @@ vte_view___::vte_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, 
 	gtk_box_pack_start(GTK_BOX(box), widget_, TRUE, TRUE, 0);
 
 	GtkWidget *scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL,
-			vte_terminal_get_adjustment(vte__()));
+			vte_terminal_get_adjustment(handle__()));
 	gtk_box_pack_end(GTK_BOX(box), scrollbar, FALSE, FALSE, 0);
 
 	gtk_widget_show_all(box);

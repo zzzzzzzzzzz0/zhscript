@@ -80,15 +80,12 @@
 	得后不退。
 	清空图标夹。
 	刷新图标夹。
-	赋予样1以“
-color:‘和谐前景色’;
-background-color:‘和谐背景色’;
-border:1px dashed ‘和谐前景色’;
-”。
-	增加图标opt2、“<a style="‘样1’" href="javascript:z$('大刷新图标夹啊')">刷新</a>”。
-	增加图标opt、“<div style="‘样1’
-text-align:left;
-"><input id=no_exit type=checkbox ‘后不退’> 启动后盒不按设定退出</div>”。
+	赋予样1以“color:‘和谐前景色’;background-color:‘和谐背景色’;
+	border:1px dashed ‘和谐前景色’”。
+	增加图标opt2、“<div class=img>
+	<a style="‘样1’" href="javascript:z$('大刷新图标夹啊')">刷新</a></div>”。
+	增加图标opt、“<div style="‘样1’;text-align:left;">
+	<input id=no_exit type=checkbox ‘后不退’> 启动后盒不按设定退出</div>”。
 上代码。
 
 使主窗、侦听、

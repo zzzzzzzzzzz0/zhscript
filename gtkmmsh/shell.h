@@ -27,6 +27,7 @@
 #endif
 #include<deque>
 #include "l4/l4___.hh"
+#include "../sh-base/gtk/sh-base/gtk_2_o_3.h"
 
 class shell___
 {

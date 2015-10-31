@@ -528,6 +528,9 @@ int call_func__(deque<string>* p,string& buf0,err___* err0,const string& null,
 			break;
 		default:
 			*err0<<func_fmt;
+#ifdef ver_mac_mini_
+			cout<<"("<<hex<<ret_typex<<" "<<ret_type<<")";
+#endif
 			return err_free__(errinfo_func_type_allow_,argv,buf);
 		}
 		//ret_type & calltype_ret_addr_不能多途径返回

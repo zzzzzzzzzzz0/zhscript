@@ -10,7 +10,7 @@
 simple___::~simple___() {
 }
 
-#include "window___.h"
+#include "../window___.h"
 
 void simple___::close__(int page_num){
 	window___* w = (window___*)window_;

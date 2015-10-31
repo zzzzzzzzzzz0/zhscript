@@ -68,8 +68,8 @@ static void cb__(VteTerminal* vte, void* data_in) {
 
 	if(s1 == contents_changed_s1_) {
 		glong col, row;
-		vte_terminal_get_cursor_position(v->vte__(), &col, &row);
-		gchar *vte_text = vte_terminal_get_text_range(v->vte__(),
+		vte_terminal_get_cursor_position(v->handle__(), &col, &row);
+		gchar *vte_text = vte_terminal_get_text_range(v->handle__(),
 				row_old_,
 				col_old_,
 				row,
@@ -100,7 +100,7 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 			if(err_buzu2__(p, 3))
 				return true;
 			const string& data = (*p)[2];
-			vte_terminal_feed_child(v->vte__(), data.c_str(), data.length());
+			vte_terminal_feed_child(v->handle__(), data.c_str(), data.length());
 			return true;
 		}
 		if(p1 == "提示") {
@@ -108,7 +108,7 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 			if(err_buzu2__(p, 3))
 				return true;
 			const string& data = (*p)[2];
-			vte_terminal_feed(v->vte__(), data.c_str(), data.length());
+			vte_terminal_feed(v->handle__(), data.c_str(), data.length());
 			return true;
 		}
 		if(p1 == "输出") {
@@ -118,23 +118,23 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 		}
 		if(p1 == "复制到剪贴板") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			vte_terminal_copy_clipboard(v->vte__());
+			vte_terminal_copy_clipboard(v->handle__());
 			return true;
 		}
 		if(p1 == "从剪贴板粘贴") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			vte_terminal_paste_clipboard(v->vte__());
+			vte_terminal_paste_clipboard(v->handle__());
 			return true;
 		}
 #ifdef ver_opt2_
 		if(p1 == "当前目录") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			* addr_ret = dup__(vte_terminal_get_current_directory_uri(v->vte__()));
+			* addr_ret = dup__(vte_terminal_get_current_directory_uri(v->handle__()));
 			return true;
 		}
 		if(p1 == "当前文件") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			* addr_ret = dup__(vte_terminal_get_current_file_uri(v->vte__()));
+			* addr_ret = dup__(vte_terminal_get_current_file_uri(v->handle__()));
 			return true;
 		}
 #endif
@@ -145,12 +145,12 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 		}
 		if(p1 == "图标标题") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			*addr_ret = dup__(vte_terminal_get_icon_title(v->vte__()));
+			*addr_ret = dup__(vte_terminal_get_icon_title(v->handle__()));
 			return true;
 		}
 		if(p1 == "reset") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			vte_terminal_reset(v->vte__(), true, true);
+			vte_terminal_reset(v->handle__(), true, true);
 			col_old_ = row_old_ = 0;
 			return true;
 		}
@@ -182,23 +182,23 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 			colour.blue = s2f__((*p)[4]);
 			colour.alpha = s2f__((*p)[5]);
 			if(p1 == "前景色")
-				vte_terminal_set_color_foreground_rgba(v->vte__(), &colour);
+				vte_terminal_set_color_foreground_rgba(v->handle__(), &colour);
 			else
-				vte_terminal_set_color_background_rgba(v->vte__(), &colour);
+				vte_terminal_set_color_background_rgba(v->handle__(), &colour);
 			return true;
 		}
 		if(p1 == "字体") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
 			if(err_buzu2__(p, 3))
 				return true;
-			vte_terminal_set_font_from_string(v->vte__(), (*p)[2].c_str());
+			vte_terminal_set_font_from_string(v->handle__(), (*p)[2].c_str());
 			return true;
 		}
 		if(p1 == "行数") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
 			if(err_buzu2__(p, 3))
 				return true;
-			vte_terminal_set_scrollback_lines(v->vte__(), s2i__((*p)[2]));
+			vte_terminal_set_scrollback_lines(v->handle__(), s2i__((*p)[2]));
 			return true;
 		}
 		if(p1 == "命令") {
