@@ -71,9 +71,7 @@ GtkWidget* container___::page_new1__(const char* name) {
 }
 
 GtkWidget* container___::box__(int page_num, GtkWidget** scrolled) {
-	if((page_num=page_check__(page_num))<0)
-		return NULL;
-	GtkWidget* scrolled2 = nth_page__(page_num);
+	GtkWidget* scrolled2 = nth_page2__(page_num);
 	if(scrolled)
 		*scrolled = scrolled2;
 	return GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(scrolled2),object_data_box_));
@@ -194,10 +192,20 @@ int container___::page_check__(int page_num){
 	return page_num;
 }
 
-gpointer container___::get_data__(int page_num, const char *key) {
+GtkWidget* container___::nth_page2__(int page_num) {
 	if((page_num = page_check__(page_num)) < 0)
 		return NULL;
-	GtkWidget* w = nth_page__(page_num);
+	return nth_page__(page_num);
+}
+
+void container___::set_data__(int page_num, const char *key, gpointer data) {
+	GtkWidget* w = nth_page2__(page_num);
+	if(w)
+		gtk_object_set_data(GTK_OBJECT(w), key, data);
+}
+
+gpointer container___::get_data__(int page_num, const char *key) {
+	GtkWidget* w = nth_page2__(page_num);
 	if(!w)
 		return NULL;
 	return gtk_object_get_data(GTK_OBJECT(w), key);
@@ -205,6 +213,12 @@ gpointer container___::get_data__(int page_num, const char *key) {
 
 GtkLabel* container___::label__(int page_num) {
 	void* v = get_data__(page_num, object_data_label_);
+	if(!v)
+		return NULL;
+	return GTK_LABEL(v);
+}
+GtkLabel* container___::label2__(int page_num) {
+	void* v = get_data__(page_num, object_data_label2_);
 	if(!v)
 		return NULL;
 	return GTK_LABEL(v);
