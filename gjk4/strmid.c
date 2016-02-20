@@ -1,7 +1,7 @@
 #include "1.h"
 
 //起始不必为 0是末尾 如同 结束0便不是头
-static int strmid__(char* s1,long s1_len,char* s,int i1,int i2,char* s2){
+static int strmid__(char* s1,long s1_len,char* s,int i1,int i2,char* s2, char* s3){
 	int s_len, len;
 
 	if(!s1 || !s)
@@ -19,6 +19,8 @@ static int strmid__(char* s1,long s1_len,char* s,int i1,int i2,char* s2){
 
 	if(s2)
 		i1+=strlen(s2);
+	if(s3)
+		i2 -= strlen(s3);
 
 	if(i1>=s_len)
 		return 0;
@@ -56,7 +58,7 @@ static int strmid__(char* s1,long s1_len,char* s,int i1,int i2,char* s2){
 _dle void strmid_(int *c4w4,char* s1,long s1_len,char* s,int argc,...){
 	int i1=0;
 	int i2=0;
-	char* s2=0;
+	char *s2=0, *s3 = 0;
 	_for_args( argc )
 		switch(i){
 		case 2:
@@ -71,5 +73,5 @@ _dle void strmid_(int *c4w4,char* s1,long s1_len,char* s,int argc,...){
 		}
 	_next_args
 
-	*c4w4 = strmid__(s1,s1_len,s,i1,i2,s2);
+	*c4w4 = strmid__(s1,s1_len,s,i1,i2,s2, s3);
 }
