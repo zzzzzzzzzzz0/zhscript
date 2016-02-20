@@ -5,11 +5,7 @@ using namespace std;
 #include<string.h>
 #include<stdio.h>
 
-dlle___
-void extractfilename___(char* buf,long siz,char* name0,int flag){
-	if(!name0)
-		return;
-	string name=name0;
+void extractfilename__(string& buf2,const string& name,int flag){
 	int i;
 	int mo4=0;
 	int wei3=name.length()-1;
@@ -99,9 +95,26 @@ void extractfilename___(char* buf,long siz,char* name0,int flag){
 		to=wei3ba1+1;
 		break;
 	}
+	for(i=from;i<to && i<=wei3ba1;){
+		buf2 += name[i++];
+	}
+}
+
+dlle___
+void extractfilename___(char* buf,long siz,char* name0,int argc,...){
+	if(!name0)
+		return;
+	string name=name0, buf2;
+	int flag;
+	_for_args( argc )
+		if(sscanf(s, "%d", &flag) == 1)
+			extractfilename__(buf2, name, flag);
+		else
+			buf2 += s;
+	_next_args
 	int i1=0;
-	for(i=from;i<to && i<=wei3ba1 && i1<siz-1;){
-		buf[i1++]=name[i++];
+	for(;i1 < buf2.size() && i1<siz-1; i1++){
+		buf[i1] = buf2[i1];
 	}
 	buf[i1]=0;
 }
