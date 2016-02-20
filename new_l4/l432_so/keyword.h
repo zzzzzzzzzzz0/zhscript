@@ -58,6 +58,8 @@ enum{
 	keyword_callback_,
 	keyword_win_,
 
+	keyword_chuantou_,
+
 	keywords_length_
 };
 

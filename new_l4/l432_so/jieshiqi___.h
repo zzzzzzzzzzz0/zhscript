@@ -68,8 +68,7 @@ private:
 	void lianzuo__(const string& name,qu___* qu);
 	int use_def__(qu___* qu,size_t& offi,size_t to,string& buf,bool*use);
 
-	int rems__(list<string>* rems,qu___** top,qu___** main1,qu___** shangji,
-			bool* lock,bool* is_noparam,bool* is_code,bool* is_yuanyang,bool* is_lib);
+	int rems__(list<string>* rems,qu___** top,qu___** main1,qu___** shangji, bool* is_code,bool* is_yuanyang,var___* ret2);
 
 	qu___ top_qu_;
 public:
@@ -81,17 +80,13 @@ public:
 	qu___* main_qu__(qu___* qu);
 	int kw_qu__(qu___* qu);
 
-	int var_new__(qu___* qu,const string& buf2,const string& buf3,
-			bool readonly,
-			int type,bool is_noparam,bool is_lib,
-			list<string>* rems);
+	int var_new__(qu___* qu,const string& buf2,const string& buf3,var___* set2,list<string>* rems);
 	int var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deque<string>* p);
 	int delete__(string& buf2,qu___* qu);
 
 	int rems__(string& buf2,list<string>* rems,
 			qu___** top,qu___** main1,qu___** shangji,
-			bool* lock=NULL,bool* is_noparam=NULL,
-			bool* is_code=NULL,bool* is_yuanyang=NULL,bool* is_lib=NULL);
+			bool* is_code=NULL,bool* is_yuanyang=NULL,var___* ret2=NULL);
 
 	syn___ syn_;
 	err___ err_;

@@ -27,7 +27,7 @@ public:
 	bool readonly_;
 	int type_;
 	bool is_noparam_;
-	bool is_lib_;
+	bool is_chuantou_;
 
 	void val__(const string& val,list<string>* rems=NULL);
 	const string& val__(list<string>* rems=NULL);

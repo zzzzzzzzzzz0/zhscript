@@ -126,10 +126,13 @@ dlle___ int l4_var_new__(jieshiqi___* jsq,qu___* qu,
 		string buf2=name;
 		bool is_code=false;
 		bool is_yuanyang=false;
-		bool is_lib=false;
-		err=jsq->rems__(buf2,&rems,&qu2,&qu2,&qu2,&readonly,&is_noparam,&is_code,&is_yuanyang,&is_lib);
+		var___ ret2;
+		ret2.readonly_ = readonly;
+		ret2.is_noparam_ = is_noparam;
+		ret2.type_ = type;
+		err=jsq->rems__(buf2,&rems,&qu2,&qu2,&qu2,&is_code,&is_yuanyang,&ret2);
 		if(!err)
-			err=jsq->var_new__(qu2,buf2,val,readonly,type,is_noparam,is_lib,&rems);
+			err=jsq->var_new__(qu2,buf2,val,&ret2,&rems);
 	}
 	if(err)
 		err+=jieshiqi_err_;
@@ -277,28 +280,25 @@ string callbackx__(int num,jieshiqi___* jsq,qu___* qu){
 	return "";
 }
 
-int jieshiqi___::rems__(list<string>* rems,qu___** top,qu___** main1,qu___** shangji,
-		bool* lock,bool* is_noparam,bool* is_code,bool* is_yuanyang,bool* is_lib)
-{
-	bool top2=false,lock2=false,is_lib2=false;
+int jieshiqi___::rems__(list<string>* rems,qu___** top,qu___** main1,qu___** shangji,bool* is_code,bool* is_yuanyang,var___* ret2) {
+	bool top2=false;
 	if(syn_.rem_kw__(rems,keyword_top_)>0){
 		top2=true;
 	}
 	if(syn_.rem_kw__(rems,keyword_lock_)>0){
-		lock2=true;
+		if(ret2)
+			ret2->readonly_ = true;
 	}
 	if(syn_.rem_kw__(rems,keyword_lib_)>0){
-		is_lib2=true;
-		if(is_lib)
-			*is_lib=true;
+		top2=true;
+		if(ret2) {
+			ret2->readonly_ = true;
+			ret2->is_chuantou_ = true;
+		}
 	}
-	if(top2||is_lib2){
+	if(top2){
 		if(top)
 			*top=&top_qu_;
-	}
-	if(lock2||is_lib2){
-		if(lock)
-			*lock=true;
 	}
 
 	if(syn_.rem_kw__(rems,keyword_main_)>0){
@@ -313,8 +313,12 @@ int jieshiqi___::rems__(list<string>* rems,qu___** top,qu___** main1,qu___** sha
 		}
 	}
 	if(syn_.rem_kw__(rems,keyword_noparam_)>0){
-		if(is_noparam)
-		*is_noparam=true;
+		if(ret2)
+		ret2->is_noparam_=true;
+	}
+	if(syn_.rem_kw__(rems,keyword_chuantou_)>0){
+		if(ret2)
+		ret2->is_chuantou_=true;
 	}
 	if(syn_.rem_kw__(rems,keyword_code_)>0){
 		if(is_code)
@@ -327,9 +331,7 @@ int jieshiqi___::rems__(list<string>* rems,qu___** top,qu___** main1,qu___** sha
 	return 0;
 }
 
-int jieshiqi___::rems__(string& buf2,list<string>* rems,qu___** top,qu___** main1,qu___** shangji,
-		bool* lock,bool* is_noparam,bool* is_code,bool* is_yuanyang,bool* is_lib)
-{
+int jieshiqi___::rems__(string& buf2,list<string>* rems,qu___** top,qu___** main1,qu___** shangji, bool* is_code,bool* is_yuanyang,var___* ret2) {
 	int err;
 	qu___ qu;
 	qu.src_=buf2;
@@ -340,7 +342,7 @@ int jieshiqi___::rems__(string& buf2,list<string>* rems,qu___** top,qu___** main
 	for(list<string>::iterator li=rems->begin();li!=rems->end();++li)
 		cout<<"\033[0;3"<<out_clr_k_<<";45m"<<*li<<"\033[0m";
 #endif
-	return rems__(rems,top,main1,shangji,lock,is_noparam,is_code,is_yuanyang,is_lib);
+	return rems__(rems,top,main1,shangji,is_code,is_yuanyang,ret2);
 }
 
 int jieshiqi___::var__(qu___* qu,size_t& offi,size_t to,string& buf,int kw,bool* push_p,deque<string>* p){
@@ -665,13 +667,11 @@ int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,i
 		return err;
 
 	qu___* qu2=qu;
-	bool readonly=false;
-	bool is_noparam=false;
 	bool is_code=false;
 	//原样还得保留回车等
 	bool is_yuanyang=false;
-	bool is_lib=false;
-	if((err=rems__(buf2,&rems,&qu2,&qu2,&qu2,&readonly,&is_noparam,&is_code,&is_yuanyang,&is_lib))){
+	var___ ret2;
+	if((err=rems__(buf2,&rems,&qu2,&qu2,&qu2,&is_code,&is_yuanyang,&ret2))){
 		err_add__(qu,from2,to2);
 		return err;
 	}
@@ -719,7 +719,8 @@ int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,i
 		}
 	}
 
-	if((err=var_new__(qu2,buf2,buf3,readonly,type,is_noparam,is_lib,&rems))){
+	ret2.type_ = type;
+	if((err=var_new__(qu2,buf2,buf3,&ret2,&rems))){
 		return err;
 	}
 	if(kw0!=keyword_no_)
@@ -727,21 +728,17 @@ int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,i
 	return 0;
 }
 
-int jieshiqi___::var_new__(qu___* qu2,const string& buf2,const string& buf3,
-		bool readonly,
-		int type,bool is_noparam,bool is_lib,
-		list<string>* rems)
-{
+int jieshiqi___::var_new__(qu___* qu2,const string& buf2,const string& buf3,var___* set2,list<string>* rems) {
     if(!qu2)
    		qu2=&top_qu_;
 	var___* var=&qu2->vars_[buf2];
 	if(var->readonly_&&(!rems||rems->size()<1))
 		return errinfo_var_readonly_;
 	var->val__(buf3,rems);
-	var->readonly_=readonly;
-	var->type_=type;
-	var->is_noparam_=is_noparam;
-	var->is_lib_=is_lib;
+	var->readonly_=set2->readonly_;
+	var->type_=set2->type_;
+	var->is_noparam_=set2->is_noparam_;
+	var->is_chuantou_ = set2->is_chuantou_;
 	return 0;
 }
 
@@ -822,7 +819,7 @@ int jieshiqi___::use_def__(qu___* qu,size_t& offi,size_t to,string& buf,bool*use
 				cout<<"\033[0;3"<<out_clr_k_<<";4"<<out_clr_t_<<"m"<<name<<"\033[0m";
 #endif
 				noparam=var->is_noparam_;
-				zheng=!var->is_lib_;
+				zheng=!var->is_chuantou_;
 				offi+=mi->first.length();
 				p.push_back(var->val__());
 				src2=mi->first;
