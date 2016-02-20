@@ -16,6 +16,12 @@ export ver_="-D ver_64_"
 
 cd "`dirname $0`"
 
+if [ "$1" != "" ]
+then
+	./mk_.sh r "$@"
+	exit
+fi
+
 ./mk_.sh r gxx_l4_
 ./mk_.sh r gxx_l4_ "-D debug_liucheng_" -d
 
@@ -85,5 +91,6 @@ dir="`pwd`/.."
 $dir/webkitsh/gtk/mk-release.sh
 $dir/cairogsh/mk-release.sh
 $dir/vtesh/mk-release.sh
+$dir/srcvwsh/mk-release.sh
 
 find "$dir" \( -name '*.o' -o -name '*.d' \) -exec rm "{}" \;

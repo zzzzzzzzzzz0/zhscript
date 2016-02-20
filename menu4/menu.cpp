@@ -226,8 +226,16 @@ dlle___ void menu_add__(int *err, char* buf, long siz, GtkWidget *menu, int argc
 	gtk_widget_show_all(menu);
 }
 
+void
+menu_popup_pos__ (GtkMenu *menu,
+                        gint *x,
+                        gint *y,
+                        gboolean *push_in,
+                        gpointer user_data) {
+}
+
 dlle___ void menu_popup__(GtkWidget *menu) {
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 0, 0);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, menu_popup_pos__, NULL, 0, 0/*GDK_CURRENT_TIME*/);
 }
 
 dlle___ void init__(void* jsq, callback3_2___ cb3,
