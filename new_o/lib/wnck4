@@ -18,12 +18,16 @@
 赋予“窗得xid【‘库名’】”以调用“Glu”、‘‘库名’’、“wnck_window_get_xid”、“&”。
 赋予“窗得类例名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_class_instance_name”、“&”。
 赋予“窗得类组名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_class_group_name”、“&”。
+赋予“窗有图标名【‘库名’】”以调用“Gi”、‘‘库名’’、“wnck_window_has_icon_name”、“&”。
 赋予“窗得图标名【‘库名’】”以调用“Gc*”、‘‘库名’’、“wnck_window_get_icon_name”、“&”。
 
 赋予“窗设几何【‘库名’】”以调用“GB”、‘‘库名’’、“window_set_geometry__”、“&”、“c*”、“c*”、“c*”、“c*”。
 赋予“窗激活【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_activate”、“&”（、“${l0}”）。
 赋予“窗关闭【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_close”、“&”（、“${l0}”）。
 赋予“窗最小化【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_minimize”、“&”。
+赋予“窗置顶【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_make_above”、“&”。
+赋予“窗撤置顶【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_unmake_above”、“&”。
+赋予“窗是置顶【‘库名’】”以调用“Gi”、‘‘库名’’、“wnck_window_is_above”、“&”。
 赋予“窗设跳过任务栏【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_set_skip_tasklist”、“&”、“i”。
 赋予“窗移区【‘库名’】”以调用“G”、‘‘库名’’、“wnck_window_move_to_workspace”、“&”、“&”。
 

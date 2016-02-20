@@ -15,12 +15,16 @@ using namespace std;
 
 static int s2i__(const char* s1,int i){
 	int i1=i;
-	char c=s1[0];
-	if(c=='+')
-		s1++;
-	sscanf(s1,"%d",&i1);
-	if(c=='+')
-		i1+=i;
+	if(s1) {
+		char c=s1[0];
+		if(c) {
+			if(c=='+')
+				s1++;
+			sscanf(s1,"%d",&i1);
+			if(c=='+')
+				i1+=i;
+		}
+	}
 	return i1;
 }
 
@@ -38,12 +42,12 @@ dlle___ void init__(callback2___ cb,void* jsq, void* main_qu, l4_err_out___ l4_e
 
 dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
 	GList *window_l;
-	char p1[32], p2[] = {0, 0}, p3[32];
+	char p1[32], /*p2[] = {0, 0},*/ p3[32];
 	WnckWorkspace *aws = wnck_screen_get_active_workspace(screen);
 	for (window_l = wnck_screen_get_windows (screen); window_l != NULL; window_l = window_l->next){
 		WnckWindow *window = WNCK_WINDOW (window_l->data);
 		sprintf(p1,"%lx",(long)window);
-		p2[0] = wnck_window_is_skip_tasklist(window) ? '0' : '1';
+		//p2[0] = wnck_window_is_skip_tasklist(window) ? '0' : '1';
 
 		WnckWorkspace *ws = wnck_window_get_workspace(window);
 		int i = wnck_workspace_get_number(ws) + 1;
@@ -52,7 +56,7 @@ dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
 			i = -i;
 		sprintf(p3, "%d", i);
 
-		cb_(jsq_,shangji,err,code,false, 3, p1, p2, p3);
+		cb_(jsq_,shangji,err,code,false, 2, p1, /*p2,*/ p3);
 		if(*err){
 			if(*err==jieshiqi_err_go_+keyword_continue_){
 				*err=0;
