@@ -24,6 +24,7 @@ public:
 	bool out_dir_enter_,out_dir_exit_;
 	bool dirlnk_is_dir_;
 	bool not_;
+	bool flag_;
 	dir_opt___(){
 		subdir_=false;
 		a_hidden_=a_dir_=a_file_=a_lnk_=false;
@@ -34,6 +35,7 @@ public:
 		out_dir_enter_=out_dir_exit_=false;
 		dirlnk_is_dir_=true;
 		not_=false;
+		flag_ = true;
 	}
 };
 
@@ -42,7 +44,7 @@ private:
 	int dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*tongpei,
 			dir_opt___*opt,const char* src,void*ce,void*qu,callback2_2___ cb);
 	int exec__(regex_t* reg,const char*tongpei,dir_opt___*opt,
-			string dir2,const char* name,bool is_dir,
+			string dir2,const char* name,bool is_dir, bool is_lnk,
 			const char* src,void*ce,void*qu,callback2_2___ cb);
 public:
 	dir___();
@@ -52,9 +54,10 @@ public:
 			const char* src,void*ce,void*qu,callback2_2___ cb);
 	void sort__(int sort1);
 	void first__(int sort1);
+	bool split__(char c, char*buf,long siz);
 
 	vector<string> list_;
-	int i_,ii_;
+	int i_, i2_, ii_;
 };
 
 #endif /* DIR____H_ */

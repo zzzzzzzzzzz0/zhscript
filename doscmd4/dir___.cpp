@@ -72,6 +72,9 @@ void dir___::dir__(int*err1,char*buf,long siz,
 		case'x':
 			opt.not_=!opt.not_;
 			continue;
+		case'f':
+			opt.flag_ = !opt.flag_;
+			continue;
 		case'o':
 			opt.sort_=*++opt1-'0';
 			if(!(opt.sort_>=0&&opt.sort_<=3))
@@ -161,7 +164,7 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 	int exec_max = opt->subdir_ ? 2 : 1;
 	int err = 0;
 	if(opt->out_dir_enter_){
-		exec__(reg,tongpei,opt,dir2,"",true,src,ce,qu,cb);
+		exec__(reg,tongpei,opt,dir2,"",true,false,src,ce,qu,cb);
 	}
 	for(int exec = 0; exec < exec_max; exec++) {
 		if(exec>0)
@@ -188,10 +191,11 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 				if(!opt->a_hidden_)
 					continue;
 			}
-			bool is_dir=false;
+			bool is_dir=false, is_lnk = false;
 			if(S_ISDIR(st_mode))
 				is_dir=true;
 			else if(S_ISLNK(st_mode)){
+				is_lnk = true;
 				if(opt->a_lnk_){
 					DIR* d2;
 					if((d2=opendir(name))){
@@ -210,14 +214,14 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 			case 0:
 				if(is_dir){
 					if(opt->a_dir_){
-						if((err=exec__(reg,tongpei,opt,dir2,name,true,src,ce,qu,cb))){
+						if((err=exec__(reg,tongpei,opt,dir2,name,is_dir, is_lnk,src,ce,qu,cb))){
 							break;
 						}
 					}
 					continue;
 				}
 				if(opt->a_file_){
-					if((err=exec__(reg,tongpei,opt,dir2,name,false,src,ce,qu,cb))){
+					if((err=exec__(reg,tongpei,opt,dir2,name,is_dir, is_lnk,src,ce,qu,cb))){
 						break;
 					}
 				}
@@ -240,7 +244,7 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 		}
 	}
 	if(opt->out_dir_exit_){
-		exec__(reg,tongpei,opt,dir2,"",true,src,ce,qu,cb);
+		exec__(reg,tongpei,opt,dir2,"",true,false,src,ce,qu,cb);
 	}
 	closedir(d);
 	chdir(oldir.c_str());
@@ -248,14 +252,14 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 }
 
 int dir___::exec__(regex_t* reg,const char*tongpei,dir_opt___*opt,
-		string dir2,const char* name,bool is_dir,
+		string dir2,const char* name,bool is_dir, bool is_lnk,
 		const char* src,void*ce,void*qu,callback2_2___ cb)
 {
 	if(dir2.length()==0 && !name[0])
 		return 0;
 	bool b=false;
 	string name1=name;
-	if(is_dir && opt->a_file_ && name1.length()>0){
+	if(opt->flag_ && is_dir && opt->a_file_ && name1.length()>0){
 		name1+='/';
 	}
 	if(is_dir&&opt->dir_not_tongpei_){
@@ -281,8 +285,11 @@ int dir___::exec__(regex_t* reg,const char*tongpei,dir_opt___*opt,
 	//printf(" %d(%s)",b,name1.c_str());
 	if(b){
 		int err=0;
-		string path=dir2+name1;
-		cb((src ? jsq_ : this),qu,&err,ce,src,false,NULL,1,path.c_str());
+		string path=dir2+name1, type;
+		type += (is_dir ? 'd' : '-');
+		if(is_lnk)
+			type += 'l';
+		cb((src ? jsq_ : this),qu,&err,ce,src,false,NULL,2,path.c_str(), type.c_str());
 		if(err)
 			return err;
 	}
@@ -338,11 +345,11 @@ void dir___::sort__(int sort1){
 void dir___::first__(int sort1){
 	switch(sort1){
 	default:
-		i_=0;
+		i2_ = i_=0;
 		ii_=1;
 		break;
 	case 2:
-		i_=list_.size()-1;
+		i2_ = i_=list_.size()-1;
 		ii_=-1;
 		break;
 	}
@@ -355,11 +362,13 @@ dlle___ void dlln___(dir__)(int*err1,char*buf,long siz,char*dir,char*tongpei,cha
 
 const char* cb__(void* jsq,void* shangji,int* err,void*ce,const char* src,bool src_is_file,const char* src2,int argc,...){
 	dir___* d=(dir___*)jsq;
+	string s2;
 	_for_args( argc )
-		d->list_.push_back(s);
-	//printf("{%s|%d}",s,d->list_.size());
-		break;
+		if(i > 0)
+			s2 += '\t';
+		s2 += s;
 	_next_args
+	d->list_.push_back(s2);
 	return NULL;
 }
 
@@ -398,15 +407,44 @@ dlle___ void dlln___(dir_first__)(dir___*d,int sort1){
 	d->first__(sort1);
 }
 
-dlle___ void dlln___(dir_next__)(char*buf,dir___*d){
+bool dir___::split__(char c, char*buf,long siz) {
+	if(i_ < 0 || (size_t)i_ >= list_.size())
+		return false;
+	const string& s = list_.at(i_);
+	size_t i = s.find('\t');
+	size_t from, to;
+	switch(c) {
+	case 't':
+		from = i + 1;
+		to = s.length();
+		break;
+	default:
+		from = 0;
+		to = i;
+	}
+	i = from;
+	for(int i2 = 0;;) {
+		if(i >= to || i2 >= siz) {
+			buf[i2] = 0;
+			break;
+		}
+		buf[i2++] = s[i++];
+	}
+	return true;
+}
+
+dlle___ void dlln___(dir_filetype__)(char*buf,long siz,dir___*d){
 	if(!d)
 		return;
-	if(d->i_>=d->list_.size()||d->i_<0)
+	d->split__('t', buf, siz);
+}
+
+dlle___ void dlln___(dir_next__)(char*buf,long siz,dir___*d){
+	if(!d)
 		return;
-	const char*s=d->list_.at(d->i_).c_str();
-	//printf("{%d/%d|%s}",d->i_,d->list_.size(),s);
-	strcpy(buf,s);
-	d->i_+=d->ii_;
+	d->i_ = d->i2_;
+	if(d->split__(0, buf, siz))
+		d->i2_ += d->ii_;
 }
 
 dlle___ void dlln___(dir_sort__)(dir___*d,int sort1){

@@ -2,6 +2,7 @@
 using namespace std;
 #include<stdio.h>
 #include<stdlib.h>
+#include <sys/stat.h>
 
 #include "for_arg_.h"
 #include "def1.h"
@@ -13,10 +14,17 @@ int putfile2___(char* filename,const char*modes,const char* s,long len){
 	f=fopen(filename,modes);
 	if(f==NULL)
 		return 1;
+
+	struct stat st;
+	int st_err = stat(filename, &st);
+
 	if(fwrite(s,1,len,f)!=len)
 		return 2;
-
 	fclose(f);
+
+	if(!st_err)
+		chmod(filename, st.st_mode);
+
 	return 0;
 }
 
