@@ -8,7 +8,12 @@
 子菜单为管理员、
 为“sudo apt-get update”、
 为“sudo apt-get dist-upgrade”、
+为“sudo apt-get autoremove”、
+为“sudo apt-get -f install”、
+为“sudo apt-get install ”、
 为“sudo reboot ”、
+为“sudo shutdown -P +60 #一小时后关机 ”、
 子菜单止、
 为“sudo -s”、
-为exit。
+为exit、
+为“history | grep ”。
