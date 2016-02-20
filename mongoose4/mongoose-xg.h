@@ -7,6 +7,7 @@
 
 #ifndef MONGOOSE_XG_H_
 #define MONGOOSE_XG_H_
+#include <time.h>
 
 //以下在使用mongoose新版时务必对照以保持一致
 #include <netinet/in.h>
@@ -66,6 +67,7 @@ struct mgstat {
   time_t mtime;      // Modification time
 };
 //以上
+
 #ifdef __cplusplus
 extern "C" {
 #endif
