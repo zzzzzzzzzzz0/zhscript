@@ -84,10 +84,6 @@ void timeout_remove2__(item___* t) {
 }
 
 dlle___ void timeout_add__(char* name, char* time, bool is_loop, char* code, int argc, ...) {
-	string time2 = time;
-	if(time2.size() == 0)
-		return;
-
 	item___* t = timeout_find__(name);
 	if(t)
 		timeout_remove2__(t);
@@ -98,23 +94,26 @@ dlle___ void timeout_add__(char* name, char* time, bool is_loop, char* code, int
 
 	//guint
 	unsigned int time1 = 1000;
-	int x = 1;
-	switch(time2[time2.size() - 1]) {
-	case 'h':
-		x *= 60;
-	case 'm':
-		x *= 60;
-	case 's':
-		x *= 1000;
-		time2.erase(time2.size() - 1, 1);
-		break;
-	}
-	float time3;
-	if(sscanf(time2.c_str(), "%f", &time3) == 1) {
-		time1 = time3 * x;
+	string time2 = time;
+	if(time2.size() > 0) {
+		int x = 1;
+		switch(time2[time2.size() - 1]) {
+		case 'h':
+			x *= 60;
+		case 'm':
+			x *= 60;
+		case 's':
+			x *= 1000;
+			time2.erase(time2.size() - 1, 1);
+			break;
+		}
+		float time3;
+		if(sscanf(time2.c_str(), "%f", &time3) == 1) {
+			time1 = time3 * x;
+		}
 	}
 
-	t->code__(code);
+	t->code__(code && code[0] ? code : name);
 	t->id__(g_timeout_add(time1, timeout_cb__, t));
 	timeouts_.push_back(t);
 }
