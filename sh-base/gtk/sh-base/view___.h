@@ -16,11 +16,13 @@ class view___ {
 protected:
 	GtkWidget* widget_;
 	GtkWidget* scrolled_;
+	GtkWidget* outer_scrolled_;
 	void* window_;
 public:
 	view___(GtkWidget* scrolled2, void* window);
 	GtkWidget* widget__() {return widget_;}
 	GtkWidget* scrolled__() {return scrolled_;}
+	GtkWidget* outer_scrolled__() {return outer_scrolled_;}
 	void* window__() {return window_;}
 	static view___* from__(void* v);
 	static GtkWidget* scrolled_from__(void* v);

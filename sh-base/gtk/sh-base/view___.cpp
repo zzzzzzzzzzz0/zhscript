@@ -18,6 +18,7 @@ GtkWidget* view___::scrolled_from__(void* v) {
 view___::view___(GtkWidget* scrolled2, void* window) {
 	widget_ = NULL;
 	scrolled_ = scrolled2;
+	outer_scrolled_ = NULL;
 	window_ = window;
 	gtk_object_set_data(GTK_OBJECT(scrolled2), object_data_view_, this);
 }

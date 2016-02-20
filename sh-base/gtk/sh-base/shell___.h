@@ -16,6 +16,10 @@ class shell___ {
 private:
 	window___* new_window__(const char* name, window_flag___* flag, container___* c);
 	window___* new_window__(const char* name, bool is_main);
+	bool api_page__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
+	bool api_w__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
+	bool api_w2__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
+	bool api_w3__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
 protected:
 	window___* get_window__(const string& name, int& page_num, const string& help,
 			bool chk_can = true, string* page_num2 = NULL, bool show_err = true);
@@ -31,4 +35,5 @@ public:
 };
 
 extern void get_xid__(GtkWidget* w, char* buf);
+extern bool bool__(deque<string>* p, size_t i);
 #endif /* SHELL____H_ */

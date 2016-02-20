@@ -14,6 +14,7 @@
 //有 GTK_STOCK_* 也在用
 #define object_data_window_	""
 #define object_data_label_	"l"
+#define object_data_label2_	"l2"
 #define object_data_box_	"b"
 
 #define notebook_end_page_		-1
@@ -62,11 +63,14 @@ public:
 	int page_num__(const char* name);
 	virtual int page_num__(GtkWidget* sw);
 	int page_check__(int page_num);
+	GtkWidget* nth_page2__(int page_num);
 	gpointer get_data__(int page_num, const char *key);
+	void set_data__(int page_num, const char *key, gpointer data);
 
 	void for__(const char* code, void*ce, void* shangji);
 
 	GtkLabel* label__(int page_num);
+	GtkLabel* label2__(int page_num);
 	GtkWidget* close_button__(int page_num);
 	virtual void close__(int page_num) {}
 	virtual void close__(void* v) {}
