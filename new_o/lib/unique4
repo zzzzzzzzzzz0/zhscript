@@ -10,7 +10,7 @@
 赋予“‘库名’*【库】”以调用“L”、“libunique-1.0.so.0”。
 赋予“unique_app_new【‘库名’】”以调用“G &”、‘‘库名’*’、“unique_app_new”、“c*”、“c*”。
 赋予“unique_app_is_running【‘库名’】”以调用“G i”、‘‘库名’*’、“unique_app_is_running”、“&”。
-赋予“unique_app_watch_window【‘库名’】”以调用“G”、‘‘库名’*’、“unique_app_watch_window”、“&”、“l”。
+赋予“unique_app_watch_window【‘库名’】”以调用“G”、‘‘库名’*’、“unique_app_watch_window”、“&”、“&”。
 赋予“unique_message_data_new【‘库名’】”以调用“G &”、‘‘库名’*’、“unique_message_data_new”。
 赋予“unique_message_data_set_text【‘库名’】”以调用“G”、‘‘库名’*’、“unique_message_data_set_text”、“&”、“c*”、“i”。
 赋予“UNIQUE_INVALID【‘库名’】”以0。
