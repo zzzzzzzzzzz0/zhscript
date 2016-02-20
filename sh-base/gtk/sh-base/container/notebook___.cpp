@@ -84,6 +84,7 @@ GtkWidget* notebook___::new__(GtkWidget* scrolled) {
 	//g_object_ref_sink(notebook_);
 	gtk_notebook_set_tab_pos (notebook__(), pt_);
 	gtk_notebook_set_scrollable (notebook__(), true);
+	gtk_notebook_popup_enable (notebook__());
 	container_add__(notebook_, scrolled);
 	if(!has_1page_)
 		return NULL;
@@ -126,7 +127,12 @@ GtkWidget* notebook___::page_new__(const char* name) {
 			box = gtk_hbox_new(false,0);
 		//g_object_ref_sink(box);
 		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_box_,(gpointer)box);
-		GtkWidget *label2 = gtk_label_new ("");
+		GtkWidget *label2;
+		label2 = gtk_label_new ("");
+		//g_object_ref_sink(label2);
+		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label2_,(gpointer)label2);
+		gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
+		label2 = gtk_label_new ("");
 		//g_object_ref_sink(label2);
 		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label_,(gpointer)label2);
 		gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
@@ -139,6 +145,7 @@ GtkWidget* notebook___::page_new__(const char* name) {
     opener_ = nth_page__(i);
     i++;
 	gtk_notebook_insert_page (notebook__(), scrolled2, label,i);
+	gtk_notebook_set_tab_reorderable (notebook__(), scrolled2, true);
 	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_window_,window_);
 	gtk_widget_show_all (scrolled2);
 	gtk_widget_show_all (label);
