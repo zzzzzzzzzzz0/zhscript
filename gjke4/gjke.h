@@ -26,9 +26,10 @@ extern void* jsq_;
 extern void* main_qu_;
 extern string kw_length_,kw_dian_;
 
-char* i2s__(int i,char buf[]);
-char* l2s__(long int i,char buf[]);
-unsigned long x2lu__(char*s);
-int s2i__(const char* s);
-bool startswith__(const char*src,const char*tag);
+extern char* i2s__(int i,char buf[]);
+extern char* l2s__(long int i,char buf[]);
+extern unsigned long x2lu__(char*s);
+extern int s2i__(const char* s);
+extern bool startswith__(const char*src,const char*tag);
+extern int for_err__(int*err);
 #endif /* GJKE_H_ */

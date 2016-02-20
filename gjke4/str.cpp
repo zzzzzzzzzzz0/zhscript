@@ -83,3 +83,47 @@ dlle___ void dlln___(addslashes__)(char**addr_ret,const char*src,const char*ctl)
 	}
 	*addr_ret=dup__(buf.c_str());
 }
+
+dlle___ bool is_noname__(const char*s) {
+	if(s) {
+		bool has_ad = false, has1 = false, has2 = false;
+		int has_09 = 0, has_ez = 0, has_AZ = 0;
+		for(; *s; s++) {
+			char c = *s;
+			if(c >= '0' && c <= '9') {
+				has_09++;
+				continue;
+			}
+			if(c >= 'a' && c <= 'd') {
+				has_ad = true;
+				continue;
+			}
+			if(c >= 'e' && c <= 'z') {
+				has_ez++;
+				continue;
+			}
+			if(c >= 'A' && c <= 'Z') {
+				has_AZ++;
+				continue;
+			}
+			switch(c) {
+			case '-':
+				has1 = true;
+				continue;
+			case '_': case '.':
+				has2 = true;
+				continue;
+			}
+			return false;
+		}
+		if(has_ez > 2 && has_AZ > 2)
+			return false;
+		if(!has_ad && !has_ez && !has_AZ && !has2) {
+			if(has_09 <= 4 &&  !has1)
+				return false;
+			if(has_09 <= 10 &&  has1)
+				return false;
+		}
+	}
+	return true;
+}

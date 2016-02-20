@@ -13,17 +13,7 @@ dlle___ void dlln___(foreach__)(int*err,char**addr_ret,void*ce,void* shangji,boo
 		ret+=callback_(jsq_,shangji,err,ce,code,false,NULL,2,i2s__(i+1,buf),s);
 	}else
 		ret+=callback_(jsq_,shangji,err,ce,code,false,NULL,1,s);
-	if(*err){
-		if(*err==jieshiqi_err_go_+keyword_continue_){
-			*err=0;
-			continue;
-		}
-		if(*err==jieshiqi_err_go_+keyword_break_){
-			*err=0;
-			break;
-		}
-		break;
-	}
+	if(for_err__(err)) break;
 	_next_args
 	*addr_ret=dup__(ret.c_str());
 }
@@ -114,17 +104,7 @@ void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool
 			val1[0]=buf1;
 		}
 		ret+=callback3_(jsq_,qu,err,ce,code,false,NULL,len2+v1_add,val1,0);
-		if(*err){
-			if(*err==jieshiqi_err_go_+keyword_continue_){
-				*err=0;
-				continue;
-			}
-			if(*err==jieshiqi_err_go_+keyword_break_){
-				*err=0;
-				break;
-			}
-			break;
-		}
+		if(for_err__(err)) break;
 	}
 }
 
