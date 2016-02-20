@@ -41,6 +41,7 @@
 									<listOptionValue builtIn="false" value="/usr/lib/i386-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/vte-0.0"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.other.pic.348884552" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1253799121" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1711668301" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
@@ -105,6 +106,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1278979401" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
 							<tool commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1124773536" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.flags.1031493579" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="`pkg-config --libs gtk+-3.0 vte-2.90`" valueType="string"/>
+								<option id="gnu.cpp.link.option.libs.1902082281" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="dl"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.873055296" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

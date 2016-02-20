@@ -33,6 +33,7 @@
 									<listOptionValue builtIn="false" value="../../new_gg"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1217648198" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 `pkg-config gtk+-2.0 --cflags`" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.pic.1823528851" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.301699968" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.debug.492729596" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.debug">
@@ -93,6 +94,7 @@
 									<listOptionValue builtIn="false" value="../../new_gg"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.2014137851" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 `pkg-config gtk+-3.0 --cflags`" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.pic.1888227334" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1302165152" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.release.2043314182" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release">

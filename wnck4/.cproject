@@ -100,9 +100,11 @@
 									<listOptionValue builtIn="false" value="WNCK_I_KNOW_THIS_IS_UNSTABLE"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1911269721" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/include/libwnck-1.0"/>
+									<listOptionValue builtIn="false" value="/usr/include/libwnck-3.0"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.other.other.2027677732" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 `pkg-config libwnck-1.0 --cflags `" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.2027677732" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 `pkg-config libwnck-3.0 --cflags `" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.111883999" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.other.pic.1854964472" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1461126429" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.release.2001166564" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release">
@@ -113,9 +115,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.so.release.1060357926" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.so.release">
 								<option defaultValue="true" id="gnu.c.link.so.release.option.shared.1399511327" name="Shared (-shared)" superClass="gnu.c.link.so.release.option.shared" valueType="boolean"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.so.release.1858225459" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.release">
+							<tool commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="cdt.managedbuild.tool.gnu.cpp.linker.so.release.1858225459" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.release">
 								<option defaultValue="true" id="gnu.cpp.link.so.release.option.shared.1176231855" name="Shared (-shared)" superClass="gnu.cpp.link.so.release.option.shared" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.flags.1908850485" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-rpath=./,-rpath=./lib3/,-rpath=/usr/lib/zhscript/lib3/ `pkg-config libwnck-1.0  --libs`" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1908850485" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-rpath=./,-rpath=./lib3/,-rpath=/usr/lib/zhscript/lib3/ `pkg-config libwnck-3.0  --libs`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1172870287" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -624,6 +626,7 @@
 		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/wnck4"/>
 		</configuration>
+		<configuration configurationName="Debug3"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/wnck4"/>
 		</configuration>
