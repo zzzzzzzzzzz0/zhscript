@@ -112,7 +112,11 @@ GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {
 	gtk_object_set_data(GTK_OBJECT(webview),object_data_view_,(gpointer)this);
 	if(scrolled) {
 		gtk_object_set_data(GTK_OBJECT(webview),object_data_scrolled_,(gpointer)scrolled);
-		gtk_container_add (GTK_CONTAINER (scrolled), webview);
+		//gtk_container_add (GTK_CONTAINER (scrolled), webview);
+		GtkWidget* scrolled2 = gtk_scrolled_window_new (NULL, NULL);
+		gtk_container_add (GTK_CONTAINER (scrolled2), webview);
+		gtk_container_add (GTK_CONTAINER (scrolled), scrolled2);
+		outer_scrolled_ = scrolled2;
 
 		if(is_app_paintable_) {
 			webkit_web_view_set_transparent(WEBKIT_WEB_VIEW(webview), true);
