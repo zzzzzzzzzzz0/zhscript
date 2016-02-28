@@ -114,9 +114,12 @@ public:
 	err___ err_;
 };
 
+typedef bool (*get_lnk_ok___)(const char* path);
+
 extern string realpath__(const char* s);
 extern void get_path__(string& path);
 extern bool which__(const char* s,string& buf2);
-extern bool get_lnk__(const char* s,string& buf2,bool abs);
+extern bool get_lnk__(const char* s,string& buf2,bool abs, get_lnk_ok___ ok);
+extern bool lstat__(const char* path, const char* ext);
 
 #endif /* Loader____H_ */

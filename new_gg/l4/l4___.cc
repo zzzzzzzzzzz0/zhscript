@@ -133,6 +133,14 @@ int l4___::init3__(){
 #ifndef S_ISLNK
 #define lstat stat
 #endif
+bool lstat__(const char* path, const char* ext) {
+	string file = path;
+	if(ext)
+		file += ext;
+	struct stat info;
+	return (lstat(file.c_str(), &info) == 0);
+}
+
 bool which__(const char* s,string& buf2){
 	bool b=true;
 	for(int i=0;s[i];i++){
@@ -144,7 +152,6 @@ bool which__(const char* s,string& buf2){
 	if(b){
 		char*PATH=getenv("PATH");
 		if(PATH){
-			struct stat info;
 			for(int i=0;;){
 				char c=PATH[i++];
 				if(c==':'||!c){
@@ -154,9 +161,8 @@ bool which__(const char* s,string& buf2){
 						}else
 							buf2+='/';
 						buf2+=s;
-						if (lstat(buf2.c_str(), &info) == 0) {
+						if (lstat__(buf2.c_str(), NULL))
 							return true;
-						}
 						buf2.clear();
 					}
 				}else
@@ -179,18 +185,29 @@ void get_path__(string& path){
 		path=path.substr(0,i+1);
 }
 
-bool get_lnk__(const char* s,string& buf2,bool abs){
+bool abs_path__(const char* s, char* buf, int siz, string& buf2) {
+	//s = realpath(s, buf);
+	if(s[0]!='/'){
+		string s2=s;
+		buf2=getcwd(buf,siz);
+		buf2+='/';
+		buf2+=s2;
+		return true;
+	}
+	return false;
+}
+
+bool get_lnk__(const char* s,string& buf2,bool abs, get_lnk_ok___ ok){
 #ifdef S_ISLNK
 	char buf[1024];
 	struct stat info;
-	string buf1;
 	int lnk=0;
 	for(int loop=0;loop<1000;loop++){
 		if(lstat(s, &info)!=0)
 			break;
 		if (S_ISLNK(info.st_mode)) {
 			lnk++;
-			buf1=s;
+			string buf1=s;
 			ssize_t len;
 			if ((len = readlink(s, buf, sizeof(buf)-1)) >= 0){
 				buf[len] = '\0';
@@ -201,19 +218,28 @@ bool get_lnk__(const char* s,string& buf2,bool abs){
 					get_path__(buf2);
 					buf2+=buf;
 				}
+				if(ok) {
+					if(abs) {
+						string buf3;
+						if(abs_path__(s, buf, sizeof(buf), buf3)) {
+							if(ok(buf3.c_str())) {
+								buf2 = buf3;
+								return true;
+							}
+						}
+					}
+					if(ok(buf2.c_str()))
+						return true;
+				}
 				s=buf2.c_str();
 			}
 		} else
 			break;
 	}
-	if(abs){
-		//s = realpath(s, buf);
-		if(s[0]!='/'){
-			string s2=s;
-			buf2=getcwd(buf,sizeof(buf));
-			buf2+='/';
-			buf2+=s2;
-			s=buf2.c_str();
+	if(abs) {
+		if(abs_path__(s, buf, sizeof(buf), buf2)) {
+			if(ok && ok(buf2.c_str()))
+				return true;
 		}
 	}
 	return lnk>0;
@@ -226,7 +252,7 @@ string realpath__(const char* s){
 	string buf2;
 	if(which__(s,buf2))
 		s=buf2.c_str();
-	if(get_lnk__(s,buf2,true))
+	if(get_lnk__(s,buf2,true, NULL))
 		s=buf2.c_str();
 	return s;
 }

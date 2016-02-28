@@ -41,13 +41,10 @@ static void not_block__() {
 }
 
 static bool file__(const char* path,const char* ext,const char* sp,string& cmdline){
-	string file;
-	file=path;
-	file+=ext;
-	struct stat info;
-	if(lstat(file.c_str(), &info) == 0){
+	if(lstat__(path, ext)){
 		cmdline+=sp;
-		cmdline+=file;
+		cmdline+=path;
+		cmdline+=ext;
 		return true;
 	}
 	return false;
@@ -457,6 +454,12 @@ static void g_log__(const gchar *log_domain, GLogLevelFlags log_level,const gcha
 			<<"--"<<message<<endl;
 }
 
+static bool get_lnk_ok__(const char* path) {
+	if(lstat__(path, ".zs"))
+		return true;
+	return false;
+}
+
 int shell___::with__(int argc, char *argv[], char* env[]) {
 	if(!g_thread_supported())
 		g_thread_init (NULL);
@@ -480,7 +483,7 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 		if(which__(path,buf))
 			path=buf.c_str();
 		string cmdline="-S syn-zh -E err-zh";
-		if(!file__(path,cmdline)&&get_lnk__(path,buf,true)){
+		if(!file__(path,cmdline)&&get_lnk__(path,buf,true, get_lnk_ok__)){
 			path=buf.c_str();
 			file__(path,cmdline);
 		}
