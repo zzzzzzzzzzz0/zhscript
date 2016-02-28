@@ -17,6 +17,7 @@ Debug3/
 /new_o/webkit*sh
 /new_o/cairogsh
 /new_o/vtesh
+/new_o/srcvwsh
 /new_o/lib3/lib*
 _util/
 _debug.zs
