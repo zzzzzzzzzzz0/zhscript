@@ -181,7 +181,7 @@ public:
 	}
 };
 
-int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
+int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pause,
 		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv)
 {
 	const char**argv2 = new const char*[argc];
@@ -194,8 +194,10 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 		int i2_old = i2;
 		for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
 			clpars_item___* ci=*cii;
-			if(ci->pause_)
+			if(ci->pause_ == 2) {
+				pause++;
 				continue;
+			}
 			bool b=false;
 			switch(scan) {
 			case 0:
@@ -276,6 +278,8 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
 				}else{
 					i2 = i2_old;
 				}
+				if(ci->pause_)
+					continue;
 				cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
 				switch(*err){
 				case jieshiqi_err_go_+keyword_continue_:
@@ -301,15 +305,16 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 	}
 	i++;
 
-	int has=cb__(flag,by_help,no,i1,i,buf,err,ce,shangji,argc,argv);
+	int pause = 0;
+	int has=cb__(flag,by_help,no,i1,i,pause,buf,err,ce,shangji,argc,argv);
 	if(*err)
 		return 1;
 	if(has)
 		return 0;
-
 	if(by_help)
 		return 0;
-
+	if(pause)
+		return 0;
 	sprintf(buf,"no parse");
 	*err=3;
 	return 1;
@@ -364,17 +369,23 @@ void clpars___::info__(char*buf,int* err,void*ce,void* shangji,char* code){
 	}
 }
 
-void clpars___::pause__(bool pause, int argc, char** argv) {
+void clpars___::pause__(int pause, int argc, char** argv) {
 	for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
 		clpars_item___* ci=*cii;
-		if(ci->flag_.empty())
-			continue;
 		if(argc <= 0)
 			ci->pause_ = pause;
 		else {
-			for(int i = 0; i < argc; i++) {
+			for(int i = 0; i < argc && ci->pause_ != pause; i++) {
+				char* arg = argv[i];
+				if(!arg)
+					continue;
+				if(ci->flag_.empty()) {
+					if(!arg || !arg[0])
+						ci->pause_ = pause;
+					continue;
+				}
 				for(list<string>::iterator si=ci->flags_.begin();si!=ci->flags_.end();si++){
-					if((*si) == argv[i]) {
+					if((*si) == arg) {
 						ci->pause_ = pause;
 						break;
 					}

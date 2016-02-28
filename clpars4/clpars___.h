@@ -22,7 +22,7 @@ public:
 	int argc_;
 	string code_;
 	char type_;
-	bool pause_;
+	int pause_;
 	clpars_item___(const char*flag,const char*info,const char*code,
 			int argc1,char type){
 		flag_=flag;
@@ -31,7 +31,7 @@ public:
 		argc_=argc1;
 		type_=type;
 
-		pause_ = false;
+		pause_ = 0;
 
 		flags__();
 	}
@@ -40,7 +40,7 @@ public:
 class clpars___ {
 private:
 	list<clpars_item___*> item_;
-	int cb__(const char*flag,bool by_help,bool no,int& i1,int&i,
+	int cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pause,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv);
 	int par__(int& i1,int& i,const char* flag,bool by_help,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,bool no);
@@ -51,7 +51,7 @@ public:
 	void par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no);
 	void info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange);
 	void info__(char*buf,int* err,void*ce,void* shangji,char* code);
-	void pause__(bool pause, int argc, char** argv);
+	void pause__(int pause, int argc, char** argv);
 };
 
 #endif /* CLPARS____H_ */
