@@ -1,0 +1,7 @@
+
+下载：txt2png-ubuntu64.tar.bz2
+http://pan.baidu.com/s/1jHg2o6a
+
+
+一张图片 一段文字 根据长度生成缩略图式的标志图形 比二维码要好看 最后直接生成图片在卡，弹出访问
+
