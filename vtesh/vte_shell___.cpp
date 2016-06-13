@@ -9,6 +9,11 @@
 #include "sh-base/extern.h"
 #include "sh-base/extern2.h"
 
+#ifdef ver_2_91_
+#define vte_terminal_set_color_foreground_rgba vte_terminal_set_color_foreground
+#define vte_terminal_set_color_background_rgba vte_terminal_set_color_background
+#endif
+
 static window___* window__(vte_view___* v) {
 	return (window___*)v->window__();
 }
@@ -66,7 +71,11 @@ static s1___* contents_changed_s1_ = new s1___("内容改变", "contents-changed
 //static s1___* char_size_changed_s1_ = new s1___(NULL, "char-size-changed", 'v', G_CALLBACK(cb3__));
 //static s1___* commit_s1_ = new s1___(NULL, "commit", 'v', G_CALLBACK(cb3_2__));
 static s1___* beep_s1_ = new s1___(NULL, "beep", 'v');
-static s1___* child_exited_s1_ = new s1___(NULL, "child-exited", 'v'/*, G_CALLBACK(cb2__)*/);
+static s1___* child_exited_s1_ = new s1___(NULL, "child-exited", 'v'
+#ifdef ver_2_91_
+		, G_CALLBACK(cb2__)
+#endif
+);
 static s1___* copy_clipboard_s1_ = new s1___(NULL, "copy-clipboard", 'v');
 static s1___* current_directory_uri_changed_s1_ = new s1___(NULL, "current-directory-uri-changed", 'v');
 static s1___* current_file_uri_changed_s1_ = new s1___(NULL, "current-file-uri-changed", 'v');
@@ -208,7 +217,11 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
 			if(err_buzu2__(p, 3))
 				return true;
+#ifdef ver_2_91_
+			vte_terminal_set_font (v->handle__(), pango_font_description_from_string ((*p)[2].c_str()));
+#else
 			vte_terminal_set_font_from_string(v->handle__(), (*p)[2].c_str());
+#endif
 			return true;
 		}
 		if(p1 == "行数") {
