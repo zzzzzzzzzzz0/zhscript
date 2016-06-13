@@ -315,6 +315,16 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 		return 0;
 	if(pause)
 		return 0;
+
+	string flag2 = flag;
+	if(flag2 == "-h" || flag2 == "--help") {
+		string info;
+		info__(info, "", "\t", "\n", false);
+		printf("%s", info.c_str());
+		*err = jieshiqi_err_go_+keyword_end_;
+		return 1;
+	}
+
 	sprintf(buf,"no parse");
 	*err=3;
 	return 1;
@@ -326,16 +336,14 @@ void clpars___::par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& 
 		par__(i1,i,"",true,buf,err,ce,shangji,argc,argv,no);
 	else {
 		for (; i < argc; ){
-			switch(par__(i1,i,va_arg(argv, char*),false,buf,err,ce,shangji,argc,argv,no)){
-			case 1:
+			if(0 != par__(i1,i,va_arg(argv, char*),false,buf,err,ce,shangji,argc,argv,no)){
 				return;
 			}
 		}
 	}
 }
 
-void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange){
-	string info;
+void clpars___::info__(string& info,const char* t1,const char* t2,const char* n,bool yange){
 	list<clpars_item___*>::iterator cii;
 	clpars_item___* ci;
 	for(cii=item_.begin();cii!=item_.end();cii++){
@@ -347,6 +355,11 @@ void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char*
 		info+=ci->info_;
 		info+=n;
 	}
+}
+
+void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange){
+	string info;
+	info__(info, t1, t2, n, yange);
 	*addr_ret=dup__(info.c_str());
 }
 

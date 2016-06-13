@@ -49,6 +49,7 @@ public:
 	virtual ~clpars___();
 	void set__(char*buf,int* err,bool add,int argc,va_list& argv,int* sp);
 	void par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no);
+	void info__(string& info,const char* t1,const char* t2,const char* n,bool yange);
 	void info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange);
 	void info__(char*buf,int* err,void*ce,void* shangji,char* code);
 	void pause__(int pause, int argc, char** argv);
