@@ -24,73 +24,75 @@ void item___::init__() {
 }
 
 int item___::mk_time__(char* time) {
-	string time2 = time;
-	if(time2.size() == 0) {
-		return 1;
-	}
 	switch(type_) {
 	case 'd':
 	{
-		string s;
-		bool b = false;
 		int i2 = -1;
-		for(size_t i = 0; !b; i++) {
-			if(i >= time2.size()) {
-				b = true;
-			} else {
-				char c = time2[i];
-				if(c != '-') {
-					s += c;
-					continue;
-				}
-			}
-			i2++;
-			if(i2 >= d_len_) {
-				d_free__(d_len_ - 1);
-				return 31;
-			}
-			if(s == "*")
-				s = "." + s;
-			else {
-				regex_t re;
-				int z = regcomp(&re, "([0-9]+)~([0-9]+)", REG_EXTENDED);
-				#define nmatch 4
-				regmatch_t pm[nmatch];
-				int off = 0;
-				string s2;
-				char s3[16];
-				for(;;) {
-					z = regexec(&re, s.c_str() + off, nmatch, pm, 0);
-					if(z != 0)
-						break;
-					int so1 = pm[1].rm_so;
-					string ss = s.substr(so1 + off, pm[2].rm_eo - so1);
-					int so, eo;
-					sscanf(ss.c_str(), "%d~%d", &so, &eo);
-					s2 += s.substr(off, so1);
-					for(int i = so; i <= eo; i++) {
-						if(i > so)
-							s2 += "|";
-						sprintf(s3, "%d", i);
-						s2 += s3;
+		if(!time || !time[0]) {
+			for(size_t i = 0; i < d_len_; i++, i2++)
+				regcomp(&d_[i], ".*", REG_EXTENDED | REG_NOSUB | REG_NEWLINE);
+		} else {
+			string time2 = time;
+			string s;
+			bool b = false;
+			for(size_t i = 0; !b; i++) {
+				if(i >= time2.size()) {
+					b = true;
+				} else {
+					char c = time2[i];
+					if(c != '-') {
+						s += c;
+						continue;
 					}
-					off += pm[2].rm_eo;
 				}
-				if(!s2.empty()) {
-					s2 += s.substr(off);
-					s = s2;
+				i2++;
+				if(i2 >= d_len_) {
+					d_free__(d_len_ - 1);
+					return 31;
 				}
-				regfree(&re);
+				if(s == "*")
+					s = "." + s;
+				else {
+					regex_t re;
+					int z = regcomp(&re, "([0-9]+)~([0-9]+)", REG_EXTENDED);
+					#define nmatch 4
+					regmatch_t pm[nmatch];
+					int off = 0;
+					string s2;
+					char s3[16];
+					for(;;) {
+						z = regexec(&re, s.c_str() + off, nmatch, pm, 0);
+						if(z != 0)
+							break;
+						int so1 = pm[1].rm_so;
+						string ss = s.substr(so1 + off, pm[2].rm_eo - so1);
+						int so, eo;
+						sscanf(ss.c_str(), "%d~%d", &so, &eo);
+						s2 += s.substr(off, so1);
+						for(int i = so; i <= eo; i++) {
+							if(i > so)
+								s2 += "|";
+							sprintf(s3, "%d", i);
+							s2 += s3;
+						}
+						off += pm[2].rm_eo;
+					}
+					if(!s2.empty()) {
+						s2 += s.substr(off);
+						s = s2;
+					}
+					regfree(&re);
 
-				s = "^(" + s + ")$";
-			}
+					s = "^(" + s + ")$";
+				}
 
-			int z = regcomp(&d_[i2], s.c_str(), REG_EXTENDED | REG_NOSUB | REG_NEWLINE);
-			if(z != 0) {
-				d_free__(i2);
-				return 32;
+				int z = regcomp(&d_[i2], s.c_str(), REG_EXTENDED | REG_NOSUB | REG_NEWLINE);
+				if(z != 0) {
+					d_free__(i2);
+					return 32;
+				}
+				s.clear();
 			}
-			s.clear();
 		}
 		if(i2 != d_len_ - 1) {
 			d_free__(i2);
@@ -103,25 +105,31 @@ int item___::mk_time__(char* time) {
 	default:
 	{
 		int x = 1;
-		switch(time2[time2.size() - 1]) {
-		case 'h':
-			x *= 60;
-		case 'm':
-			x *= 60;
-		case 's':
-			x *= 1000;
-			time2.erase(time2.size() - 1, 1);
-			break;
-		}
 		float time3;
-		if(sscanf(time2.c_str(), "%f", &time3) != 1) {
-			return 2;
+		if(!time || !time[0]) {
+			time3 = 1000;
+		} else {
+			string time2 = time;
+			switch(time2[time2.size() - 1]) {
+			case 'h':
+				x *= 60;
+			case 'm':
+				x *= 60;
+			case 's':
+				x *= 1000;
+				time2.erase(time2.size() - 1, 1);
+				break;
+			}
+			if(sscanf(time2.c_str(), "%f", &time3) != 1) {
+				return 2;
+			}
 		}
 		time_ = time3 * x;
 		break;
 	}
 	}
-	time2_ = time;
+	if(time)
+		time2_ = time;
 	return 0;
 }
 

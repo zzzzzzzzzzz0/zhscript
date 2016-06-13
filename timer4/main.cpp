@@ -14,6 +14,7 @@
 #include "def1.h"
 #include "l4/keyword.h"
 #include "item___.h"
+#include "for_arg_.h"
 
 static void* jsq_;
 static void* main_qu_;
@@ -59,13 +60,29 @@ static item___* find__(char* name) {
 		return *i;
 }
 
-dlle___ void add__(/*int* err*/char* buf, char* name, char* time, char* type, int is_loop, char* code) {
+dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, int argc, ...) {
 	switch(type[0]) {
 	case 'd': case 0:
 		break;
 	default:
 		//*err = 1;
 		sprintf(buf, "1");
+		return;
+	}
+
+	char *time = NULL, *code = NULL;
+	_for_args( argc )
+		switch(i) {
+		case 0:
+			time = s;
+			break;
+		case 1:
+			code = s;
+			break;
+		}
+	_next_args
+	if(!name || ((!code || !code[0]) && !name[0])) {
+		sprintf(buf, "11");
 		return;
 	}
 
@@ -87,7 +104,7 @@ dlle___ void add__(/*int* err*/char* buf, char* name, char* time, char* type, in
 	t->init__();
 	t->name_ = name;
 	t->is_loop_ = is_loop;
-	t->code_ = code;
+	t->code_ = code && code[0] ? code : name;
 	if(is_new)
 		items_.push_back(t);
 }
