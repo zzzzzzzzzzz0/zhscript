@@ -36,6 +36,8 @@ dlle___ int l4_parse_args__(jieshiqi___* l4){
 	int err;
 	if((err=l4->args_.parse_args__()))
 		return err;
+	if(l4->args_.src_is_file_)
+		file_.add_path2__(l4->args_.src_);
 	if((err=l4->syn_.get_file__(l4->args_.syn_file_)))
 		return err;
 	return 0;
@@ -137,6 +139,9 @@ dlle___ void l4_go__(jieshiqi___* l4, int kw) {
 }
 dlle___ int l4_exit_code__(jieshiqi___* l4){
 	return l4->exit_code_;
+}
+dlle___ int l4_is_end__(jieshiqi___* l4){
+	return l4->is_end_;
 }
 
 dlle___ const char* l4_keyword__(jieshiqi___* l4,int kw){
