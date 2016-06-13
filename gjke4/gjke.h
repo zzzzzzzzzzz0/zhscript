@@ -28,8 +28,9 @@ extern string kw_length_,kw_dian_;
 
 extern char* i2s__(int i,char buf[]);
 extern char* l2s__(long int i,char buf[]);
-extern unsigned long x2lu__(char*s);
-extern int s2i__(const char* s);
+extern unsigned long x2lu__(char*s, unsigned long l=0);
+extern int s2i__(const char* s, int i=0);
+extern long s2l__(const char* s, long i=0);
 extern bool startswith__(const char*src,const char*tag);
 extern int for_err__(int*err);
 #endif /* GJKE_H_ */

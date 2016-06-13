@@ -61,6 +61,9 @@ _dle void strmid_(int *c4w4,char* s1,long s1_len,char* s,int argc,...){
 	char *s2=0, *s3 = 0;
 	_for_args( argc )
 		switch(i){
+		case 3:
+			s3=s;
+			break;
 		case 2:
 			s2=s;
 			break;

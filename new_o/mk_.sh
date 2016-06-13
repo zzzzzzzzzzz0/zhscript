@@ -3,10 +3,10 @@
 dir="`pwd`/.."
 
 f3="$ver_ -Wall -fmessage-length=0 -MMD -MP"
-f2="-O0 -g3 $f3"
+f2="-O0 $f3"
 case "$1" in
 d)
-	f1=$f2;;
+	f1="-g3 $f2";;
 r)
 	f1="-O3 $f3";;
 *)

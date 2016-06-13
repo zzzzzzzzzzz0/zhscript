@@ -11,8 +11,18 @@ libgnomeui-dev
 sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev
 sudo apt-get install libgtksourceviewmm-2.0-dev
 
+u1604=
+if cat /etc/issue | grep -q 16.04
+then
+	u1604=1
+fi
+
 p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
 export ver_="-D ver_64_"
+if [ -n "$u1604" ]
+then
+	export ver_="$ver_ -D ver_64a_"
+fi
 
 cd "`dirname $0`"
 
@@ -25,7 +35,6 @@ fi
 ./mk_.sh r gxx_l4_
 ./mk_.sh r gxx_l4_ "-D debug_liucheng_" -d
 
-./mk_.sh r gxx_lib_ test4
 ./mk_.sh r gcc_lib_ gjk4
 ./mk_.sh r gxx_lib_ gjke4
 ./mk_.sh r gxx_lib_ gjks4
@@ -41,7 +50,6 @@ fi
 ./mk_.sh r gxx_lib_ curle4 "-lcurl"
 ./mk_.sh r gxx_lib_ inotify4
 ./mk_.sh r gxx_lib_ sqlite4 "-lsqlite3"
-./mk_.sh r gcc_lib_ md4
 ./mk_.sh r gxx_lib_ thread4 -lpthread
 ./mk_.sh r gxx_lib_ clpars4
 ./mk_.sh r gxx_lib_ timeout4 "`pkg-config glib-2.0 --cflags --libs`"
@@ -50,12 +58,31 @@ fi
 ./mk_.sh r gxx_lib_ menu4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ clipboard4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ dlg4 "`pkg-config gtk+-3.0 --cflags --libs`"
+./mk_.sh r gxx_lib_ dnd4 "`pkg-config gtk+-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ wnck4 "$p_lib3 -DWNCK_I_KNOW_THIS_IS_UNSTABLE `pkg-config libwnck-3.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ unique4 "$p_lib3 `pkg-config --cflags --libs gtk+-2.0 unique-1.0`"
 ./mk_.sh r gxx_lib_ gnomeu4 "`pkg-config libgnomeui-2.0 --cflags --libs`"
 ./mk_.sh r gxx_lib_ mongoose4 "-ldl -pthread -DINT64_MAX=9223372036854775807 mongoose.c"
 ./mk_.sh r gxx_lib_ slave4 "`pkg-config glib-2.0 glibmm-2.4 --libs --cflags`"
 ./mk_.sh r gxx_lib_ transform4
+
+if [ -n "$u1604" ]
+then
+	./mk_.sh d gcc_lib_ md4
+	./mk_.sh d gxx_lib_ test4
+else
+	./mk_.sh r gcc_lib_ md4
+	./mk_.sh r gxx_lib_ test4
+fi
+
+sudo apt-get install libmagick++-dev
+#sudo apt install graphicsmagick-libmagick-dev-compat
+if [ -n "$u1604" ]
+then
+	./mk_.sh r gxx_lib_ imagemagick4 "`pkg-config Magick++ --cflags --libs`"
+else
+	./mk_.sh r gxx_lib_ imagemagick4 "`Magick++-config --cxxflags --cppflags --ldflags --libs`"
+fi
 
 ./mk_.sh r gxx_l_
 
@@ -88,9 +115,10 @@ fi
 
 dir="`pwd`/.."
 
-$dir/webkitsh/gtk/mk-release.sh
-$dir/cairogsh/mk-release.sh
-$dir/vtesh/mk-release.sh
-$dir/srcvwsh/mk-release.sh
+#$dir/webkitsh/gtk/mk-release.sh
+#$dir/cairogsh/mk-release.sh
+#$dir/vtesh/mk-release.sh
+#$dir/srcvwsh/mk-release.sh
+./mk-sh2.zs 1 u1604=$u1604
 
 find "$dir" \( -name '*.o' -o -name '*.d' \) -exec rm "{}" \;

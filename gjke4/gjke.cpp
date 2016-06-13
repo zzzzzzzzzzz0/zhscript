@@ -65,14 +65,16 @@ char* l2s__(long int i,char buf[]){
 	sprintf(buf,"%ld",i);
 	return buf;
 }
-unsigned long x2lu__(char*s){
-	unsigned long l=0;
+unsigned long x2lu__(char*s, unsigned long l){
 	sscanf(s,"%lx",&l);
 	return l;
 }
-int s2i__(const char* s){
-	int i;
+int s2i__(const char* s, int i){
 	sscanf(s,"%d",&i);
+	return i;
+}
+long s2l__(const char* s, long i){
+	sscanf(s,"%ld",&i);
 	return i;
 }
 
