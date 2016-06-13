@@ -13,6 +13,7 @@
 
 jieshiqi___::jieshiqi___() {
 	exit_code_=0;
+	is_end_ = false;
 }
 
 jieshiqi___::~jieshiqi___() {
@@ -26,6 +27,7 @@ int jieshiqi___::jieshi__(qu___* shangji,string& buf){
 	catch(int ex){
 		switch(ex){
 		case keyword_end_:
+			is_end_ = true;
 		case keyword_exit_:
 			err=0;
 			break;
@@ -75,17 +77,18 @@ int jieshiqi___::jieshi2__(args___* args,qu___* shangji,string& buf){
 		qu.src_=args->src_;
 
 	syn_.yasuo__(qu.src_);
+	bool has_add_path = false;
 	if(args->src_is_file_)
-		file_.add_path__(args->src_);
+		has_add_path = file_.add_path2__(args->src_);
 	try{
 		err=jieshi__(&qu,0,qu.src_.length(),buf);
 	}catch(...){
-		/*if(args->src_is_file_)
-			file_.del_path__(args->src_);*/
+		if(has_add_path)
+			file_.del_path2__();
 		throw;
 	}
-	/*if(args->src_is_file_)
-		file_.del_path__(args->src_);*/
+	if(has_add_path)
+		file_.del_path2__();
 	return err;
 }
 
@@ -238,8 +241,11 @@ extern void android_log__(const string& s);
 
 int jieshiqi___::echo__(deque<string>* p,string& buf,int kw0){
 	string s;
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li)
+	for(deque<string>::iterator li=p->begin();li!=p->end();++li) {
+		if(li != p->begin())
+			s += ' ';
 		s+=*li;
+	}
 	if(args_.is_server_pages_)
 		buf += s;
 	else {
