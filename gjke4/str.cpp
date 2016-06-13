@@ -6,6 +6,7 @@
  */
 
 #include "gjke.h"
+#include "for_arg_.h"
 #include "string.h"
 #include "stdio.h"
 
@@ -126,4 +127,66 @@ dlle___ bool is_noname__(const char*s) {
 		}
 	}
 	return true;
+}
+
+dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
+	if(!s)
+		return;
+
+	long i1=0;
+	long i2=0;
+	char *s2=0, *s3 = 0;
+	_for_args( argc )
+		switch(i){
+		case 3:
+			s3=s;
+			break;
+		case 2:
+			s2=s;
+			break;
+		case 1:
+			i2=s2l__(s);
+			break;
+		case 0:
+			i1=s2l__(s);
+			break;
+		}
+	_next_args
+
+	string buf = s;
+
+	if(i2<=0)
+		i2+=buf.size();
+	if(i1<0)
+		i1+=buf.size();
+	if(i2<0 || i1<0)
+		return;
+
+	if(s2)
+		i1+=strlen(s2);
+	if(s3)
+		i2 -= strlen(s3);
+
+	if(i1>=(long)buf.size())
+		return;
+
+	if(i2>(long)buf.size())
+		i2=buf.size();
+
+	long len = i2 - i1;
+	if(len <= 0)
+		return;
+	buf = buf.substr(i1, len);
+
+	*addr_ret=dup__(buf.c_str());
+}
+
+dlle___ long strpos_2a2__(char* s,char* ss){
+	if(!s || !ss)
+		return -1;
+	string buf = s;
+	size_t i = buf.find(ss);
+	if(i == string::npos)
+		return -1;
+	return i;
 }
