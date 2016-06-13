@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_and_use"
+            android:id="@+id/button" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:id="@+id/button2" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editText"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_weight="1" 
+    android:scrollbars="vertical" 
+    android:background="@android:drawable/edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:enabled="true"
+    android:gravity="top"
+    android:minLines="8"
+    android:maxLines="10"
+    />
+</LinearLayout>
+
