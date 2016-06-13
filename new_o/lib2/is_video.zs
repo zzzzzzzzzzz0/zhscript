@@ -7,16 +7,19 @@
 加载“lib/magic4”。
 加载“lib/regexpr4”。
 
-新建数组“视频标示【顶】”为“1”、
-“MPEG ”、
-“RIFF \(little-endian\) data”、
-“Microsoft ASF”、
-“RealMedia file”、
-“Ogg-Vorbis compressed sound file”、“Ogg data,”、
-“Macromedia Flash Video”、
-“Matroska data”、“EBML file, creator matroska”、
-“WebM$”、
-“ISO Media,”、“^ISO Media$”。
+新建数组“视频标示【顶】”为“2”、
+“mpg”、“MPEG ”、
+“riff”、“RIFF \(little-endian\) data”、
+“asf”、“Microsoft ASF”、
+“rm”、“RealMedia file”、
+“ogg”、“Ogg-Vorbis compressed sound file”、
+“ogg”、“Ogg data,”、
+“flv”、“Macromedia Flash Video”、
+“mkv”、“Matroska data”、
+“mkv”、“EBML file, creator matroska”、
+“webm”、“WebM$”、
+“mp4”、“ISO Media,”、
+“mp4”、“^ISO Media$”。
 
 定义“是视频【顶】”以下代码
 	别名“路径”以“参数1”。
@@ -24,8 +27,7 @@
 	赋予“号”以“0”。
 	循环先
 		赋予“号”以算术“‘号’+1”。
-		别名“标示”以“视频标示之‘号’【顶】”。
-		如果不存在“标示”那么跳出。
-		如果调用‘正则配’、‘类型’、‘标示’、“l”那么“1”，退出。
+		如果‘号’大于‘视频标示数目【顶】’那么跳出。
+		如果调用‘正则配’、‘类型’、‘视频标示之‘号’之2【顶】’、“l”那么‘视频标示之‘号’之1【顶】’，退出。
 	了。
 上代码。
