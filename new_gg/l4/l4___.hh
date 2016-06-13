@@ -54,6 +54,7 @@ private:
 	void* (*l4_new_qu__)(void* shangji);
 	void (*l4_delete_qu__)(void* qu);
 	int (*l4_exit_code__)(void* l4);
+	bool (*l4_is_end__)(void* l4);
 	int get_funcs__();
 
 public:
@@ -83,11 +84,7 @@ public:
 			return;
 		l4_err_clear__(l4_);
 	}
-	void err_out__(const char*ret, int err, int by) {
-		if(!dl_)
-			return;
-		return l4_err_out__(l4_, ret, err, by);
-	}
+	void err_out__(const char*ret, int err, int by);
 	void* l4__(){return l4_;}
 	/*const char* (*l4_callback__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,...);
 	const char* (*l4_callback3__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,const char**argv,int from);
@@ -110,6 +107,7 @@ public:
 	void* new_main_qu__(){return l4_new_main_qu__(l4_);}
 	void delete_qu__(void* qu){l4_delete_qu__(qu);}
 	int exit_code__(){return l4_exit_code__(l4_);}
+	bool is_end__(){return l4_is_end__(l4_);}
 
 	err___ err_;
 };

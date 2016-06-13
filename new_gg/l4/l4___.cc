@@ -301,6 +301,14 @@ bool l4___::dlerr__(){
 	return false;
 }
 
+void l4___::err_out__(const char*ret, int err, int by) {
+	if(!dl_) {
+		cerr << ret << "(" << err << "," << by << ")" << endl;
+		return;
+	}
+	return l4_err_out__(l4_, ret, err, by);
+}
+
 #define get_func2__(n,p)	\
 	if(!(n=(p)get_func__(#n)))	\
 		return errinfo_get_;
@@ -332,5 +340,6 @@ int l4___::get_funcs__(){
 	get_func2__(l4_new_qu__,void* (*)(void* shangji));
 	get_func2__(l4_delete_qu__,void (*)(void* qu));
 	get_func2__(l4_exit_code__,int (*)(void* l4));
+	get_func2__(l4_is_end__,bool (*)(void* l4));
 	return 0;
 }
