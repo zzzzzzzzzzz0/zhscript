@@ -58,8 +58,12 @@ _dle const char* int2str__(int*c4w4,char*buf,long siz,long l,int argc,...){
     if(s1==NULL)
       return NULL;
 	len1=strlen(s1);
-    if (i3 == -1)
-      i3 = len1;
+	if (i3 == -1)
+		i3 = len1;
+	else if(i3 < 0) {
+		i3 = -i3;
+		s1 += len1 - i3;
+	}
 	if(i3<2||i3>len1){
 		ltoa_(i3,buf,10);
 		strcat(buf," < 2 || > ");
