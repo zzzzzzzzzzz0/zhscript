@@ -466,7 +466,7 @@ int call_func__(deque<string>* p,string& buf0,err___* err0,const string& null,
 				argv[argc++]=(call_data_type___)&err_ret;
 		}
 		if(
-#if defined( ver_loongson_ ) || defined( ver_64_ )
+#if defined( ver_loongson_ ) || (defined( ver_64_ ) && !defined( ver_64a_ ))
 				argc>128
 #elif ver_no_asm_16_
 				argc>16

@@ -17,10 +17,45 @@ unsigned long int call_func2__(void*func,bool ret,int argc,call_data_type___ *ar
 #include "call_func-no-asm-16.inc"
 #elif ver_no_asm_32_
 #include "call_func-no-asm-32.inc"
+#elif ver_no_asm_
+#include "call_func-no-asm.inc"
 #elif defined( ver_loongson_ )
 #include"call_func-loongson.inc"
 #elif defined( 	ver_mac_mini_ )
 #include"call_func-mac-mini.inc"
+#elif defined( ver_64a_ )
+	int add = (argc - 6);
+	if(add <= 0)
+		add = 0;
+	else {
+		if(add % 2 == 1)
+			__asm__ volatile ("sub $0x8,%rsp");
+		add = (add + 1) / 2 * 16;
+	}
+	for(int i = argc; i >= 7; i--)
+		__asm__ volatile ("pushq %0"::"m"(argv[i - 1]));
+	switch(argc) {
+	default:
+	case 6: __asm__ volatile ("mov %0,%%r9"::"m"( argv[5] ));
+	case 5: __asm__ volatile ("mov %0,%%r8"::"m"( argv[4] ));
+	case 4: __asm__ volatile ("mov %0,%%rcx"::"m"( argv[3] ));
+	case 3: __asm__ volatile ("mov %0,%%rdx"::"m"( argv[2] ));
+	case 2: __asm__ volatile ("mov %0,%%rsi"::"m"( argv[1] ));
+	case 1: __asm__ volatile ("mov %0,%%rdi"::"m"( argv[0] ));
+	case 0: break;
+	}
+	if(ret){
+		__asm__ volatile (
+				"callq *%1" "\n"
+				"mov %%rax,%0" "\n"
+				"add %2,%%rsp"
+				:"=m"( ax_qi4  ):"m"( func ),"m"( add ));
+	}else{
+		__asm__ volatile (
+				"callq *%0" "\n"
+				"add %1,%%rsp"
+				::"m"( func ),"m"( add ));
+	}
 //#elifdef ver_64_
 #elif defined( ver_64_ )
 #include"call_func-64.inc"
