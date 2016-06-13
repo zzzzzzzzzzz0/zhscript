@@ -4,7 +4,9 @@
     <string name="app_name">开源的算命机</string>
     <string name="action_settings">结束。</string>
     <string name="hello_world">（不）怎么样</string>
-    <string name="go_about">webview::go、about.html。</string>
-    <string name="go_index">webview::go、index.html。</string>
+    <string name="go_about">我的访问、about.html。</string>
+    <string name="go_index">我的访问、index.html。</string>
+    <string name="save_and_use">保存 并 使用</string>
+    <string name="cancel">放弃</string>
 
 </resources>
