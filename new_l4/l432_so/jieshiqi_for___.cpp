@@ -83,6 +83,7 @@ int jieshiqi___::end__(qu___* qu,size_t& offi,size_t to){
 		return err;
 	if(!buf.empty())
 		exit_code_=s2i__(buf);
+	is_end_ = true;
 	return 0;
 }
 

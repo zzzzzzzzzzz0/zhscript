@@ -93,6 +93,7 @@ public:
 	errinfo___ errinfo_;
 	args___ args_;
 	int exit_code_;
+	bool is_end_;
 };
 
 #endif /* JIESHIQI____H_ */
