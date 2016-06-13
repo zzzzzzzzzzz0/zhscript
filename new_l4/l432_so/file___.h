@@ -15,15 +15,17 @@ using namespace std;
 
 class file___ {
 private:
-	list<string> path_,path1_;
+	list<string> path_,path1_, path2_;
 public:
 	file___();
 	virtual ~file___();
 	void add_path__(const string& path);
-	void add_path1__(const string& path);
 	void del_path__(const string& path){
 		path_.remove(path);
 	}
+	void add_path1__(const string& path);
+	bool add_path2__(const string& path);
+	void del_path2__() {path2_.pop_front();}
 	int get__(const string& filename,string& filename1,string& ret);
 	int get__(const string& filename,string& ret){
 		string filename1;

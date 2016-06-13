@@ -11,5 +11,6 @@
 using namespace std;
 
 bool get_path__(const string& path,string&buf);
+bool mk_abs_path__(const string& path, string& path2);
 
 #endif /* PATH_H_ */

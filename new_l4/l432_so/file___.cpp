@@ -33,13 +33,29 @@ void file___::add_path__(const string& path){
 	add__(path,&path_);
 }
 
+bool file___::add_path2__(const string& path) {
+	string path2;
+	if(!get_path__(mk_abs_path__(path, path2) ? path2 : path, path2))
+		return false;
+	if(path2_.size() > 0 && path2_.front() == path2) {
+		//cout << "\t" << path2 << endl;
+		return false;
+	}
+	path2_.push_front(path2);
+	return true;
+}
+
 void file___::add_path1__(const string& path){
-	add__(path,&path1_);
+	string path2;
+	add__(mk_abs_path__(path, path2) ? path2 : path, &path1_);
 }
 
 static void name0__(const string& filename,string& ret,ifstream*& f,list<string>& ls){
+	if(filename[0] == '/')
+		return;
 	for(list<string>::iterator li=ls.begin();li!=ls.end();++li) {
 		string s=*li+filename;
+		//cout << filename << "\t" << *li << endl;
 		if(*(f=new ifstream(s.c_str()))){
 			ret=s;
 			break;
@@ -53,19 +69,29 @@ int file___::name__(const string& filename,string& ret){
 	if(filename.empty())
 		return errinfo_open_;
 	ifstream* f=NULL;
-	name0__(filename,ret,f,path1_);
-	if(f==NULL){
-		if(*(f=new ifstream(filename.c_str())))
+	for(;;) {
+		name0__(filename,ret,f,path1_);
+		if(f!=NULL)
+			break;
+
+		name0__(filename,ret,f,path2_);
+		if(f!=NULL)
+			break;
+
+		if(*(f=new ifstream(filename.c_str()))) {
 			ret=filename;
-		else{
-			if(f){
-				delete f;
-				f=NULL;
-			}
-			name0__(filename,ret,f,path_);
-			if(f==NULL)
-				return errinfo_open_;
+			break;
 		}
+		if(f){
+			delete f;
+			f=NULL;
+		}
+
+		name0__(filename,ret,f,path_);
+		if(f!=NULL)
+			break;
+
+		return errinfo_open_;
 	}
 	delete f;
 	return 0;
