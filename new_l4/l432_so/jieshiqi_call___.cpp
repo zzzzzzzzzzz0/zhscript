@@ -147,8 +147,11 @@ int jieshiqi___::call__(deque<string>* p,string& buf,qu___* qu){
 
 int jieshiqi___::exec__(deque<string>* p,string& buf){
 	string s;
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li)
+	for(deque<string>::iterator li=p->begin();li!=p->end();++li) {
+		if(li != p->begin())
+			s += ' ';
 		s+=*li;
+	}
 #ifdef WIFEXITED
 	int ret;
     if ( (ret=system( s.c_str() )) == -1 )
