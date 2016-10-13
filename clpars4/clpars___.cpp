@@ -108,7 +108,19 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 			case -3:
 				type='c';
 				break;
+			default:
+				if(argc1 < 0) {
+					sprintf(buf,"no argc %d", argc1);
+					*err=2;
+					return;
+				}
+				break;
 			}
+		}
+		if(!flag[0] && !(argc1 > 0 || type == 'a' || type == 'h')) {
+			sprintf(buf,"empty item no argc %d%c", argc1, type);
+			*err=2;
+			return;
 		}
 		clpars_item___* item=new clpars_item___(flag,info,code,argc1,type);
 		item_.push_back(item);
@@ -281,8 +293,11 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 				if(ci->pause_)
 					continue;
 				cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
-				switch(*err){
-				case jieshiqi_err_go_+keyword_continue_:
+				if(*err == jieshiqi_err_go_+keyword_continue_){
+					*err=0;
+					continue;
+				}
+				if(*err == jieshiqi_err_go_+keyword_break_){
 					*err=0;
 					break;
 				}

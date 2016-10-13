@@ -26,11 +26,11 @@ dlle___ void one__(int*err,char*buf,void*ce,void* shangji,bool no,int argc,...){
 
 static clpars___ clpars_;
 
-dlle___ clpars___* set__(int*err,char*buf,bool need_new,bool add,int argc,...){
-	clpars___* clp;
-	if(need_new)
-		clp=new clpars___();
-	else
+dlle___ clpars___* set__(int*err,char*buf,bool need_new,bool add,clpars___* clp,int argc,...){
+	if(need_new) {
+		if(!clp)
+			clp=new clpars___();
+	} else
 		clp=&clpars_;
 	va_list argv;
 	va_start(argv, argc);
