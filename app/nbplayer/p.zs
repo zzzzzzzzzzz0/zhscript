@@ -21,14 +21,9 @@
 	上代码。
 调用‘命令行解析’、‘参数栈’。
 
-加载getmplayer.zs。
-
-加载lib/regexpr4。
-加载lib/redireconsoi4。
-赋予mplayer【主】以mplayer。
-赋予信息以调用‘重定向输出’、“‘mplayer’ -identify "‘视频’" -nosound -vc dummy -vo null”。
-赋予‘视频’宽度【主】以调用‘正则格’、‘信息’、ID_VIDEO_WIDTH=([0-9]+)。
-赋予‘视频’高度【主】以调用‘正则格’、‘信息’、ID_VIDEO_HEIGHT=([0-9]+)。
+加载mplayerutil.zs。
+如果不安装mplayer那么结束10。
+用mplayer取信息‘视频’。
 如果不‘‘视频’宽度’那么
 	赋予‘视频’宽度【主】以80。
 如果不‘‘视频’高度’那么
@@ -173,7 +168,7 @@
 			上代码。
 	上代码、
 	显现为下代码
-		调用‘启动被动者’、‘mplayer’、“-wid ”先使主窗、xid了“ -slave -quiet "‘视频’" -subcp UTF-8”。
+		调用‘启动被动者’、mplayer、“-wid ”先使主窗、xid了“ -slave -quiet "‘视频’" -subcp UTF-8”。
 		如果存在音量【主】那么
 			给我“volume ‘音量’ 1”。
 	上代码、
