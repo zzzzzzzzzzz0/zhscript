@@ -7,6 +7,7 @@
 #include "shell___.h"
 #include "extern.h"
 #include "extern2.h"
+#include "util3.h"
 
 extern s1___* window_destroy_s1_;
 
@@ -29,7 +30,7 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		if(p->size() >= 3) {
 			const string& p2 = (*p)[2];
 			if(p2 == "盒") {
-				gtk_widget_grab_focus(w->c__()->box__(page_num, NULL));
+				gtk_widget_grab_focus(w->c__()->box__(page_num));
 				return true;
 			}
 			err_wufa__(p1, p2.c_str());
@@ -80,7 +81,7 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 					sprintf(x1, "%d", x2);
 					sprintf(y1, "%d", y2);
 					const char* argv[] = {arg0.c_str(), x1, y1};
-					call4__(eo_code.c_str(), NULL, 3, argv, 0);
+					call4__(eo_code.c_str(), NULL, 3, argv);
 				}
 			}
 		} else {
@@ -108,7 +109,36 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		if(err_buzu2__(p, 3))
 			return true;
 		w = get_window__(p0,page_num,p1);if(!w)return true;
-		w->c__()->for__((*p)[2].c_str(), ce, shangji);
+		const string& p2 = (*p)[2];
+		if(p->size() >= 4) {
+			if(p2 == "盒") {
+				foreach__(w->c__()->box__(page_num), (*p)[3].c_str(), ce, shangji);
+				return true;
+			}
+			wufa__(3, p);
+			return true;
+		}
+		w->c__()->for__(p2.c_str(), ce, shangji);
+		return true;
+	}
+	if(p1=="工具提示"){
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		if(buzu__(2, p))
+			return true;
+		GtkWidget* box = w->c__()->box__(page_num);
+		if(box) {
+			GtkWidget* w2 = get__(box, s2i__((*p)[2]));
+			if(w2) {
+				if(p->size()<4){
+					cpy__(buf, gtk_widget_get_tooltip_markup(GTK_WIDGET(w2)), siz);
+				}else
+					gtk_widget_set_tooltip_markup(GTK_WIDGET(w2), (*p)[3].c_str());
+				return true;
+			}
+			wufa__(2, p);
+			return true;
+		}
+		wufa__(1, p);
 		return true;
 	}
 	if(p1=="敏感"){
@@ -221,6 +251,7 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 			if(pi == "无边框") {k = 19; break;}
 			if(pi == "无修饰") {k = 20; break;}
 			if(pi == "不可关闭") {k = 21; break;}
+			if(pi == "框地址") {k = 22; break;}
 			if(i == 1) return false; else {err_buzhichi__(pi); return true;}
 		}
 		if(i == 1) {w=get_window__(p0,page_num,pi);if(!w)return true;}
@@ -255,6 +286,7 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 			gtk_widget_hide (b);
 			break;
 		}
+		case 22: l2x__((long)w->c__()->nth_page2__(page_num), buf); break;
 		}
 		i++;
 	}
