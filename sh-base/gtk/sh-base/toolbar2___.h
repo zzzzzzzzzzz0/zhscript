@@ -21,15 +21,23 @@ public:
 	int btn_width_, btn_height_;
 	string def_code_, def_arg_;
 	string def_code2_, def_arg2_;
-	const char* tag_;
+	char tag_;
+	bool title_tooltip_;
 
-	virtual void store_add__(callback_item___* si, GdkPixbuf *pixbuf) = 0;
+	virtual void store_add__(callback_item___* si, GdkPixbuf *pixbuf, int posi) = 0;
+	virtual void store_del__(GtkTreeIter* i) = 0;
+	virtual GtkTreeModel *model__() = 0;
+	virtual void for__(const string& code, void* ce, void* shangji);
+
+	GtkIconView *icon_view__() {return GTK_ICON_VIEW(widget_);}
+	GtkTreeView *tree_view__() {return GTK_TREE_VIEW(widget_);}
 
 	toolbar2_item___(bool in_book) {
 		is_init_ = false;
 		in_book_ = in_book;
 		btn_width_ = btn_height_ = -1;
-		tag_ = "";
+		tag_ = 0;
+		title_tooltip_ = false;
 	}
 	GtkContainer* container__() {return GTK_CONTAINER(scrolled_);}
 	GtkScrolledWindow* scrolled__() {return GTK_SCROLLED_WINDOW (scrolled_);}
@@ -39,10 +47,11 @@ class icon_item___ : public toolbar2_item___ {
 public:
 	GtkListStore *store_;
 	icon_item___(bool in_book) : toolbar2_item___(in_book) {
-		tag_ = "i";
+		tag_ = 'i';
 	}
-	GtkIconView *view__() {return GTK_ICON_VIEW (widget_);}
-	void store_add__(callback_item___* si, GdkPixbuf *pixbuf);
+	GtkTreeModel *model__() {return GTK_TREE_MODEL (store_);}
+	void store_add__(callback_item___* si, GdkPixbuf *pixbuf, int posi);
+	void store_del__(GtkTreeIter* i) {gtk_list_store_remove(store_, i);}
 };
 
 class tree_item___ : public toolbar2_item___ {
@@ -51,11 +60,11 @@ public:
 	GtkTreeViewColumn *col_;
 	string up_, last_;
 	tree_item___(bool in_book) : toolbar2_item___(in_book) {
-		tag_ = "t";
+		tag_ = 't';
 	}
-	GtkTreeView *view__() {return GTK_TREE_VIEW(widget_);}
-	GtkTreeModel *model__() {return gtk_tree_view_get_model(view__());}
-	void store_add__(callback_item___* si, GdkPixbuf *pixbuf);
+	GtkTreeModel *model__() {return gtk_tree_view_get_model(tree_view__());}
+	void store_add__(callback_item___* si, GdkPixbuf *pixbuf, int posi);
+	void store_del__(GtkTreeIter* i) {}
 };
 
 class toolbar2___ {
