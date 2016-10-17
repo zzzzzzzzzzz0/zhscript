@@ -127,15 +127,7 @@ GtkWidget* notebook___::page_new__(const char* name) {
 			box = gtk_hbox_new(false,0);
 		//g_object_ref_sink(box);
 		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_box_,(gpointer)box);
-		GtkWidget *label2;
-		label2 = gtk_label_new ("");
-		//g_object_ref_sink(label2);
-		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label2_,(gpointer)label2);
-		gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
-		label2 = gtk_label_new ("");
-		//g_object_ref_sink(label2);
-		gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label_,(gpointer)label2);
-		gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
+		label_new__(box, scrolled2);
 		label=box;
 		break;
 	}
@@ -148,7 +140,7 @@ GtkWidget* notebook___::page_new__(const char* name) {
 	gtk_notebook_set_tab_reorderable (notebook__(), scrolled2, true);
 	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_window_,window_);
 	gtk_widget_show_all (scrolled2);
-	gtk_widget_show_all (label);
+	gtk_widget_show/*_all*/ (label);
 	switch(label_style_){
 	case label_style_can_close_:
 		button_new__(i,NULL,GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU, NULL, 0);
@@ -162,6 +154,19 @@ GtkWidget* notebook___::page_new__(const char* name) {
 void notebook___::set_page__(int page_num){
 	if((page_num=page_check__(page_num))>=0)
 		gtk_notebook_set_page (notebook__(),page_num);
+}
+
+GtkLabel* notebook___::menu_label__(int page_num) {
+	GtkWidget* w = nth_page__(page_num);
+	GtkWidget* l = gtk_notebook_get_menu_label (notebook__(), w);
+	if(!l) {
+		l = gtk_label_new ("");
+#ifdef ver_gtk3_
+		gtk_widget_set_halign (l, GTK_ALIGN_START);
+#endif
+		gtk_notebook_set_menu_label (notebook__(), w, l);
+	}
+	return GTK_LABEL(l);
 }
 
 #include "../window___.h"

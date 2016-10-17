@@ -64,6 +64,7 @@ public:
 		return gtk_notebook_page_num(notebook__(), sw);
 	}
 
+	GtkLabel* menu_label__(int page_num);
 	void close__(int page_num);
 	void close__(void* v) {
 		close__(page_num__(view___::scrolled_from__(v)));

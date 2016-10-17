@@ -46,13 +46,14 @@ public:
 	virtual GtkWidget* page_new__(const char* name) {
 		return NULL;
 	}
+	void label_new__(GtkWidget *box, GtkWidget* scrolled2);
 	GtkWidget* button_new__(int page_num,
 			const char*name, const char*iconame,GtkIconSize size,
 			const char* code, char clicked);
 	GtkWidget* button_new__(GtkWidget* box, GtkWidget* scrolled2,
 			const char*name,const char*iconame,GtkIconSize size,
 			const char* code,char clicked);
-	GtkWidget* box__(int page_num, GtkWidget** scrolled2);
+	GtkWidget* box__(int page_num, GtkWidget** scrolled2 = NULL);
 
 	virtual int n_pages__() {
 		return views_.size();
@@ -71,6 +72,7 @@ public:
 
 	GtkLabel* label__(int page_num);
 	GtkLabel* label2__(int page_num);
+	virtual GtkLabel* menu_label__(int page_num) {return NULL;}
 	GtkWidget* close_button__(int page_num);
 	virtual void close__(int page_num) {}
 	virtual void close__(void* v) {}

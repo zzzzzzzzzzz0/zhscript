@@ -70,6 +70,18 @@ GtkWidget* container___::page_new1__(const char* name) {
 	return scrolled2;
 }
 
+void container___::label_new__(GtkWidget *box, GtkWidget* scrolled2) {
+	GtkWidget *label2;
+	label2 = gtk_label_new ("");
+	//g_object_ref_sink(label2);
+	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label2_,(gpointer)label2);
+	gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
+	label2 = gtk_label_new ("");
+	//g_object_ref_sink(label2);
+	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label_,(gpointer)label2);
+	gtk_box_pack_start(GTK_BOX(box),label2,false,false,0);
+}
+
 GtkWidget* container___::box__(int page_num, GtkWidget** scrolled) {
 	GtkWidget* scrolled2 = nth_page2__(page_num);
 	if(scrolled)
@@ -169,7 +181,7 @@ void container___::for__(const char* code, void*ce, void* shangji) {
 		name2__(name2, nth_page__(i));
 		a[0] = name2.c_str();
 		a[1] = i == current_page__() ? "1" : "";
-		call4__(&err, ce, code, NULL, shangji, 2, a, 0);
+		call4__(&err, ce, code, NULL, shangji, 2, a);
 		switch(err) {
 		case 0:
 			break;
