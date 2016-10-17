@@ -39,6 +39,7 @@ public:
 	map<int, string> codes_;
 	GdkCursor *cursor_;
 	static bool add_event_box_;
+	bool is_destroy_;
 
 	window___(const char* name, bool is_main = false);
 	const string& name__(){return name_;}

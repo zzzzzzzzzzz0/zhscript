@@ -27,6 +27,15 @@ static void s1s_push__(s1___* s1) {
 }
 
 s1___::s1___(const char* src2, const char* signal, char type) {
+	init__(src2, signal, type);
+}
+
+s1___::s1___(const char* src2, const char* signal, char type, GCallback cb) {
+	init__(src2, signal, type);
+	cb_ = cb;
+}
+
+void s1___::init__(const char* src2, const char* signal, char type) {
 	if(src2)
 		src2_ = src2;
 	else
@@ -36,9 +45,4 @@ s1___::s1___(const char* src2, const char* signal, char type) {
 	cb_ = NULL;
 	i_ = s1s_length__();
 	s1s_push__(this);
-}
-
-s1___::s1___(const char* src2, const char* signal, char type, GCallback cb) {
-	s1___(src2, signal, type);
-	cb_ = cb;
 }

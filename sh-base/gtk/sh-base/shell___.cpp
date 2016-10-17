@@ -15,21 +15,13 @@
 #include<gdk/gdkx.h>
 #include "s1___.h"
 #include "windows___.h"
+#include "extern.h"
 #include "extern2.h"
 #include "toolbar2___.h"
 
 #include "container/simple___.h"
 #include "container/notebook___.h"
 #include "container/table___.h"
-
-void get_xid__(GtkWidget* w, char* buf) {
-	GdkWindow* w2=gtk_widget_get_window(w);
-	//GDK_DRAWABLE(w2)
-	sprintf(buf,"%lu",GDK_WINDOW_XID(w2));
-	/*sprintf(buf,"%lu",
-			gdk_x11_drawable_get_xid(
-					gtk_widget_get_window(GTK_WIDGET(w->widget__()))));*/
-}
 
 bool bool__(deque<string>* p, size_t i) {
 	return p->size() > i ? !bool__((*p)[i]) : false;
@@ -58,6 +50,15 @@ static bool file__(const char* path,string& cmdline){
 	return i>0;
 }
 
+void get_xid__(GtkWidget* w, char* buf) {
+	GdkWindow* w2=gtk_widget_get_window(w);
+	//GDK_DRAWABLE(w2)
+	sprintf(buf,"%lu",GDK_WINDOW_XID(w2));
+	/*sprintf(buf,"%lu",
+			gdk_x11_drawable_get_xid(
+					gtk_widget_get_window(GTK_WIDGET(w->widget__()))));*/
+}
+
 static l4___ l4_;
 static void* l4_main_qu_;
 string null_;
@@ -73,40 +74,16 @@ void err__(int err, const char* ret){
 		l4_.err_clear__();
 	}
 }
-
-void err__(const char* s,const char* s2=NULL,const char* s3=NULL){
-	cerr<<endl;
-	if(s)
-		cerr<<s;
-	if(s2)
-		cerr<<s2;
-	if(s3)
-		cerr<<s3;
-	cerr<<endl;
-}
-void err_buzu__(const char* s=NULL){
-	err__(s,"参数不足");
-}
-bool err_buzu2__(const deque<string>* p, size_t need, size_t i = 1){
-	if(p->size()<need){
-		string s;
-		for(; i < p->size(); i++)
-			s += (*p)[i];
-		err_buzu__(s.c_str());
-		return true;
-	}
-	return false;
-}
-void err_wufa__(const string& s3,const char* s=NULL){
-	err__(s,"无法",s3.c_str());
-}
-void err_buzhichi__(const string& s3,const char* s=NULL){
-	err__(s,"不支持",s3.c_str());
-}
-
 const char* call4__(int* err, void*ce, const char* code, const char* src2,void* shangji,
 		int argc, const char**argv2, int from) {
-	const char* ret=l4_.l4_callback3_2__(l4_.l4__(), err, ce, code, false, src2, shangji,
+	if(!shangji)
+		shangji = l4_main_qu_;
+	if(!code || !code[0]) {
+		code=code_.c_str();
+		if(!code[0])
+			return "";
+	}
+	const char* ret=l4_.callback3__(err, ce, code, false, src2, shangji,
 			argc, argv2, from);
 	switch(*err){
 	case 0:
@@ -124,59 +101,6 @@ const char* call4__(int* err, void*ce, const char* code, const char* src2,void* 
 	}
 	return ret;
 }
-const char* call4__(int* err,const char* code,const char* src2,int argc,const char**argv2,int from){
-	return call4__(err, NULL, code, src2, l4_main_qu_, argc, argv2, from);
-}
-const char* call4__(const char* code,const char* src2,int argc,const char**argv2,int from){
-	int err;
-	return call4__(&err, code, src2, argc, argv2, from);
-}
-const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
-	const char*argv2[16];
-	_for_args( argc )
-		argv2[i]=s;
-	_next_args
-	const char* code=NULL;
-	if(w && s1) {
-		map<int, string>::iterator it = w->codes_.find(s1->i__());
-		if(it != w->codes_.end())
-			code=(*it).second.c_str();
-	}
-	if(!code || !code[0]){
-		for(;;){
-			if(w) {
-				code = w->code_.c_str();
-				if(code[0])
-					break;
-			}
-			code=code_.c_str();
-			if(code[0])
-				break;
-			return "";
-		}
-	}
-	string name2;
-	if(w) {
-		w->name2__(name2, sw);
-		argv2[argc++]=name2.c_str();
-	}
-	const char* src2 = NULL;
-	if(s1)
-		src2 = s1->src2__();
-	return call4__(code,src2,argc,argv2,0);
-}
-
-const string& s__(const deque<string>* p, size_t i) {
-	if(i >= p->size()) {
-		if(p->size() > 0)
-			err_buzu__((*p)[0].c_str());
-		throw 's';
-	}
-	return (*p)[i];
-}
-const string& s__(const deque<string>& p, size_t i) {
-	return s__(&p, i);
-}
 
 s1___* new_window_s1_ = new s1___("创建", "", 'w');
 static s1___* show_window_s1_ = new s1___("显现", "", 'w');
@@ -190,9 +114,12 @@ static void show_window__(window___* w){
 
 static void destroy__(GtkWidget *widget,gpointer gdata) {
 	window___* w=window___::from__(widget);
-	const char* ret=call4__(NULL,w,window_destroy_s1_,0);
-	if(ret[0]=='x'&&!ret[1])
+	if(w->is_destroy_)
 		return;
+	w->is_destroy_ = true;
+	/*const char* ret=*/call4__(NULL,w,window_destroy_s1_,0);
+	/*if(ret[0]=='x'&&!ret[1])
+		return;*/
 	if(w->is_main__()){
 		gtk_main_quit();
 	}
@@ -463,6 +390,9 @@ static bool get_lnk_ok__(const char* path) {
 int shell___::with__(int argc, char *argv[], char* env[]) {
 	if(!g_thread_supported())
 		g_thread_init (NULL);
+#ifdef ver_thread_
+	gdk_threads_init();
+#endif
 	{
 		GLogLevelFlags llf=(GLogLevelFlags)(G_LOG_LEVEL_MASK);
 		g_log_set_handler (NULL, llf, g_log__, NULL);
@@ -525,7 +455,7 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 	if(err)
 		return 255;
 
-	if(l4_.exit_code__() == 0) {
+	if(!l4_.is_end__()) {
 		{
 			window___* w = windows_.main__();
 			if(!main_window_c_)

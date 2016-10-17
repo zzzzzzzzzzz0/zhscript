@@ -15,6 +15,8 @@ static s1___* clicked_s1_ = new s1___("点击", "", 'w');
 void clicked_close__(GtkButton *button, gpointer user_data) {
 	GtkWidget *sw = (GtkWidget *)user_data;
 	window___* w=(window___*)gtk_object_get_data(GTK_OBJECT(sw),object_data_window_);
+	if(!w)
+		return;
 	call4__(sw,w,clicked_s1_,1,"x");
 	w->c__()->close__(w->c__()->page_num__(sw));
 }
@@ -28,7 +30,7 @@ void button_code__(GtkWidget* w, const char* c) {
 void clicked__(GtkButton *button, gpointer user_data) {
 	button_code___::iterator it = button_code_.find(button);
 	if(it != button_code_.end()) {
-		call4__((*it).second.c_str(),gtk_widget_get_name(GTK_WIDGET(button)),0,NULL,0);
+		call4__((*it).second.c_str(),gtk_widget_get_name(GTK_WIDGET(button)),0,NULL);
 		return;
 	}
 
@@ -109,4 +111,5 @@ window___::window___(const char* name, bool is_main){
 	name_ = name;
 	window_ = NULL;
 	cursor_ = NULL;
+	is_destroy_ = false;
 }

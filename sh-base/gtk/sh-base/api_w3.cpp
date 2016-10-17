@@ -64,8 +64,9 @@ bool shell___::api_w3__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,
 		if(err_buzu2__(p, 3))
 			return true;
 		w=get_window__(p0,page_num,p1);if(!w)return true;
+		const string& cn = (*p)[2];
 		const string& cc = (*p)[p->size() > 3 ? 3 : 2];
-		gtk_window_set_wmclass(w->window__(), (*p)[2].c_str(), cc.c_str());
+		gtk_window_set_wmclass(w->window__(), cn == null_ ? NULL : cn.c_str(), cc == null_ ? NULL : cc.c_str());
 		return true;
 	}
 	return false;

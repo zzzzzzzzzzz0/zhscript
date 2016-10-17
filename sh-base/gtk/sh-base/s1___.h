@@ -15,6 +15,7 @@ private:
 	const char* signal_;
 	char type_;
 	int i_;
+	void init__(const char* src2, const char* signal, char type);
 public:
 	GCallback cb_;
 

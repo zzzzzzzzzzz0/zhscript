@@ -7,6 +7,8 @@
 
 #ifndef EXTERN2_H_
 #define EXTERN2_H_
+#include <string>
+using namespace std;
 
 extern char* l2s__(long num,char* buf);
 extern char* l2x__(long num,char* buf);

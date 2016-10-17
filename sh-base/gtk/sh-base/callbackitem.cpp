@@ -10,25 +10,17 @@
 #include "extern.h"
 #include "extern2.h"
 
-static deque<callback_item___*> callback_item_;
-
-callback_item___* callback_item__(int id) {
-	if(id < 1 || (size_t)id > callback_item_.size())
-		return 0;
-	return callback_item_[id - 1];
-}
-
-callback_item___::~callback_item___() {
-}
-
-void callback_item___::init__() {
-	callback_item_.push_back(this);
-	id_ = callback_item_.size();
-}
-
-void callback_item___::call__(int i, const char* arg2) {
+void callback_item___::call__(int i, const char* arg2, const char* code3, void* shangji, void* ce) {
 	const char *code, *arg;
 	switch(i) {
+	case 3:
+		code = code3;
+		arg = arg2_.c_str();
+		break;
+	case 2:
+		code = code3;
+		arg = arg_.c_str();
+		break;
 	case 1:
 		code = code2_.c_str();
 		arg = arg2_.c_str();
@@ -56,11 +48,34 @@ void callback_item___::call__(int i, const char* arg2) {
 	}
 	argv[i2] = id2;
 	argv[argc] = 0;
-	call4__(code, title_.c_str(), argc,argv,0);
+	int err;
+	call4__(&err, ce, code, title_.c_str(), shangji, argc, argv);
 }
 
-void call_item__(int id, int i) {
+void call_item__(int id, int i, const char* code3, void* shangji, void* ce) {
 	callback_item___* item = callback_item__(id);
 	if(item)
-		item->call__(i);
+		item->call__(i, NULL, code3, shangji, ce);
+}
+
+callback_item___::~callback_item___() {
+}
+
+static deque<callback_item___*> callback_item_;
+
+callback_item___* callback_item__(int id) {
+	if(id < 1 || (size_t)id > callback_item_.size())
+		return 0;
+	return callback_item_[id - 1];
+}
+
+void callback_item___::init__(bool has_id) {
+	data_ = data2_ = NULL;
+	i_ = 0;
+
+	if(has_id) {
+		callback_item_.push_back(this);
+		id_ = callback_item_.size();
+	} else
+		id_ = 0;
 }

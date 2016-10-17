@@ -22,18 +22,18 @@ static gboolean event_mouse__(GtkWidget *widget, GdkEventButton *event, gpointer
 	sprintf(s2, "%.2f", event->x);
 	sprintf(s3, "%.2f", event->y);
 	const char* a[] = {s1, s2, s3};
-	call4__(e->code_.c_str(), e->name_.c_str(), 3, a, 0);
+	call4__(e->code_.c_str(), e->name_.c_str(), 3, a);
 	return e->b_;
 }
 static gboolean event_key__(GtkWidget *widget, GdkEventKey *event, gpointer data) {
 	event___* e = (event___*)data;
 	const char* a[] = {gdk_keyval_name(event->keyval)};
-	call4__(e->code_.c_str(), e->name_.c_str(), 1, a, 0);
+	call4__(e->code_.c_str(), e->name_.c_str(), 1, a);
 	return e->b_;
 }
 static gboolean event_other__(GtkWidget *widget, GdkEvent *event, gpointer data) {
 	event___* e = (event___*)data;
-	call4__(e->code_.c_str(), e->name_.c_str(), 0, NULL, 0);
+	call4__(e->code_.c_str(), e->name_.c_str(), 0, NULL);
 	return e->b_;
 }
 
