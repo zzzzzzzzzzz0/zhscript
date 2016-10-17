@@ -75,9 +75,7 @@ GtkWidget* table___::page_new__(const char* name) {
     gtk_box_pack_end(GTK_BOX(box2), scrolled2, true, true, 0);
 	GtkWidget *box3 = gtk_hbox_new(false, 0);
 
-	GtkWidget *label2 = gtk_label_new ("");
-	gtk_box_pack_start(GTK_BOX(box3),label2,false,false,0);
-	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_label_,(gpointer)label2);
+	label_new__(box3, scrolled2);
 
 	GtkWidget *box4 = gtk_hbox_new(false, 0);
     gtk_box_pack_end(GTK_BOX(box3), box4, true, true, 0);
@@ -100,8 +98,10 @@ GtkWidget* table___::page_new__(const char* name) {
 
 int table___::current_page__() {
 	GtkWindow* w = ((window___*)window_)->window__();
+	GtkWidget *w2 = gtk_window_get_focus(w);
 	for(int i = 0; i < n_pages__(); i++) {
-		if(gtk_window_get_focus(w) == views_[i]->widget__()) {
+		GtkWidget *w3 = views_[i]->widget__();
+		if(w2 == w3) {
 			current_page_ = i;
 			break;
 		}
