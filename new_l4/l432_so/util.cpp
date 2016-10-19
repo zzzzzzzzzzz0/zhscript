@@ -25,15 +25,13 @@ string lu2s__(unsigned long l){
 	return s;
 }
 
-int s2i__(const string& s){
-	int i;
+int s2i__(const string& s, int i){
 	istringstream ss(s);
 	ss>>i;
 	return i;
 }
 
-long s2l__(const string& s){
-	long i;
+long s2l__(const string& s, long i){
 	istringstream ss(s);
 	ss>>i;
 	return i;
@@ -72,28 +70,69 @@ long x2l__(const string& s){
 	return i;
 }
 
-int kw_num__(const string& kw,int min,int max,const string& buf2,const string* kw_len){
-	if(buf2.compare(0,kw.length(),kw)==0){
-		string s=buf2.substr(kw.length());
-		if(s.length()==0)
-			return kwnum_no_;
-		if(kw_len&&s==*kw_len)
-			return -1;
+bool is_num__(const string& s) {
+	for(size_t i=0;i<s.length();i++){
+		char c=s[i];
+		if(!((c>='0'&&c<='9')||(c=='-'&&i==0&&s.length()>1))){
+			return false;
+		}
+	}
+	return true;
+}
 
-		bool b=true;
-		for(size_t i=0;i<s.length();i++){
-			char c=s[i];
-			if(!((c>='0'&&c<='9')||(c=='-'&&i==0&&s.length()>1))){
-				b=false;
-				break;
-			}
+int kw_num__(const string& kw,int min,int max,const string& buf,const string* kw_len, int* num, int* num2){
+	if(buf.compare(0,kw.length(),kw)==0){
+		if(num2) {
+			*num2 = max;
 		}
-		if(b){
-			int i=s2i__(s);
-			if((min==kwnum_no_||i>=min)&&(max==kwnum_no_||i<=max)){
-				return i;
-			}
+
+		string s=buf.substr(kw.length());
+		if(s.length()==0) {
+			*num = kwnum_no_;
+			return kwnum_no_;
 		}
+		if(kw_len&&s==*kw_len)
+			return kwnum_is_len_;
+
+		string s2;
+		size_t i2 = s.find('/');
+		if(i2 != string::npos) {
+			s2 = s.substr(i2 + 1);
+			s = s.substr(0, i2);
+		}
+
+		if(!is_num__(s))
+			return kwnum_false_;
+		int i=s2i__(s, kwnum_err_);
+		if(i == kwnum_err_)
+			return kwnum_false_;
+		if(i < 0)
+			i += max + 1;
+		*num = i;
+
+		if(!s2.empty() && num2) {
+			if(!is_num__(s2))
+				return kwnum_false_;
+			i=s2i__(s2, kwnum_err_);
+			if(i == kwnum_err_)
+				return kwnum_false_;
+			if(i < 0)
+				i += max + 1;
+			*num2 = i;
+		}
+
+		int ret = kwnum_false_;
+		if((min==kwnum_no_||*num>=min)&&(max==kwnum_no_||*num<=max))
+			ret = kwnum_has_;
+		else
+			return kwnum_out_;
+		if(num2) {
+			if((min==kwnum_no_||*num2>=min)&&(max==kwnum_no_||*num2<=max))
+				ret = kwnum_has2_;
+			else
+				return kwnum_out_;
+		}
+		return ret;
 	}
 	return kwnum_false_;
 }

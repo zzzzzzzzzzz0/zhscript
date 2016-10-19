@@ -13,18 +13,22 @@ using namespace std;
 
 string l2s__(long l);
 string lu2s__(unsigned long l);
-int s2i__(const string& s);
-long s2l__(const string& s);
+int s2i__(const string& s, int i = 0);
+long s2l__(const string& s, long i = 0);
 unsigned long s2lu__(const string& s);
 double s2d__(const string& s);
 string l2x__(long l);
 long x2l__(const string& s);
 string&   replace_all(string&   str,const   string&   old_value,const   string&   new_value);
 
-//-1一般表示数量，留8个
+#define kwnum_is_len_	-1
+#define kwnum_has_		-2
+#define kwnum_has2_		-3
 #define kwnum_no_		-10
 #define kwnum_false_	-11
-int kw_num__(const string& kw,int min,int max,const string& buf2,const string* kw_len);
+#define kwnum_out_		-12
+#define kwnum_err_		-10000
+int kw_num__(const string& kw,int min,int max,const string& buf2,const string* kw_len, int* num, int* num2);
 
 #ifdef debug_liucheng_
 #define out_clr_1_ '2'
