@@ -320,6 +320,11 @@ int jieshiqi___::rems__(list<string>* rems,qu___** top,qu___** main1,qu___** sha
 		if(ret2)
 		ret2->is_chuantou_=true;
 	}
+	if(syn_.rem_kw__(rems,keyword_mutex_)>0){
+		if(ret2) {
+			ret2->use_mutex_=true;
+		}
+	}
 	if(syn_.rem_kw__(rems,keyword_code_)>0){
 		if(is_code)
 		*is_code=true;
@@ -345,7 +350,37 @@ int jieshiqi___::rems__(string& buf2,list<string>* rems,qu___** top,qu___** main
 	return rems__(rems,top,main1,shangji,is_code,is_yuanyang,ret2);
 }
 
-int jieshiqi___::var__(qu___* qu,size_t& offi,size_t to,string& buf,int kw,bool* push_p,deque<string>* p){
+void jieshiqi___::p2s__(deque<s___>* p, string& buf, bool by_all) {
+	for(deque<s___>::iterator li=p->begin();li!=p->end();++li) {
+		s___ s=*li;
+		if(by_all || s.u__() == keyword_params_) {
+			if(li!=p->begin())
+				buf+=' ';
+			bool yin=false;
+			if(s.length()==0)
+				yin=true;
+			else{
+				for(size_t i=0;i<s.length();i++){
+					char c=s[i];
+					if(!((c>='0'&&c<='9')||(c>='a'&&c<='z')||(c>='A'&&c<='Z')||c=='.'||c=='-')){
+						yin=true;
+						break;
+					}
+				}
+			}
+			if(yin)
+				buf+='"';
+			string buf2 = s;
+			buf+=replace_all(buf2,"\"","\\\"");
+			if(yin)
+				buf+='"';
+		} else {
+			buf += s;
+		}
+	}
+}
+
+int jieshiqi___::var__(qu___* qu,size_t& offi,size_t to,string& buf,int kw,bool* push_p,deque<s___>* p){
 	size_t from2,to2,offi2;
 	int kw2;
 	string buf2;
@@ -401,7 +436,7 @@ int jieshiqi___::var__(qu___* qu,size_t& offi,size_t to,string& buf,int kw,bool*
 	return var__(buf2,buf,qu,kw,push_p,p);
 }
 
-int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deque<string>* p){
+int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deque<s___>* p){
 	if(buf2==syn_[keyword_win_]){
 		switch(kw){
 		case keyword_has_:
@@ -425,11 +460,9 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 		return 0;
 	}
 
-	int num;
-	switch(num=kw_num__(syn_[keyword_],-1,keywords_length_,buf2,&syn_[keyword_length_])){
-	case kwnum_false_:
-	case 0:
-		break;
+	int num, num2;
+	switch(kw_num__(syn_[keyword_],1,keywords_length_,buf2,&syn_[keyword_length_], &num, NULL)){
+	//case kwnum_false_:
 	case kwnum_no_:
 		switch(kw){
 		case keyword_has_:
@@ -440,7 +473,7 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 			break;
 		}
 		return 0;
-	case -1:
+	case kwnum_is_len_:
 		switch(kw){
 		case keyword_has_:
 			buf+=has_true_;
@@ -450,7 +483,7 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 			break;
 		}
 		return 0;
-	default:
+	case kwnum_has_:
 		switch(kw){
 		case keyword_has_:
 			buf+=has_true_;
@@ -476,8 +509,8 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 		return err;
 	}
 
-	switch(num=kw_num__(syn_[keyword_callback_],kwnum_no_,callback_max_,buf2,NULL)){
-	case kwnum_false_:
+	switch(kw_num__(syn_[keyword_callback_],0,callback_max_,buf2,NULL, &num, NULL)){
+	case kwnum_false_: case kwnum_out_:
 		break;
 	default:
 		switch(kw){
@@ -492,41 +525,18 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 	}
 
 	if(qu2->args_){
-		switch(num=kw_num__(syn_[keyword_param_],-1,qu2->args_->params_.size(),buf2,&syn_[keyword_length_])){
-		case kwnum_false_:
-			break;
+		switch(kw_num__(syn_[keyword_param_],0,qu2->args_->params_.size(),buf2,&syn_[keyword_length_], &num, NULL)){
 		case kwnum_no_:
 			switch(kw){
 			case keyword_has_:
 				buf+=has_true_;
 				break;
 			default:
-				for(deque<string>::iterator li=qu2->args_->params_.begin();li!=qu2->args_->params_.end();++li) {
-					if(li!=qu2->args_->params_.begin())
-						buf+=' ';
-					string s=*li;
-					bool yin=false;
-					if(s.length()==0)
-						yin=true;
-					else{
-						for(size_t i=0;i<s.length();i++){
-							char c=s[i];
-							if(!((c>='0'&&c<='9')||(c>='a'&&c<='z')||(c>='A'&&c<='Z')||c=='.'||c=='-')){
-								yin=true;
-								break;
-							}
-						}
-					}
-					if(yin)
-						buf+='"';
-					buf+=replace_all(s,"\"","\\\"");
-					if(yin)
-						buf+='"';
-				}
+				p2s__(&qu2->args_->params_, buf, true);
 				break;
 			}
 			return 0;
-		case -1:
+		case kwnum_is_len_:
 			switch(kw){
 			case keyword_has_:
 				buf+=has_true_;
@@ -536,39 +546,41 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 				break;
 			}
 			return 0;
-		case 0:
-			//同时也因为对于非文件得用解释而非加载
-			switch(kw){
-			case keyword_has_:
-				buf+=has_true_;
-				return 0;
-			default:
-				if(qu2->args_->src_is_file_){
-					string s=qu2->args_->src_;
-					file_.name__(s,s);
-					for(;s.length()>1&&s[s.length()-1]=='-';)
-						s=s.substr(0,s.length()-1);
-					buf+=s;
-				}else
-					buf+=qu2->args_->src2_;
-				return 0;
-			}
-			break;
-		default:
+		case kwnum_has_:
 			switch(kw){
 			case keyword_has_:
 				buf+=has_true_;
 				break;
 			default:
+				if(num == 0) {
+					//同时也因为对于非文件得用解释而非加载
+
+					if(qu2->args_->src_is_file_){
+						string s=qu2->args_->src_;
+						file_.name__(s,s);
+						for(;s.length()>1&&s[s.length()-1]=='-';)
+							s=s.substr(0,s.length()-1);
+						buf+=s;
+					}else
+						buf+=qu2->args_->src2_;
+					break;
+				}
 				buf+=qu2->args_->params_[num-1];
 				break;
 			}
 			return 0;
+		//参数不存在便做空
+		case kwnum_out_:
+			return 0;
 		}
 
-		switch(num=kw_num__(syn_[keyword_params_],1,qu2->args_->params_.size()+16,buf2,NULL)){
+		switch(kw_num__(syn_[keyword_params_],1,qu2->args_->params_.size()/*+16*/,buf2,NULL, &num, &num2)){
 		case kwnum_false_:
 			break;
+		case kwnum_out_:
+			if(push_p)
+				*push_p = true;
+			return 0;
 		default:
 			switch(kw){
 			case keyword_has_:
@@ -576,14 +588,14 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 				return 0;
 			default:
 				if(push_p){
-					size_t i=num==kwnum_no_?0:num-1;
-					for(;i<qu2->args_->params_.size();i++){
+					size_t i=num==kwnum_no_?0:num-1, to = num2;
+					for(;i<to;i++){
 						if(!buf.empty()){
-							p->push_back(buf+qu2->args_->params_[i]);
+							p->push_back(*new s___(buf+(const string&)qu2->args_->params_[i], keyword_params_));
 							buf.clear();
 							continue;
 						}
-						p->push_back(qu2->args_->params_[i]);
+						p->push_back(*new s___(qu2->args_->params_[i], keyword_params_));
 					}
 					*push_p=true;
 					return 0;
@@ -611,13 +623,15 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 				return 0;
 			}
 			if(!qu2->shangji_){
+				/*//类似bash的变量不存在便做空，虽然能省存在、赋缺省值的代码，但增除错难度
 				switch(kw){
+				case keyword_bianliangshi_:
+					return 0;
+				}*/
 				//keyword_has_放这里便不是仅设定区
-				default:
-					if(kw!=keyword_no_)
-						err_<<buf2;
-					return errinfo_var_find_;
-				}
+				if(kw!=keyword_no_)
+					err_<<buf2;
+				return errinfo_var_find_;
 			}else{
 				qu2=qu2->shangji_;
 			}
@@ -648,7 +662,7 @@ int jieshiqi___::var__(string&buf2,string& buf,qu___* qu,int kw,bool* push_p,deq
 	}
 }
 
-int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,int kw0,deque<string>* eval_p){
+int jieshiqi___::set_equ__(qu___* qu,size_t& offi,size_t to,int kw,string& buf,int kw0,deque<s___>* eval_p){
 	size_t from2,to2;
 	int kw2;
 	string buf2;
@@ -739,12 +753,15 @@ int jieshiqi___::var_new__(qu___* qu2,const string& buf2,const string& buf3,var_
 	var->type_=set2->type_;
 	var->is_noparam_=set2->is_noparam_;
 	var->is_chuantou_ = set2->is_chuantou_;
+
+	var->use_mutex_ = set2->use_mutex_;
+	var->is_mutex_ = set2->is_mutex_;
 	return 0;
 }
 
-int jieshiqi___::delete__(deque<string>* p,qu___* qu){
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li){
-		string buf2=*li;
+int jieshiqi___::delete__(deque<s___>* p,qu___* qu){
+	for(deque<s___>::iterator li=p->begin();li!=p->end();++li){
+		s___ buf2=*li;
 		int err=delete__(buf2,qu);
 		if(err){
 			err_<<buf2;
@@ -754,7 +771,8 @@ int jieshiqi___::delete__(deque<string>* p,qu___* qu){
 	return 0;
 }
 
-int jieshiqi___::delete__(string& buf2,qu___* qu){
+int jieshiqi___::delete__(const string& buf,qu___* qu){
+	string buf2 = buf;
 	qu___* qu2=qu;
 	list<string> rems;
 	int err;
@@ -790,13 +808,14 @@ void jieshiqi___::delete_lianzuo__(const string& name,qu___* qu){
 }
 
 int jieshiqi___::use_def__(qu___* qu,size_t& offi,size_t to,string& buf,bool*use){
-	deque<string> p;
-	bool has=false,noparam,zheng;
+	deque<s___> p;
+	bool has=false;
 	string src2;
+	var___* var;
 	for(qu___* qu2=qu;;){
 		for(map<string,var___>::iterator mi=qu2->vars_.begin();mi!=qu2->vars_.end();mi++){
 			const string& name=mi->first;
-			var___* var=&mi->second;
+			var=&mi->second;
 			switch(var->type_){
 			case vartype_def_:
 			case vartype_alias_:
@@ -818,10 +837,7 @@ int jieshiqi___::use_def__(qu___* qu,size_t& offi,size_t to,string& buf,bool*use
 #ifdef debug_liucheng_
 				cout<<"\033[0;3"<<out_clr_k_<<";4"<<out_clr_t_<<"m"<<name<<"\033[0m";
 #endif
-				noparam=var->is_noparam_;
-				zheng=!var->is_chuantou_;
 				offi+=mi->first.length();
-				p.push_back(var->val__());
 				src2=mi->first;
 				break;
 			}
@@ -836,5 +852,17 @@ int jieshiqi___::use_def__(qu___* qu,size_t& offi,size_t to,string& buf,bool*use
 	if(!has)
 		return 0;
 	*use=true;
-	return eval__(&p,src2.c_str(),!noparam,qu,offi,to,buf,false,zheng);
+	bool mutex = var->use_mutex_ && var->is_mutex_;
+	if(mutex) {
+		p.push_back(*new s___());
+	} else
+		p.push_back(var->val__());
+	if(!mutex && var->use_mutex_) {
+		var->is_mutex_ = true;
+	}
+	int ret = eval__(&p,src2.c_str(),!var->is_noparam_,qu,offi,to,buf,false,!var->is_chuantou_);
+	if(!mutex && var->use_mutex_) {
+		var->is_mutex_ = false;
+	}
+	return ret;
 }
