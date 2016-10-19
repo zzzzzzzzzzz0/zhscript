@@ -192,7 +192,7 @@ int err_free__(int err,call_data_type___ *ul,char* c){
 }
 
 unsigned long int call_func2__(void*func,bool ret,int argc,call_data_type___ *argv);
-int call_func__(deque<string>* p,string& buf0,err___* err0,const string& null,
+int call_func__(deque<s___>* p,string& buf0,err___* err0,const string& null,
 		jieshiqi___* jsq,qu___* qu,call_ex___* ce){
 	string func_fmt=(*p)[0];
 	size_t i=func_fmt.find(funcfmt_func_fengefu_);

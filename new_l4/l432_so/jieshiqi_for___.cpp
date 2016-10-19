@@ -9,7 +9,7 @@
 #include "util.h"
 #include "call_ex___.h"
 
-int jieshiqi___::for__(qu___* qu,size_t& offi,size_t to,string& buf,deque<string>* eval_p){
+int jieshiqi___::for__(qu___* qu,size_t& offi,size_t to,string& buf,deque<s___>* eval_p){
 	for(;;){
 		size_t offi2=offi;
 		size_t from2,to2;
@@ -33,7 +33,7 @@ int jieshiqi___::for__(qu___* qu,size_t& offi,size_t to,string& buf,deque<string
 	return 0;
 }
 
-int jieshiqi___::loop__(qu___* qu,size_t& offi,size_t to,string& buf,deque<string>* eval_p){
+int jieshiqi___::loop__(qu___* qu,size_t& offi,size_t to,string& buf,deque<s___>* eval_p){
 	int err;
 	size_t from2,to2,to4;
 	string buf2;

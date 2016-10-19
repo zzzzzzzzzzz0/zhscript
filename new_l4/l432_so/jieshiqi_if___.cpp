@@ -121,7 +121,7 @@ int jieshiqi___::and_or__(qu___* qu,size_t from,size_t to,bool& result,zhi___& z
 	return 0;
 }
 
-int jieshiqi___::if_then_else__(int kw,qu___* qu,size_t& offi,size_t to,string& buf,zhi___& zuo,bool& result,deque<string>* eval_p){
+int jieshiqi___::if_then_else__(int kw,qu___* qu,size_t& offi,size_t to,string& buf,zhi___& zuo,bool& result,deque<s___>* eval_p){
 	size_t from2,to2;
 	int kw2;
 	int err;
@@ -237,7 +237,7 @@ int jieshiqi___::if_then_else__(int kw,qu___* qu,size_t& offi,size_t to,string& 
 	return 0;
 }
 
-int jieshiqi___::switch__(qu___* qu,size_t& offi,size_t to,string& buf,deque<string>* eval_p){
+int jieshiqi___::switch__(qu___* qu,size_t& offi,size_t to,string& buf,deque<s___>* eval_p){
 	int err;
 	size_t from2,to2,to4;
 	string buf2;

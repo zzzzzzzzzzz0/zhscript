@@ -14,7 +14,7 @@ using namespace std;
 #include "jieshiqi___.h"
 #include "call_ex___.h"
 
-int call_func__(deque<string>* p,string& buf0,err___* err0,const string& null,
+int call_func__(deque<s___>* p,string& buf0,err___* err0,const string& null,
 		jieshiqi___* jsq,qu___* qu,call_ex___* ce);
 
 unsigned long call_type__(const string& s,err___* err,size_t* i1=NULL,int step=1,

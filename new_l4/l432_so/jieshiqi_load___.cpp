@@ -8,14 +8,15 @@
 #include "jieshiqi___.h"
 #include "util.h"
 
-int jieshiqi___::load__(deque<string>* p,const char*src2,string& buf,int kw,qu___* qu,bool zheng){
+int jieshiqi___::load__(deque<s___>* p,const char*src2,string& buf,int kw,qu___* qu,bool zheng){
 	args___ args;
 	args.src_is_file_=kw==keyword_load_;
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li){
+	for(deque<s___>::iterator li=p->begin();li!=p->end();++li){
+		s___ s = *li;
 		if(args.src_.empty())
-			args.src_=*li;
+			args.src_=s;
 		else
-			args.params_.push_back(*li);
+			args.params_.push_back(s);
 	}
 	if(src2)
 		args.src2_=src2;
@@ -29,15 +30,15 @@ int jieshiqi___::load__(deque<string>* p,const char*src2,string& buf,int kw,qu__
 	}
 }
 
-int jieshiqi___::eval__(deque<string>* p,const char*src2,bool param,qu___* qu,
+int jieshiqi___::eval__(deque<s___>* p,const char*src2,bool param,qu___* qu,
 		size_t& offi,size_t to,string& buf,bool chuan,bool zheng){
 	p->erase(p->begin()+1,p->end());
 	if(param){
 		size_t from2,to2;
 		int kw2;
 		int err;
-		deque<string> d;
-		deque<string>* p2;
+		deque<s___> d;
+		deque<s___>* p2;
 		if(chuan){
 			d.push_back((*p)[0]);
 			p2=&d;
@@ -77,7 +78,7 @@ int jieshiqi___::with__(qu___* qu,size_t& offi,size_t to,string& buf){
 	if((err=jieshi_buf__(qu,offi,to,buf,buf2,kwsm_jieheshi_|kwsm_juhao_,
 			keyword_with_,true,&from2,&to2,&to4)))
 		return err;
-	deque<string> p;
+	deque<s___> p;
 	p.push_back(buf2);
 	int kw2;
 	for(;from2<to2;){

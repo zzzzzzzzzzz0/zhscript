@@ -63,7 +63,7 @@ int jieshiqi___::jieshi2__(args___* args,qu___* shangji,string& buf){
 	qu.shangji_=shangji;
 	qu.args_=args;
 	if(args->src_is_file_){
-		err=file_.get__(args->src_,qu.src_);
+		err=file_.get__(args->src_, true,qu.src_);
 		if(err){
 			err_<<file_.err_;
 			return err;
@@ -120,9 +120,9 @@ int jieshiqi___::kw_qu__(qu___* qu){
 
 int jieshiqi___::find__(qu___* qu,size_t& offi,size_t to,
 		unsigned long mask2,size_t& from2,size_t& to2,
-		int& kw2,string& buf,bool jieshi,bool* push_p,deque<string>* p,int kw0,
+		int& kw2,string& buf,bool jieshi,bool* push_p,deque<s___>* p,int kw0,
 		unsigned long mask,unsigned long maskt,
-		deque<string>* eval_p)
+		deque<s___>* eval_p)
 {
 	from2=offi;
 	kw2=keyword_no_;
@@ -168,7 +168,7 @@ int jieshiqi___::x__(int kw,qu___* qu,size_t& offi,size_t to,string& buf,int kw0
 	size_t from=offi;
 	size_t from2,to2;
 	int kw2;
-	deque<string> p;
+	deque<s___> p;
 	int err;
 	unsigned long mask;
 	switch(kw){
@@ -239,13 +239,9 @@ int jieshiqi___::x__(int kw,qu___* qu,size_t& offi,size_t to,string& buf,int kw0
 extern void android_log__(const string& s);
 #endif
 
-int jieshiqi___::echo__(deque<string>* p,string& buf,int kw0){
+int jieshiqi___::echo__(deque<s___>* p,string& buf,int kw0){
 	string s;
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li) {
-		if(li != p->begin())
-			s += ' ';
-		s+=*li;
-	}
+	p2s__(p, s, false);
 	if(args_.is_server_pages_)
 		buf += s;
 	else {
@@ -297,11 +293,11 @@ void jieshiqi___::err_add__(qu___* qu,size_t from,size_t to,bool qiangzhi,int kw
 }
 
 int jieshiqi___::jieshi__(qu___* qu,size_t from,size_t to,string&buf,
-		bool* push_p,deque<string>* p,
+		bool* push_p,deque<s___>* p,
 		int kw0,
 		unsigned long mask,unsigned long maskt,
 		list<string>* rems,
-		deque<string>* eval_p)
+		deque<s___>* eval_p)
 {
 #ifdef debug_liucheng_
 	out_f_t__(qu->src_,from,to);

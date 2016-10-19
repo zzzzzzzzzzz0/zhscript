@@ -10,12 +10,19 @@
 #include "path.h"
 #include "../../new_gg/l4/args_util.hh"
 
+/*void free_d_s__(deque<s___>* p) {
+	for(size_t i = 0; i < p->size(); i++) {
+		delete &((*p)[i]);
+	}
+}*/
+
 args___::args___() {
 	src_is_file_=true;
 	is_server_pages_ = false;
 }
 
 args___::~args___() {
+	//free_d_s__(&params_);
 }
 
 void args___::add_arg__(int argc,char** argv,int from){
@@ -101,7 +108,7 @@ int args___::get_arg__(const string& s1,string& s2,list<string>::iterator& li){
 int args___::get_ini_file__(list<string>::iterator& li){
 	const string filename=*li;
 	string buf;
-	int err=file_.get__(filename,buf);
+	int err=file_.get__(filename, false,buf);
 	if(err){
 		err_<<file_.err_;
 		return err;

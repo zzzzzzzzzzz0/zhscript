@@ -31,7 +31,7 @@ bool dlerr__(err___* err){
 	return false;
 }
 
-int jieshiqi___::call__(deque<string>* p,string& buf,qu___* qu){
+int jieshiqi___::call__(deque<s___>* p,string& buf,qu___* qu){
 	if(p->size()<1)
 		return errinfo_param_num_;
 	string first=(*p)[0];
@@ -145,13 +145,9 @@ int jieshiqi___::call__(deque<string>* p,string& buf,qu___* qu){
 	return 0;
 }
 
-int jieshiqi___::exec__(deque<string>* p,string& buf){
+int jieshiqi___::exec__(deque<s___>* p,string& buf){
 	string s;
-	for(deque<string>::iterator li=p->begin();li!=p->end();++li) {
-		if(li != p->begin())
-			s += ' ';
-		s+=*li;
-	}
+	p2s__(p, s, false);
 #ifdef WIFEXITED
 	int ret;
     if ( (ret=system( s.c_str() )) == -1 )

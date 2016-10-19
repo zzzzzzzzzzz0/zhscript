@@ -15,6 +15,7 @@ using namespace std;
 
 #include"err___.h"
 #include"errinfo.h"
+#include"s___.h"
 
 class args___ {
 private:
@@ -32,7 +33,7 @@ public:
 	string syn_file_,err_file_;
 	string src_,src2_;
 	bool src_is_file_;
-	deque<string> params_;
+	deque<s___> params_;
 	bool is_server_pages_;
 
 	void add_arg__(int argc,char** argv,int from=0);
