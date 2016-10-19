@@ -74,7 +74,7 @@ syn___::~syn___() {
 
 int syn___::get_file__(const string& path){
 	string buf;
-	int err=file_.get__(path,path_,buf);
+	int err=file_.get__(path,path_, false,buf);
 	if(err){
 		err_<<file_.err_;
 		return err;

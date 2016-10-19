@@ -26,10 +26,10 @@ public:
 	void add_path1__(const string& path);
 	bool add_path2__(const string& path);
 	void del_path2__() {path2_.pop_front();}
-	int get__(const string& filename,string& filename1,string& ret);
-	int get__(const string& filename,string& ret){
+	int get__(const string& filename,string& filename1, bool is_src,string& ret);
+	int get__(const string& filename, bool is_src,string& ret){
 		string filename1;
-		return get__(filename,filename1,ret);
+		return get__(filename,filename1, is_src,ret);
 	}
 	int name__(const string& filename,string& ret);
 

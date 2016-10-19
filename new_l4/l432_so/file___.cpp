@@ -101,7 +101,7 @@ int file___::name__(const string& filename,string& ret){
 extern int aam_get_file__(const char* filename, string& ret);
 #endif
 
-int file___::get__(const string& filename,string& filename1,string& ret){
+int file___::get__(const string& filename,string& filename1, bool is_src,string& ret){
 	err_.del__();
 	int err;
 #ifdef ver_android_
@@ -133,6 +133,12 @@ int file___::get__(const string& filename,string& filename1,string& ret){
 	delete f;
 
 	ret=buf;
+	if(is_src && ret.length() > 2 && ret[0] == '#' && ret[1] == '!') {
+		size_t i = ret.find('\n');
+		if(i != string::npos) {
+			ret = ret.substr(i + 1);
+		}
+	}
 	delete buf;
 #endif
 

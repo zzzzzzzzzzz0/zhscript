@@ -20,7 +20,7 @@ errinfo___::~errinfo___() {
 
 int errinfo___::get_file__(const string& path){
 	string buf;
-	int err=file_.get__(path,buf);
+	int err=file_.get__(path, false,buf);
 	if(err){
 		err_<<file_.err_;
 		return err;
