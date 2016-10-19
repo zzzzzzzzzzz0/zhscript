@@ -10,6 +10,11 @@
 
 var___::var___() {
 	readonly_=false;//必须设置因为会先用于判断
+
+	type_ = vartype_var_;
+	is_noparam_ = false;
+	is_chuantou_ = false;
+	use_mutex_ = is_mutex_ = false;
 }
 
 var___::~var___() {

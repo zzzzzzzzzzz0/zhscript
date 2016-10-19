@@ -58,7 +58,7 @@ enum{
 	keyword_callback_,
 	keyword_win_,
 
-	keyword_chuantou_,
+	keyword_chuantou_, keyword_mutex_,
 
 	keywords_length_
 };

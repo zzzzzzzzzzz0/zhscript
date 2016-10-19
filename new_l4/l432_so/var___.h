@@ -28,6 +28,7 @@ public:
 	int type_;
 	bool is_noparam_;
 	bool is_chuantou_;
+	bool use_mutex_, is_mutex_;
 
 	void val__(const string& val,list<string>* rems=NULL);
 	const string& val__(list<string>* rems=NULL);
