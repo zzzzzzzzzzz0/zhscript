@@ -303,7 +303,7 @@ bool l4___::dlerr__(){
 
 void l4___::err_out__(const char*ret, int err, int by) {
 	if(!dl_) {
-		cerr << ret << "(" << err << "," << by << ")" << endl;
+		cerr << "err:" << err << ", ret:" << (ret ? ret : "NULL") << ", " << by << endl;
 		return;
 	}
 	return l4_err_out__(l4_, ret, err, by);
@@ -315,6 +315,7 @@ void l4___::err_out__(const char*ret, int err, int by) {
 int l4___::get_funcs__(){
 	get_func2__(l4_new__,void*(*)());
 	get_func2__(l4_delete__,void (*)(void* l4));
+	get_func2__(l4_err_out__,void (*)(void* l4, const char* ret, int err, int by));
 	get_func2__(l4_set_path__,void (*)(void* l4,const char* s));
 	get_func2__(l4_add_path__,void (*)(const char* s));
 	get_func2__(l4_del_path__,void (*)(const char* s));
@@ -332,7 +333,6 @@ int l4___::get_funcs__(){
 	get_func2__(l4_err__,const char* (*)(void* l4));
 	get_func2__(l4_errinfo__,const char* (*)(void* l4,int err));
 	get_func2__(l4_err_clear__,void (*)(void* l4));
-	get_func2__(l4_err_out__,void (*)(void* l4, const char* ret, int err, int by));
 	get_func2__(l4_go__,void (*)(void* l4, int kw));
 	get_func2__(l4_var_new__,int (*)(void* l4,void* qu,const char* name,const char* val,bool readonly,int type,bool is_noparam));
 	get_func2__(l4_keyword__,const char* (*)(void* l4,int kw));

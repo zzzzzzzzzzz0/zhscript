@@ -372,7 +372,7 @@ const char* shell___::call4_1__(int* err,void*ce,const char*code,void* shangji,
 	}
 	if(!shangji)
 		shangji=l4_main_qu_;
-	return l4_.l4_callback3_2__(l4_.l4__(),err,ce,code,false,src2,shangji,argc,argv,from);
+	return l4_.callback3__(err,ce,code,false,src2,shangji,argc,argv,from);
 }
 
 void shell___::call4_2__(int err){

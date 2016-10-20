@@ -43,6 +43,11 @@ private:
 	int (*l4_parse_args__)(void* l4);
 	int (*l4_jieshi__)(void* l4,void* shangji);
 	const char* (*l4_jieshi2__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji);
+	/*const char* (*l4_callback__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,...);
+	const char* (*l4_callback3__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,const char**argv,int from);
+	const char* (*l4_callback_1__)(void* l4,int* err,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,...);
+	const char* (*l4_callback3_1__)(void* l4,int* err,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,const char**argv,int from);*/
+	const char* (*l4_callback3_2__)(void* l4,int* err,void*ce,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,const char**argv,int from);
 	const char* (*l4_err__)(void* l4);
 	const char* (*l4_errinfo__)(void* l4,int err);
 	void (*l4_err_clear__)(void* l4);
@@ -69,6 +74,10 @@ public:
 	const char* jieshi2__(int* err,const char* src=NULL,bool src_is_file=false,void* shangji=NULL){
 		return l4_jieshi2__(l4_,err,src,src_is_file,shangji);
 	}
+	const char* (*l4_callback_2__)(void* l4,int* err,void*ce,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,...);
+	const char* callback3__(int* err,void*ce,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,const char**argv,int from) {
+		return 	l4_callback3_2__(l4_,err,ce,src,src_is_file,src2,shangji,argc,argv,from);
+	}
 	const char* err__(){
 		if(!dl_)
 			return "";
@@ -86,12 +95,6 @@ public:
 	}
 	void err_out__(const char*ret, int err, int by);
 	void* l4__(){return l4_;}
-	/*const char* (*l4_callback__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,...);
-	const char* (*l4_callback3__)(void* l4,int* err,const char* src,bool src_is_file,void* shangji,int argc,const char**argv,int from);
-	const char* (*l4_callback_1__)(void* l4,int* err,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,...);
-	const char* (*l4_callback3_1__)(void* l4,int* err,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,const char**argv,int from);*/
-	const char* (*l4_callback_2__)(void* l4,int* err,void*ce,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,...);
-	const char* (*l4_callback3_2__)(void* l4,int* err,void*ce,const char* src,bool src_is_file,const char* src2,void* shangji,int argc,const char**argv,int from);
 	int var_new__(const char* name,const char* val,bool readonly=false,void* qu=NULL){
 		return l4_var_new__(l4_,qu,name,val,readonly,vartype_var_,false);
 	}
@@ -105,6 +108,7 @@ public:
 	void add_path__(const char*s){l4_add_path__(s);}
 	void del_path__(const char*s){if(l4_)l4_del_path__(s);}
 	void* new_main_qu__(){return l4_new_main_qu__(l4_);}
+	void* new_qu__(void* shangji){return l4_new_qu__(shangji);}
 	void delete_qu__(void* qu){l4_delete_qu__(qu);}
 	int exit_code__(){return l4_exit_code__(l4_);}
 	bool is_end__(){return l4_is_end__(l4_);}
