@@ -12,4 +12,8 @@
 extern	callback2_2___ cb_;
 extern	void* jsq_;
 
+const char* kaiyinhao__();
+const char* biyinhao__();
+const char* dunhao__();
+
 #endif /* DOSCMD_H_ */
