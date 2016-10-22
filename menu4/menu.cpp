@@ -57,7 +57,7 @@ void item_cb__(GtkWidget *item, gpointer user_data) {
 	call4__(gi->code_.c_str(), gtk_menu_item_get_label(GTK_MENU_ITEM(item)));
 }
 
-void menu_1__(GtkWidget *menu,
+bool menu_1__(GtkWidget *menu,
 		deque<string>& p1, size_t& i, const char *code1,
 		int* err, char* buf, long siz) {
 	const char *code = NULL, *set_code = NULL, *icon = NULL;
@@ -70,13 +70,13 @@ void menu_1__(GtkWidget *menu,
 		const string& s1 = p1[i];
 		if(s1 == "代码") {
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			code = p1[i].c_str();
 			continue;
 		}
 		if(s1 == "缺省代码") {
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			code1 = p1[i].c_str();
 			if(!code1[0])
 				code1 = NULL;
@@ -84,36 +84,39 @@ void menu_1__(GtkWidget *menu,
 		}
 		if(s1 == "得") {
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			set_code = p1[i].c_str();
 			continue;
 		}
 		if(s1 == "图标") {
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			icon = p1[i].c_str();
 			continue;
 		}
 		if(s1 == "大小"){
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			size=(GtkIconSize)s2i__(p1[i]);
 			continue;
 		}
 		if(s1 == "子菜单"){
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			GtkWidget *item = gtk_menu_item_new_with_label(p1[i++].c_str());
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 			GtkWidget *menu2 = gtk_menu_new();
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu2);
-			menu_1__(menu2, p1, i, code1, err, buf, siz);
-			if(*err)
-				return;
+			if(i == p1.size()) {
+				sprintf(buf, "%lx", (long)menu2);
+				return false;
+			}
+			if(!menu_1__(menu2, p1, i, code1, err, buf, siz))
+				return false;
 			continue;
 		}
 		if(s1 == "子菜单止"){
-			return;
+			return true;
 		}
 		if(s1 == "-"){
 			gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
@@ -148,7 +151,7 @@ void menu_1__(GtkWidget *menu,
 		}
 		if(s1 == "") {
 			if(err_buzu2__(&p1, ++i, err))
-				return;
+				return false;
 			const string& label = p1[i];
 			GtkWidget *item;
 			if(icon) {
@@ -198,8 +201,9 @@ void menu_1__(GtkWidget *menu,
 		}
 		*err = 1;
 		cpy__(buf, s1.c_str(), siz);
-		return;
+		return false;
 	}
+	return true;
 }
 
 dlle___ GtkWidget* menu_new__(int *err, char* buf, long siz, int argc, ...) {
