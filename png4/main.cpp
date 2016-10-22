@@ -9,7 +9,7 @@ using namespace std;
 
 static string head_("txt2png");
 
-dlle___ void txt2png__(char* buf, const char* txt, const char* pngname, const char* outpngname) {
+dlle___ void txt2png__(char* buf, const char* txt, const char* pngname, char over, const char* outpngname) {
 	if(!txt || !pngname || !outpngname) {
 		buf[0] = 'n';
 		buf[1] = 0;
@@ -35,16 +35,27 @@ dlle___ void txt2png__(char* buf, const char* txt, const char* pngname, const ch
 			for(png::uint_32 x = 0; x < img2.get_width(); x++) {
 				png::uint_32 r, g, b;
 				png::rgb_pixel* p = &img[y % img.get_height()][x % img.get_width()];
+				r = p->red;
 				g = p->green;
 				b = p->blue;
-				if(i < txt2.size())
-					r = txt2[i++];
-				else {
-					if(!end) {
+				if(!end) {
+					png::uint_32 u;
+					if(i < txt2.size())
+						u = txt2[i++];
+					else {
 						end = true;
-						r = 0;
-					} else {
-						r = p->red;
+						u = 0;
+					}
+					switch(over) {
+					default:
+						r = u;
+						break;
+					case 'g':
+						g = u;
+						break;
+					case 'b':
+						b = u;
+						break;
 					}
 				}
 				img2[y][x] = png::rgb_pixel(r, g, b);
@@ -57,14 +68,13 @@ dlle___ void txt2png__(char* buf, const char* txt, const char* pngname, const ch
 	}
 }
 
-dlle___ void png2txt__(char**addr_ret, const char* pngname) {
+dlle___ void png2txt__(char**addr_ret, const char* pngname, char over) {
 	if(!pngname)
 		return;
 	string buf;
 	try {
 		png::image< png::rgb_pixel > img(pngname);
 		png::uint_32 len = img.get_height() * img.get_width();
-		//cout << img.get_width() << " x " << img.get_height() << " = " << len << endl;
 		if(len < head_.size())
 			return;
 		int step = 1;
@@ -72,9 +82,21 @@ dlle___ void png2txt__(char**addr_ret, const char* pngname) {
 		png::uint_32 i = 0;
 		for(png::uint_32 y = 0; y < img.get_height(); y++) {
 			for(png::uint_32 x = 0; x < img.get_width(); x++) {
-				unsigned char r = img[y][x].red;
+				png::rgb_pixel* p = &img[y][x];
+				unsigned char u;
+				switch(over) {
+				default:
+					u = p->red;
+					break;
+				case 'g':
+					u = p->green;
+					break;
+				case 'b':
+					u = p->blue;
+					break;
+				}
 				if(step < 3) {
-					if(!r)
+					if(!u)
 						step = buf2 ? 3 : 4;
 					else {
 						switch(step) {
@@ -84,7 +106,7 @@ dlle___ void png2txt__(char**addr_ret, const char* pngname) {
 								buf2 = new char[len];
 								i = 0;
 							} else {
-								if(r != head_[i]) {
+								if(u != head_[i]) {
 									return;
 								}
 							}
@@ -93,7 +115,7 @@ dlle___ void png2txt__(char**addr_ret, const char* pngname) {
 					}
 					switch(step) {
 					case 2: case 3:
-						buf2[i] = r;
+						buf2[i] = u;
 						break;
 					}
 					i++;
