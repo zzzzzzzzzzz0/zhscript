@@ -1393,7 +1393,7 @@ static int wait_until_socket_is_readable(struct mg_connection *conn) {
   } while ((result == 0 || (result < 0 && ERRNO == EINTR)) &&
            conn->ctx->stop_flag == 0);
 
-  return conn->ctx->stop_flag || result < 0 ? 0 : 1;
+  return (conn->ctx && conn->ctx->stop_flag) || result < 0 ? 0 : 1;
 }
 
 // Read from IO channel - opened file descriptor, socket, or SSL descriptor.
@@ -1414,7 +1414,7 @@ static int pull(FILE *fp, struct mg_connection *conn, char *buf, int len) {
     nread = recv(conn->client.sock, buf, (size_t) len, 0);
   }
 
-  return conn->ctx->stop_flag ? -1 : nread;
+  return conn->ctx && conn->ctx->stop_flag ? -1 : nread;
 }
 
 int mg_read(struct mg_connection *conn, void *buf, size_t len) {
