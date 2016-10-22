@@ -1,5 +1,6 @@
 #include "gjke.h"
 #include "for_arg_.h"
+#include "l4/errinfo.h"
 
 dlle___ void dlln___(for_name__)(int*err,void*ce,void* shangji2,const char*code,void* shangji,int max){
 	var_for_name_(jsq_,shangji2,err,ce,code,callback3_,shangji,max);
@@ -96,6 +97,10 @@ void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool
 				if(has2){
 					name=head1+kw_dian_+buf1+kw_dian_+i2s__(i2,buf2);
 					val=var_get_(jsq_,qu,name.c_str());
+				}
+				if(!val) {
+					*err = jieshiqi_err_ + errinfo_var_find_;
+					return;
 				}
 			}
 			val1[i2-1+v1_add]=val;
