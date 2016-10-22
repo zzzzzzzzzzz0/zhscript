@@ -1,6 +1,6 @@
 显示“HTTP/1.1 200 OK”←↙“Content-Type: text/html; charset=utf-8”←↙←↙。
 
-如果存在a并且‘a’等于x那么先
+如果存在a【上】并且‘a’等于x那么先
 	调用‘跳出【mongoose4】’。
 	退出。
 了。
