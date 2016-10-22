@@ -73,7 +73,7 @@ dlle___ void init__(callback2___ cb,void* jsq,
 		var_new___ var_new,
 		void* shangji,
 		char* kw_echo,char*echo_def_fmt,
-		char* name_get_header, char* name_get_option, char* name_send_file,char*code_fmt2){
+		char* name_get_header, char* name_get_option, char* name_send_file,char*code_fmt2,char*code_fmt3){
 	jsq_=jsq;
 	cb_=cb;
 	l4_err_=l4_err;
@@ -165,18 +165,40 @@ dlle___ void filenaming_code__(char*s){
 }
 
 #include <list>
-static std::list<std::string> wzs2_;
+static std::list<std::string> wzs2_, wzs3_;
 dlle___ void wzs2_add__(int argc, ...){
 	_for_args( argc )
 			wzs2_.push_back(s);
 	_next_args
+}
+dlle___ void wzs3_add__(int argc, ...){
+	_for_args( argc )
+			wzs3_.push_back(s);
+	_next_args
+}
+static bool wzs2__(std::string uri, std::list<std::string>* ls, bool& is_zs, std::string& script) {
+	for(std::list<std::string>::iterator i = ls->begin();;) {
+		if( i == ls->end())
+			break;
+		bool b = uri.find(*i) != std::string::npos;
+		i++;
+		if( i == ls->end())
+			break;
+		if(b) {
+			is_zs = true;
+			script = *i;
+			return true;
+		}
+		i++;
+	}
+	return false;
 }
 
 static std::string _wzs_ = ".wzs";
 
 static void *callback__(enum mg_event event, struct mg_connection *conn) {
 	if (event == MG_NEW_REQUEST) {
-		bool is_zs;
+		bool is_zs, script_is_file = true;
 		std::string script;
 		{
 			char path[PATH_MAX];
@@ -188,25 +210,15 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 			is_zs=(script.rfind(_wzs_)==script.length()-_wzs_.length());
 			if(!is_zs) {
 				std::string uri = conn->request_info.uri;
-				for(std::list<std::string>::iterator i = wzs2_.begin();;) {
-					if( i == wzs2_.end())
-						break;
-					if(uri.find(*i) != std::string::npos) {
-						is_zs = true;
+				if(!wzs2__(uri, &wzs2_, is_zs, script)) {
+					if(wzs2__(uri, &wzs3_, is_zs, script)) {
+						script_is_file = false;
 					}
-					i++;
-					if( i == wzs2_.end())
-						break;
-					if(is_zs) {
-						script = *i;
-						break;
-					}
-					i++;
 				}
 			}
 		}
 		if(is_zs){
-			if(script.find(uploadir_) == 0) {
+			if(script_is_file && script.find(uploadir_) == 0) {
 				return NULL;
 			}
 			void* qu=qu_new_(shangji_);
@@ -381,7 +393,7 @@ static void *callback__(enum mg_event event, struct mg_connection *conn) {
 					if(err)
 						break;
 				}
-				ret=cb_(jsq_,qu,&err,script.c_str(),true,0);
+				ret=cb_(jsq_,qu,&err,script.c_str(),script_is_file,0);
 				qu_delete_(qu);
 				break;
 			}
@@ -454,4 +466,12 @@ dlle___ int start__(int argc,...) {
 		delete code_buf;
 	}
 	return ctx_?1:0;
+}
+
+dlle___ void web_get__(char *buf, size_t buf_len, const char *url, const char *path) {
+	struct mg_request_info ri;
+	FILE *fp = mg_fetch(ctx_, url, path, buf, buf_len, &ri);
+	if(!fp)
+		return;
+	fclose(fp);
 }
