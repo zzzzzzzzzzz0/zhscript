@@ -41,6 +41,41 @@ int vte_view___::fork_command__(const char* cmd, const char* env,
 	return pid;
 }
 
+void vte_view___::mk_outext__() {
+	glong col, row;
+	vte_terminal_get_cursor_position(handle__(), &col, &row);
+
+	if(col_old_ == -1) {
+		change_ = false;
+		row_old_ = row;
+		col_old_ = col;
+	} else {
+		change_ = !(row_old_ == row && col_old_ == col);
+	}
+
+	gchar *vte_text = vte_terminal_get_text_range(handle__(),
+			row_old_,
+			col_old_,
+			row,
+			col,
+			NULL,
+			NULL,
+			NULL);
+	row_old_ = row;
+	col_old_ = col;
+	outext_ = vte_text;
+	g_free (vte_text);
+}
+
+void vte_view___::reset__() {
+	vte_terminal_reset(handle__(), true, true);
+	reset_old__();
+}
+void vte_view___::reset_old__() {
+	col_old_ = row_old_ = -1;
+	change_ = false;
+}
+
 vte_view___::vte_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, window) {
 	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_set_homogeneous(GTK_BOX(box), FALSE);
@@ -66,4 +101,5 @@ vte_view___::vte_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, 
 	gtk_widget_show_all(box);
 
 	pid_ = 0;
+	reset_old__();
 }

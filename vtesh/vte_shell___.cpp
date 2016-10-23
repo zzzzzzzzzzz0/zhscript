@@ -18,9 +18,6 @@ static window___* window__(vte_view___* v) {
 	return (window___*)v->window__();
 }
 
-static glong col_old_ = 0, row_old_ = 0;
-static string outext_;
-
 static void call4__(VteTerminal* vte, void* data_in, s1___* contents_changed_s1 = NULL) {
 	vte_view___* v = (vte_view___*)vte_view___::from__(vte);
 	s1___* s1 = NULL;
@@ -38,20 +35,7 @@ static void call4__(VteTerminal* vte, void* data_in, s1___* contents_changed_s1 
 	}
 
 	if(s1 == contents_changed_s1) {
-		glong col, row;
-		vte_terminal_get_cursor_position(v->handle__(), &col, &row);
-		gchar *vte_text = vte_terminal_get_text_range(v->handle__(),
-				row_old_,
-				col_old_,
-				row,
-				col,
-				NULL,
-				NULL,
-				NULL);
-		outext_ = vte_text;
-		g_free (vte_text);
-		row_old_ = row;
-		col_old_ = col;
+		v->mk_outext__();
 	}
 	call4__(vte_view___::scrolled_from__(vte), window__(v), s1, 0);
 }
@@ -136,7 +120,12 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 		}
 		if(p1 == "输出") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			*addr_ret = dup__(outext_.c_str());
+			*addr_ret = dup__(v->outext__());
+			return true;
+		}
+		if(p1 == "变") {
+			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
+			l2s__(v->change_, buf);
 			return true;
 		}
 		if(p1 == "复制到剪贴板") {
@@ -173,8 +162,7 @@ bool vte_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 		}
 		if(p1 == "reset") {
 			v=(vte_view___*)get_view__(p0,page_num,p1);if(!v)return true;
-			vte_terminal_reset(v->handle__(), true, true);
-			col_old_ = row_old_ = 0;
+			v->reset__();
 			return true;
 		}
 		if(p1 == "z") {
