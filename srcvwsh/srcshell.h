@@ -15,6 +15,8 @@ public:
 	src_shell___();
 	view___* new_view__(GtkWidget* scrolled2, window___* window);
 	bool api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
+private:
+	bool api2__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret);
 };
 
 #endif /* SRCVWSH_SRCSHELL_H_ */

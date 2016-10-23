@@ -9,6 +9,7 @@
 #include "sh-base/extern.h"
 #include "sh-base/extern2.h"
 #include "sh-base/callbackitem.h"
+#include "sh-base/util3.h"
 #include "gtksourceview/gtksourcelanguagemanager.h"
 #include <gtksourceview/gtksourcelanguage.h>
 #include <sys/stat.h>
@@ -49,6 +50,22 @@ bool file_get__(const char*name,string& buf){
 }
 
 bool src_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret) {
+	/*for(size_t i = 0; i < p->size(); i++)
+		cout << '\t' << (*p)[i];
+	cout << endl;*/
+#ifdef ver_thread_
+	thread_begin__();
+#endif
+	bool use = api2__(shangji, ce, p, buf, siz, addr_ret);
+#ifdef ver_thread_
+	thread_end__();
+#endif
+	if(!use)
+		use = shell___::api__(shangji,ce,p,buf,siz,addr_ret);
+	return use;
+}
+
+bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret) {
 	if(p->size() >= 2) {
 		const string& p0=(*p)[0];
 		const string& p1=(*p)[1];
@@ -163,8 +180,10 @@ bool src_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 					if(no_undo)
 						gtk_source_buffer_begin_not_undoable_action(v->buf__());
 					gtk_text_buffer_set_text(v->buf2__(), s.c_str(), s.size());
-					if(no_undo)
+					if(no_undo) {
 						gtk_source_buffer_end_not_undoable_action(v->buf__());
+						gtk_text_buffer_set_modified(v->buf2__(), false);
+					}
 				} else {
 					char* text = v->text__();
 					*addr_ret=dup__(text);
@@ -198,6 +217,7 @@ bool src_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 				} else {
 					if(!st_err)
 						chmod(filename.c_str(), st.st_mode);
+					gtk_text_buffer_set_modified(v->buf2__(), false);
 				}
 				g_free (text);
 				break;
@@ -320,7 +340,7 @@ bool src_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 					argv[2] = gtk_source_language_get_name (sl);
 					argv[3] = gtk_source_language_get_section (sl);
 					noh[0] = '0' + !gtk_source_language_get_hidden (sl);
-					const char* ret = call4__(&err, ce, (*p)[2].c_str(), NULL, shangji, 4, argv, 0);
+					const char* ret = call4__(&err, ce, (*p)[2].c_str(), NULL, shangji, 4, argv);
 					if(err) {
 						err__(err, ret);
 						return true;
@@ -332,7 +352,7 @@ bool src_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, l
 			return true;
 		}
 	}
-	return shell___::api__(shangji,ce,p,buf,siz,addr_ret);
+	return false;
 }
 /*
   PangoFontDescription *font_desc = pango_font_description_new();
