@@ -16,4 +16,6 @@
 子菜单止、
 为“sudo -s”、
 为exit、
-为“history | grep ”。
+为“history | grep ”、
+为“ps ax | grep ”、
+为reset。
