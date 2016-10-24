@@ -1,0 +1,19 @@
+Ctrl + C	终止命令
+
+Ctrl + P	上一条命令
+Ctrl + N	下一条命令
+Ctrl + A	移到命令行首
+Ctrl + E	移到命令行尾
+Ctrl + F	按字符前移（右向）
+Ctrl + B	按字符后移（左向）
+
+Ctrl + U	从光标处删除至命令行首
+Ctrl + K	从光标处删除至命令行尾
+Ctrl + W	从光标处删除至字首
+Ctrl + D	删除光标处的字符
+Ctrl + H	删除光标前的字符
+
+Ctrl + Y	粘贴至光标后
+Ctrl + T	交换光标处和之前的字符
+Ctrl + L	清屏
+Ctrl + Z	挂起命令
