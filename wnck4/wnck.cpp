@@ -28,25 +28,36 @@ static int s2i__(const char* s1,int i){
 	return i1;
 }
 
+static bool has_b__(const char* x) {
+	if(x) {
+		for(int i = 0; x[i]; i++) {
+			if(x[i] == ',') {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 static void* jsq_;
-static callback2___ cb_;
+static callback2_2___ cb_;
 static void* main_qu_;
 static l4_err_out___ l4_err_out_;
 
-dlle___ void init__(callback2___ cb,void* jsq, void* main_qu, l4_err_out___ l4_err_out){
+dlle___ void init__(callback2_2___ cb,void* jsq, void* main_qu, l4_err_out___ l4_err_out){
 	jsq_=jsq;
 	cb_=cb;
 	main_qu_ = main_qu;
 	l4_err_out_ = l4_err_out;
 }
 
-dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
+dlle___ void for__(int*err, void *ce, void* shangji,const char*code, const char*fmt,WnckScreen *screen){
 	GList *window_l;
 	char p1[32], /*p2[] = {0, 0},*/ p3[32];
 	WnckWorkspace *aws = wnck_screen_get_active_workspace(screen);
 	for (window_l = wnck_screen_get_windows (screen); window_l != NULL; window_l = window_l->next){
 		WnckWindow *window = WNCK_WINDOW (window_l->data);
-		sprintf(p1,"%lx",(long)window);
+		sprintf(p1,fmt,(long)window);
 		//p2[0] = wnck_window_is_skip_tasklist(window) ? '0' : '1';
 
 		WnckWorkspace *ws = wnck_window_get_workspace(window);
@@ -56,7 +67,7 @@ dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
 			i = -i;
 		sprintf(p3, "%d", i);
 
-		cb_(jsq_,shangji,err,code,false, 2, p1, /*p2,*/ p3);
+		cb_(jsq_,shangji,err, ce,code,false, NULL, 2, p1, /*p2,*/ p3);
 		if(*err){
 			if(*err==jieshiqi_err_go_+keyword_continue_){
 				*err=0;
@@ -71,22 +82,51 @@ dlle___ void for__(int*err,void* shangji,const char*code,WnckScreen *screen){
 	}
 }
 
-dlle___ void window_set_geometry__(char* buf, WnckWindow* ww, char* x, char* y, char* w, char* h) {
+dlle___ void window_get_geometry__(char* buf, WnckWindow* ww) {
 	int x1, y1, w1, h1;
 	wnck_window_get_geometry(ww, &x1, &y1, &w1, &h1);
-	x1 = s2i__(x, x1);
-	y1 = s2i__(y, y1);
-	w1 = s2i__(w, w1);
-	h1 = s2i__(h, h1);
 	sprintf(buf, "%d,%d,%d,%d", x1, y1, w1, h1);
-	wnck_window_set_geometry(ww, WNCK_WINDOW_GRAVITY_CURRENT,
-			(WnckWindowMoveResizeMask)(WNCK_WINDOW_CHANGE_X | WNCK_WINDOW_CHANGE_Y | WNCK_WINDOW_CHANGE_WIDTH | WNCK_WINDOW_CHANGE_HEIGHT),
-			x1, y1, w1, h1);
+}
+
+dlle___ void window_set_geometry__(char* buf, WnckWindow* ww, char* x, char* y, char* w, char* h) {
+	int x1, y1, w1, h1;
+	WnckWindowMoveResizeMask mrm = (WnckWindowMoveResizeMask)0;
+	if(has_b__(x)) {
+		if(sscanf(x, "%d,%d,%d,%d", &x1, &y1, &w1, &h1) != 4)
+			return;
+		if(has_b__(y)) {
+			int x2, y2, w2, h2;
+			switch(sscanf(y, "%d,%d,%d,%d", &x2, &y2, &w2, &h2)) {
+			case 4:
+				x1 = x2 == 0 ? 0 : (w2 - w1) / x2;
+				y1 = y2 == 0 ? 0 : (h2 - h1) / y2;
+				break;
+			default:
+				return;
+			}
+		}
+	} else {
+		wnck_window_get_geometry(ww, &x1, &y1, &w1, &h1);
+		x1 = s2i__(x, x1);
+		y1 = s2i__(y, y1);
+		w1 = s2i__(w, w1);
+		h1 = s2i__(h, h1);
+	}
+	if(x)
+		mrm = (WnckWindowMoveResizeMask)(mrm | WNCK_WINDOW_CHANGE_X);
+	if(y)
+		mrm = (WnckWindowMoveResizeMask)(mrm | WNCK_WINDOW_CHANGE_Y);
+	if(w)
+		mrm = (WnckWindowMoveResizeMask)(mrm | WNCK_WINDOW_CHANGE_WIDTH);
+	if(h)
+		mrm = (WnckWindowMoveResizeMask)(mrm | WNCK_WINDOW_CHANGE_HEIGHT);
+	wnck_window_set_geometry(ww, WNCK_WINDOW_GRAVITY_STATIC, mrm, x1, y1, w1, h1);
+	sprintf(buf, "%d,%d,%d,%d", x1, y1, w1, h1);
 }
 
 static void z__(const string& code) {
 	int err;
-	const char* ret = cb_(jsq_, main_qu_, &err, code.c_str(), false, 0);
+	const char* ret = cb_(jsq_, main_qu_, &err, NULL, code.c_str(), false, NULL, 0);
 	l4_err_out_(jsq_, ret, err, 1);
 }
 
