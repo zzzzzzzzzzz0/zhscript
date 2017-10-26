@@ -15,10 +15,11 @@ dlle___ void trim__(char**addr_ret, const char*src, int ctl) {
 		return;
 	}
 	string buf = src;
+	const char* s = " \t\r\n";
 	if(ctl & 1)
-		buf.erase(0, buf.find_first_not_of(' '));
+		buf.erase(0, buf.find_first_not_of(s));
 	if(ctl & 2)
-		buf.erase(buf.find_last_not_of(' ') + 1);
+		buf.erase(buf.find_last_not_of(s) + 1);
 	*addr_ret = dup__(buf.c_str());
 }
 
@@ -173,6 +174,36 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	if(i2>(long)buf.size())
 		i2=buf.size();
 
+	for(; i1 > 0 && i1 < i2; i1++) {
+		if(((unsigned char)buf[i1] & 0xc0) != 0x80)
+			break;
+	}
+	for(; i2 > 0; i2--) {
+		unsigned char c = buf[i2 - 1];
+		/*
+		1字节：0xxxxxxx
+		2字节：110xxxxx 10xxxxxx
+		3字节：1110xxxx 10xxxxxx 10xxxxxx
+		4字节：11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+		5字节：111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+		6字节：1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+		*/
+		c &= 0xc0;
+		//11000000
+		if(c == 0xc0) {
+			i2--;
+			break;
+		}
+		//10000000
+		if(c == 0x80) {
+			if(i2 == buf.size())
+				break;
+			if(((unsigned char)buf[i2] & 0xc0) != 0x80)
+				break;
+		} else
+			break;
+	}
+
 	long len = i2 - i1;
 	if(len <= 0)
 		return;
@@ -181,12 +212,54 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	*addr_ret=dup__(buf.c_str());
 }
 
-dlle___ long strpos_2a2__(char* s,char* ss){
-	if(!s || !ss)
+dlle___ long strpos__(char* src,char* ss, int argc, ...) {
+	if(!src || !ss)
 		return -1;
-	string buf = s;
-	size_t i = buf.find(ss);
-	if(i == string::npos)
+	size_t from = 0;
+	const char* skip = NULL;
+	_for_args( argc )
+		switch(i) {
+		case 0:
+			from = s2i__(s);
+			break;
+		case 1:
+			skip = s;
+			break;
+		}
+	_next_args
+	if(skip)
+		from += strlen(skip);
+	string buf = src;
+	size_t pos = buf.find(ss, from);
+	if(pos == string::npos)
 		return -1;
-	return i;
+	return pos;
+}
+
+dlle___ bool strstr__(const char* s1, int c, int argc, ...) {
+	string s11 = s1;
+	_for_args( argc )
+		switch(c) {
+		case 1:
+			if(s11.find(s) == 0)
+				return true;
+			break;
+		case 2:
+		{
+			size_t pos = s11.rfind(s);
+			if(pos != string::npos && pos == s11.length() - string(s).length())
+				return true;
+			break;
+		}
+		case 3:
+			if(s11 == s)
+				return true;
+			break;
+		default:
+			if(s11.find(s) != string::npos)
+				return true;
+			break;
+		}
+	_next_args
+	return false;
 }

@@ -25,6 +25,7 @@ extern l4_err_out___ l4_err_out_;
 extern void* jsq_;
 extern void* main_qu_;
 extern string kw_length_,kw_dian_;
+extern string kw_eval_, kw_begin_, kw_end_, kw_dunhao_, kw_yybegin_, kw_yyend_;
 
 extern char* i2s__(int i,char buf[]);
 extern char* l2s__(long int i,char buf[]);

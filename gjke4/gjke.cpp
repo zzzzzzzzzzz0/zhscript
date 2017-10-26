@@ -17,6 +17,7 @@ l4_err_out___ l4_err_out_;
 void* jsq_;
 void* main_qu_;
 string kw_length_,kw_dian_;
+string kw_eval_, kw_begin_, kw_end_, kw_dunhao_, kw_yybegin_, kw_yyend_;
 
 dlle___ void dlln___(init__)(void* jsq,
 		callback2_2___ cb,
@@ -25,7 +26,8 @@ dlle___ void dlln___(init__)(void* jsq,
 		var_for_name___ var_for_name,
 		l4_err_out___ l4_err_out,
 		void* main_qu,
-		char*len,char*dian)
+		char*len,char*dian,
+		char*kw_eval, char*kw_begin, char*kw_end, char*kw_dunhao, char*kw_yybegin, char*kw_yyend)
 {
 	jsq_=jsq;
 	callback_=cb;
@@ -38,6 +40,12 @@ dlle___ void dlln___(init__)(void* jsq,
 	main_qu_ = main_qu;
 	kw_length_=len;
 	kw_dian_=dian;
+	kw_eval_ = kw_eval;
+	kw_begin_ = kw_begin;
+	kw_end_ = kw_end;
+	kw_dunhao_ = kw_dunhao;
+	kw_yybegin_ = kw_yybegin;
+	kw_yyend_ = kw_yyend;
 }
 
 int for_err__(int*err) {

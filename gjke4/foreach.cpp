@@ -18,6 +18,39 @@ dlle___ void dlln___(foreach__)(int*err,char**addr_ret,void*ce,void* shangji,boo
 	_next_args
 	*addr_ret=dup__(ret.c_str());
 }
+dlle___ void dlln___(foreach2__)(int*err,char**addr_ret,void*ce,void* shangji,bool no,const char*code,int argc2,int argc,...){
+	if(argc2 <= 0) {
+		*err = 1;
+		return;
+	}
+	if(argc % argc2 != 0) {
+		*err = 2;
+		return;
+	}
+	char buf[32];
+	i2s__(argc / argc2, buf);
+	if(no)
+		argc2++;
+	const char** argv2 = new const char*[argc2];
+	char buf2[32];
+	string ret;
+	va_list argv;
+	va_start(argv, argc);
+	for (int i = 0, i3 = 0; i < argc;) {
+		int i2 = 0;
+		if(no) {
+			i2s__(++i3, buf2);
+			argv2[i2++] = buf2;
+		}
+		for (; i2 < argc2; ++i) {
+			argv2[i2++] = va_arg(argv, char*);
+		}
+		ret+=callback3_(jsq_,shangji,err,ce,code,false,buf,argc2,argv2, 0);
+		if(for_err__(err)) break;
+	}
+	delete argv2;
+	*addr_ret=dup__(ret.c_str());
+}
 
 void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool desc,string&ret){
 	string name;

@@ -7,26 +7,30 @@
 
 #include "gjke.h"
 #include <stdio.h>
-#include <string.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include "for_arg_.h"
 
-#define id_fmt_ "%p,%d,%d"
+#define id_fmt_ "%p,%d,%d,%lu"
 
-static bool shm_id__(char*id, char*& shm_addr, int& shm_id, key_t& shm_key) {
-	return sscanf(id, id_fmt_, &shm_addr, &shm_id, &shm_key) == 3;
-}
-
-dlle___ void delete_shm__(int argc,...) {
+class id___ {
+public:
 	char *shm_addr;
 	int shm_id;
 	key_t shm_key;
+	size_t shm_size;
+	bool from__(char*id) {
+		return sscanf(id, id_fmt_, &shm_addr, &shm_id, &shm_key, &shm_size) == 4;
+	}
+};
+
+dlle___ void delete_shm__(int argc,...) {
+	id___ id;
 	_for_args( argc )
-		if(!shm_id__(s, shm_addr, shm_id, shm_key))
+		if(!id.from__(s))
 			continue;
-		shmdt(shm_addr);
-		shmctl(shm_id,IPC_RMID,0);
+		shmdt(id.shm_addr);
+		shmctl(id.shm_id,IPC_RMID,0);
 	_next_args
 }
 
@@ -37,7 +41,7 @@ static void get__(key_t shm_key, size_t shm_size, int shm_flg, char *shm_addr, c
 	shm_addr = (char*)shmat(shm_id, shm_addr, 0);
 	if((char*)-1 == shm_addr)
 		return;
-	sprintf(buf, id_fmt_, shm_addr, shm_id, shm_key);
+	sprintf(buf, id_fmt_, shm_addr, shm_id, shm_key, shm_size);
 }
 
 #define shm_mode_    (SHM_R | SHM_W)
@@ -50,29 +54,46 @@ dlle___ void new_shm__(char* buf, const char*fname, int proj_id, size_t shm_size
 }
 
 dlle___ void attach_shm__(char* buf, char*id) {
-	char *shm_addr;
-	int shm_id;
-	key_t shm_key;
-	if(!shm_id__(id, shm_addr, shm_id, shm_key))
+	id___ id2;
+	if(!id2.from__(id))
 		return;
-	get__(shm_key, 0, shm_mode_, shm_addr, buf);
+	get__(id2.shm_key, 0, shm_mode_, id2.shm_addr, buf);
 }
 
 dlle___ char* get_shm__(char*id) {
-	char *shm_addr;
-	int shm_id;
-	key_t shm_key;
-	if(!shm_id__(id, shm_addr, shm_id, shm_key))
+	id___ id2;
+	if(!id2.from__(id))
 		return NULL;
-	return shm_addr;
+	return id2.shm_addr;
 }
 
-dlle___ bool set_shm__(char*id, char* s) {
-	char *shm_addr;
-	int shm_id;
-	key_t shm_key;
-	if(!shm_id__(id, shm_addr, shm_id, shm_key))
+dlle___ bool set_shm__(char*id, char* s2, int argc,...) {
+	id___ id2;
+	if(!id2.from__(id))
 		return false;
-	strcpy(shm_addr, s);
+	if(!s2)
+		return false;
+	string s3;
+	_for_args( argc )
+		s3 += kw_dunhao_;
+		s3 += kw_yybegin_;
+		s3 += s;
+		s3 += kw_yyend_;
+	_next_args
+	if(s3.empty())
+		s3 += s2;
+	else {
+		string s4;
+		s4 += kw_eval_;
+		s4 += kw_begin_;
+		s4 += s2;
+		s4 += kw_end_;
+		s4 += s3;
+		s3 = s4;
+	}
+	size_t i2 = 0;
+	for(; i2 < id2.shm_size - 1 && i2 < s3.size(); i2++)
+		id2.shm_addr[i2] = s3[i2];
+	id2.shm_addr[i2] = 0;
 	return true;
 }

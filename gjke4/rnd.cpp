@@ -7,6 +7,7 @@
 
 #include "gjke.h"
 #include <stdlib.h>
+#include <time.h>
 
 dlle___ void srand__(long l){
 	unsigned int seed;

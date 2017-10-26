@@ -37,12 +37,12 @@ int new_array0__(void* qu,char*head1,int well_i,int argc,va_list argv,int i1=1){
 			i1++;
 		}
 	}
-	name=head+"-1";
+	/*name=head+"-1";
 	if((err=var_new__(name,i2s__(i1-1,buf))))
 		return err;
 	name=head+"-2";
 	if((err=var_new__(name,i2s__(well_i,buf))))
-		return err;
+		return err;*/
 	name=head+kw_length_;
 	if((err=var_new__(name,i2s__(i1-1,buf))))
 		return err;
@@ -67,11 +67,11 @@ dlle___ int dlln___(add_to_array__)(void* qu,char*head1,int well_i,int argc,...)
     {
 		string name=head1+kw_length_;
 		const char*val=var_get_(jsq_,qu,name.c_str());
-		if(!val){
+		/*if(!val){
 			name=head1;
 			name+="-1";
 			val=var_get_(jsq_,qu,name.c_str());
-		}
+		}*/
 		if(val)
 			i1=s2i__(val)+1;
     }
