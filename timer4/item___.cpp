@@ -136,6 +136,8 @@ int item___::mk_time__(char* time) {
 bool item___::begin__(const char* argv[]) {
 	if(pause_)
 		return false;
+	if(!is_loop_)
+		pause_ = true;
 	i_ += interval_;
 	if(i_ < time_)
 		return false;
@@ -159,6 +161,4 @@ bool item___::begin__(const char* argv[]) {
 
 void item___::end__() {
 	i_ = 0;
-	if(!is_loop_)
-		pause_ = true;
 }
