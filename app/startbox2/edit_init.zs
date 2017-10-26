@@ -1,7 +1,6 @@
 加载init-1.zs。
 
 加载lib/dlg4。
-加载lib/regexpr4。
 
 赋予配置文件2【主】以‘配置文件’.2。
 如果调用‘exist’、‘配置文件2’那么
@@ -54,6 +53,8 @@
 			了。
 		上代码、
 		‘1’、
+		/usr/share/icons/hicolor/64x64/apps/‘1’.png、
+		/usr/share/icons/hicolor/64x64/mimetypes/‘1’.png、
 		/usr/share/icons/hicolor/48x48/apps/‘1’.png、
 		/usr/share/icons/hicolor/48x48/mimetypes/‘1’.png。
 	了。
