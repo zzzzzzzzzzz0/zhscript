@@ -55,7 +55,9 @@ static gif_surface___ *get_gif__(unsigned i2, deque<string>* p) {
 }
 
 view___* cairog_shell___::new_view__(GtkWidget* scrolled2, window___* window) {
-	return new cairog_view___(scrolled2, window);
+	cairog_view___* v = new cairog_view___(scrolled2, window);
+	v->addr_fmt_ = addr_fmt_;
+	return v;
 }
 
 bool cairog_shell___::api__(void* shangji, void* ce, deque<string>* p, char* buf, long siz, char** addr_ret) {

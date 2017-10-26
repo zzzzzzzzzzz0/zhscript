@@ -16,6 +16,7 @@
 class cairog_view___ : public view___ {
 public:
 	string huitu_;
+	int addr_fmt_;
 
 	gif_surface___ * gif_;
 

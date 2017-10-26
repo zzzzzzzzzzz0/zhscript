@@ -109,7 +109,10 @@ static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpoin
 	} else {
 		if(!w->huitu_.empty()) {
 			sprintf(cr_, "%ld", (long)cr);
-			sprintf(callback_, "Z/%lx/${l%ld}", (long)callback__, (long)cr);
+			if(w->addr_fmt_ == 16)
+				sprintf(callback_, "/%lx/${l%ld}-Z", (long)callback__, (long)cr);
+			else
+				sprintf(callback_, "/%lu/-${l%ld}-Z", (long)callback__, (long)cr);
 			call4__(w->huitu_.c_str(), NULL, 2, argv_, 0);
 		}
 	}
@@ -119,9 +122,15 @@ static gboolean expose_event__(GtkWidget * widget, GdkEventExpose * event, gpoin
 
 cairog_view___::cairog_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, window) {
 	widget_ = gtk_drawing_area_new ();
-    gtk_container_add (GTK_CONTAINER (scrolled2), widget_);
-    gtk_widget_show(widget_);
-    g_signal_connect(G_OBJECT(widget_), "expose-event", G_CALLBACK(expose_event__), this);
+	gtk_container_add (GTK_CONTAINER (scrolled2), widget_);
+	gtk_widget_show(widget_);
+	g_signal_connect(G_OBJECT(widget_),
+#ifdef ver_gtk3_
+		"draw"
+#else
+		"expose-event"
+#endif
+		, G_CALLBACK(expose_event__), this);
 
-    gif_ = NULL;
+	gif_ = NULL;
 }
