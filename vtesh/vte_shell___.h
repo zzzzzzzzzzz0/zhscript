@@ -11,6 +11,8 @@
 #include "vte_view___.h"
 
 class vte_shell___: public shell___ {
+private:
+	vte_view___* view__(const string& name, int& page_num, const string& help);
 public:
 	vte_shell___();
 	view___* new_view__(GtkWidget* scrolled2, window___* window);

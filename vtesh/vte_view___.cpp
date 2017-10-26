@@ -101,5 +101,6 @@ vte_view___::vte_view___(GtkWidget* scrolled2, void* window):view___(scrolled2, 
 	gtk_widget_show_all(box);
 
 	pid_ = 0;
+	outext_lock_ = false;
 	reset_old__();
 }

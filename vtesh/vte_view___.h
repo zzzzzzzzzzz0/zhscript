@@ -8,11 +8,11 @@
 #ifndef VTE_VIEW____H_
 #define VTE_VIEW____H_
 #include "sh-base/view___.h"
-#ifdef ver_opt2_
+/*#ifdef ver_opt2_
 #include <src/vte.h>
-#else
+#else*/
 #include <vte/vte.h>
-#endif
+//#endif
 
 class vte_view___: public view___ {
 private:
@@ -31,5 +31,6 @@ public:
 	void mk_outext__();
 	const char* outext__() {return outext_.c_str();}
 	bool change_;
+	bool outext_lock_;
 };
 #endif /* VTE_VIEW____H_ */

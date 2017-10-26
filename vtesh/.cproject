@@ -286,6 +286,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1405787556" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ver_2_91_"/>
+									<listOptionValue builtIn="false" value="ver_opt2_"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.175737061" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.397387115" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
