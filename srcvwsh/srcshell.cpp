@@ -25,8 +25,8 @@ view___* src_shell___::new_view__(GtkWidget* scrolled2, window___* window) {
 
 static void modified_changed__ (GtkTextBuffer *textbuffer, gpointer user_data) {
 	callback_item___* cbi = (callback_item___*)user_data;
-	window___* w = (window___*)cbi->data2_;
-	src_view___* v = (src_view___*)cbi->data_;
+	window___* w = (window___*)cbi->data__(1);
+	src_view___* v = (src_view___*)cbi->data__(0);
 	string name;
 	w->name2__(name, v->scrolled__());
 	cbi->call__(0, name.c_str());
@@ -72,22 +72,8 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 		int page_num;
 		window___* w;
 		src_view___* v;
-		if(p1 == new_view_s1_->src2__()) {
-			string page_num2;
-			w=get_window__(p0,page_num,p1, true, &page_num2);if(!w)return true;
-			v=(src_view___*)w->view__(page_num);
-			if(page_num2.empty() || !v){
-				v = (src_view___*)new_page__(page_num2.c_str(), w);
-				if(v) {
-					call4__(v->scrolled__(), w, new_view_s1_, 0);
-				} else {
-					err_wufa__(p1);
-				}
-			} else {
-				w->c__()->set_page__(page_num);
-			}
-			return true;
-		}
+		if(p1 == new_view_s1_->src2__())
+			return api_new_view__(p0, p1, p, new_view_s1_, "文件");
 		char sdz1=0;
 		if(p1=="撤销")
 			sdz1='u';
@@ -129,7 +115,7 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 			sdz1='\xf1';
 		if(sdz1) {
 			w=get_window__(p0,page_num,p1);if(!w)return true;
-			v=(src_view___*)w->view__(page_num);
+			v=(src_view___*)w->view__(page_num);if(!v)return true;
 			switch(sdz1) {
 			case'x':
 			case'c':
@@ -156,8 +142,8 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 						if(err_buzu2__(p, 4))
 							break;
 						callback_item___* cbi = new callback_item___(p1, (*p)[3]);
-						cbi->data_ = v;
-						cbi->data2_ = w;
+						cbi->add_data__(v);
+						cbi->add_data__(w);
 						g_signal_connect(v->buf2__(), "modified-changed", G_CALLBACK(modified_changed__), cbi);
 					}else
 						gtk_text_buffer_set_modified(v->buf2__(), bool__(s));
@@ -193,8 +179,9 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 			case'o':
 			{
 				if(err_buzu2__(p, 3)) break;
+				const string& filename = (*p)[2];
 				string s;
-				if(file_get__((*p)[2].c_str(),s)) {
+				if(file_get__(filename.c_str(),s)) {
 					gtk_source_buffer_begin_not_undoable_action(v->buf__());
 					gtk_text_buffer_set_text(v->buf2__(), s.c_str(), s.size());
 					gtk_source_buffer_end_not_undoable_action(v->buf__());
@@ -223,7 +210,7 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 				break;
 			}
 			case'e':
-				gtk_text_view_set_editable(v->handle2__(), bool__(p, 2));
+				gtk_text_view_set_editable(v->handle2__(), bool__(p, 2, false));
 				break;
 			case '\xa0':
 				gtk_source_buffer_begin_not_undoable_action(v->buf__());
@@ -258,12 +245,18 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 				break;
 			}
 			case 'u':
-				if(gtk_source_buffer_can_undo(v->buf__()))
-					gtk_source_buffer_undo(v->buf__());
+				if(!gtk_source_buffer_can_undo(v->buf__())) {
+					err_wufa__(p1);
+					return true;
+				}
+				gtk_source_buffer_undo(v->buf__());
 				break;
 			case 'r':
-				if(gtk_source_buffer_can_redo(v->buf__()))
-					gtk_source_buffer_redo(v->buf__());
+				if(!gtk_source_buffer_can_redo(v->buf__())) {
+					err_wufa__(p1);
+					return true;
+				}
+				gtk_source_buffer_redo(v->buf__());
 				break;
 			case'h':
 				if(p->size()>2){
@@ -321,7 +314,7 @@ bool src_shell___::api2__(void* shangji, void* ce, deque<string>* p, char* buf, 
 				const gchar * const *ids = gtk_source_language_manager_get_language_ids (slm);
 				char noh[] = {0, 0};
 				const char* argv[] = {noh, 0, 0, 0};
-				int err = 0;
+				int err;
 				for (int i = 0; ids[i] != NULL; i++) {
 					const gchar * id = ids[i];
 					GtkSourceLanguage *sl = gtk_source_language_manager_get_language (slm, id);
