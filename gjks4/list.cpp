@@ -49,7 +49,7 @@ dlle___ void list_add__(vector<vector<string>*>* p, int colnum, int argc, ...) {
 			p->push_back(v);
 			i1 = 0;
 		}
-		v->push_back(s);
+		v->push_back(s ? s : "NULL");
 		i1++;
 	_next_args
 }
@@ -61,7 +61,7 @@ dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
 
 	bool can_empty = true;
 	_for_args( argc )
-		if(s[0] == 'n' && !s[1]) {
+		if(s && s[0] == 'n' && !s[1]) {
 			can_empty = false;
 		} else {
 			return;
@@ -101,8 +101,8 @@ dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
 	}
 }
 
-dlle___ void list_foreach__(int* err, void*ce, void* shangji,
-		bool has_num, vector<vector<string>*>* p, char* code)
+dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
+		bool has_num, bool is_reverse, vector<vector<string>*>* p, char* code)
 {
 	if(!ok__(p) || !code) {
 		*err = 1;
@@ -116,30 +116,54 @@ dlle___ void list_foreach__(int* err, void*ce, void* shangji,
 	}
 	const char**argv = new const char*[argc + 1];
 	char num[16];
-	for(size_t i1 = 0; i1 < p->size(); i1++) {
+	string ret2;
+	int i1 = is_reverse ? p->size() - 1 : 0;
+	for(unsigned i11 = 0; i1 < p->size() && i1 >= 0;) {
 		vector<string>* v = (*p)[i1];
 		argc = v->size();
 		size_t add = 0;
 		if(has_num) {
-			sprintf(num, "%u", (unsigned)i1 + 1);
+			sprintf(num, "%u", ++i11);
 			argv[0] = num;
 			add++;
 		}
 		for(size_t i = 0; i < argc; i++)
 			argv[i + add] = (*v)[i].c_str();
-		cb_(jsq_, shangji, err, ce, code, false, NULL, argc + add, argv, 0);
+		const char *ret = cb_(jsq_, shangji, err, ce, code, false, NULL, argc + add, argv, 0);
+		if(addr_ret && ret)
+			ret2 += ret;
 		if(*err == jieshiqi_err_go_+keyword_continue_) {
 			*err=0;
-			continue;
 		}
-		if(*err == jieshiqi_err_go_+keyword_break_) {
+		else if(*err == jieshiqi_err_go_+keyword_break_) {
 			*err=0;
 			break;
 		}
-		if(*err)
+		else if(*err)
 			break;
+		if(is_reverse)
+			i1--;
+		else
+			i1++;
 	}
 	delete argv;
+	if(addr_ret)
+		*addr_ret = dup__(ret2.c_str());
+}
+
+dlle___ void list_foreach2__(int* err, char** addr_ret, void*ce, void* shangji,
+		bool has_num, bool is_reverse, char* code, int argc, ...) {
+	string ret2;
+	_for_args1( argc )
+		list_foreach__(err, addr_ret, ce, shangji, has_num, is_reverse, va_arg(argv, vector<vector<string>*>*), code);
+		if(addr_ret) {
+			ret2 += *addr_ret;
+			delete *addr_ret;
+		}
+		if(*err) break;
+	_next_args
+	if(addr_ret)
+		*addr_ret = dup__(ret2.c_str());
 }
 
 static vector<string>* list_get__(int* err, vector<vector<string>*>* p,
@@ -291,7 +315,7 @@ dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, .
 
 	vector<string> head;
 	_for_args( argc )
-		head.push_back(s);
+		head.push_back(s ? s : "");
 	_next_args
 
 	size_t max = 0;

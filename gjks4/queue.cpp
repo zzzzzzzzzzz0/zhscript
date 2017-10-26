@@ -19,7 +19,7 @@ dlle___ void delete_queue__(deque<string>* p) {
 dlle___ void queue_push__(deque<string>* p, const char* s) {
 	if(!ok__(p))
 		return;
-	p->push_back(s);
+	p->push_back(s ? s : "NULL");
 }
 
 dlle___ void queue_pop__(char** addr_ret, deque<string>* p) {
