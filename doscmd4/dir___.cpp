@@ -150,7 +150,7 @@ int dir___::dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*
 		dir_opt___*opt,const char* src,void*ce,void*qu,callback2_2___ cb)
 {
 	DIR* d;
-	if((d=opendir(dir))==NULL)
+	if((d=opendir(dir && dir[0] ? dir : "."))==NULL)
 		return 0;//'d'
 	string oldir;
 	{
@@ -279,9 +279,9 @@ int dir___::exec__(regex_t* reg,const char*tongpei,dir_opt___*opt,
 			b=(strcmp(name,tongpei)==0);
 			break;
 		}
+		if(opt->not_)
+			b=!b;
 	}
-	if(opt->not_)
-		b=!b;
 	//printf(" %d(%s)",b,name1.c_str());
 	if(b){
 		int err=0;
