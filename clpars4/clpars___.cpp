@@ -41,7 +41,16 @@ void clpars_item___::flags__() {
 #endif
 }
 
+clpars_item___::~clpars_item___() {
+	if(reg_) {
+		regfree(reg_);
+		delete reg_;
+		reg_ = NULL;
+	}
+}
+
 clpars___::clpars___() {
+	par_1_ = 0;
 }
 
 clpars___::~clpars___() {
@@ -56,6 +65,7 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 	const char*code;
 	const char*s;
 	int argc1;
+	regex_t *reg = NULL;
 	for (int i = 0; i < argc; ){
 		flag = va_arg(argv, const char*); i++;
 		if(i <= argc){
@@ -81,6 +91,18 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 		}
 		char type=' ';
 		switch(s[0]) {
+		case 'r': {
+			type=s[0];
+			argc1=0;
+			reg = new regex_t;
+			int z = regcomp(reg, flag, REG_EXTENDED|REG_NEWLINE);
+			if(z != 0) {
+				regerror(z, reg, buf, 512);
+				*err=2;
+				return;
+			}
+			break;
+		}
 		case 'a':
 		case 'b':
 		case 'e':
@@ -94,100 +116,84 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 			s++;
 		default:
 			if(sscanf(s,"%d",&argc1)!=1){
-				sprintf(buf,"no int");
+				sprintf(buf,"'%s' no int", s);
 				*err=2;
 				return;
 			}
-			switch(argc1){
-			case -1:
-				type='b';
-				break;
-			case -2:
-				type='e';
-				break;
-			case -3:
-				type='c';
-				break;
-			default:
-				if(argc1 < 0) {
-					sprintf(buf,"no argc %d", argc1);
-					*err=2;
-					return;
-				}
-				break;
+			if(argc1 < 0) {
+				sprintf(buf,"%d bad argc", argc1);
+				*err=2;
+				return;
 			}
 		}
 		if(!flag[0] && !(argc1 > 0 || type == 'a' || type == 'h')) {
-			sprintf(buf,"empty item no argc %d%c", argc1, type);
+			sprintf(buf,"empty flag no %c%d", type, argc1);
 			*err=2;
 			return;
 		}
-		clpars_item___* item=new clpars_item___(flag,info,code,argc1,type);
+		clpars_item___* item=new clpars_item___(flag,info,code,argc1,reg,type);
 		item_.push_back(item);
 	}
 }
 
 class comp___ {
 private:
-	char type_;
-	const char*s_;
+	clpars_item___* ci_;
+	string s_;
 	const char**src2_;
-	string*arg1_;
+	list<string> *arg1_;
 public:
-	comp___(const char*s, char type,const char**src2,string*arg1) {
+	comp___(const char*s, clpars_item___* ci,const char**src2,list<string> *arg1) {
 		s_ = s;
-		type_ = type;
+		ci_ = ci;
 		src2_=src2;
 		arg1_=arg1;
 	}
 	bool operator () (string& s2) {
-		return bool__(s2, s_, type_, src2_,arg1_);
-	}
-	bool bool__(const string&s2,const string&s,char type,const char**src2,string*arg1) {
-		bool b=false;
-		switch(type){
-		case 'b':case 'e':case 'c':
-			{
-				size_t i;
-				switch(type){
-				case 'e':
-					i=s.rfind(s2);
-					break;
-				default:
-					i=s.find(s2);
-					break;
-				}
-				switch(type){
-				case 'b':
-					b=(i == 0);
-					break;
-				case 'e':
-					if(s.size() >= s2.size())
-						b=(i == s.size()-s2.size());
-					break;
-				case 'c':
-					b=(i != string::npos);
-					break;
-				}
-				if(b){
-					*src2 = s2.c_str();
-					switch(type){
-					case 'b':
-						*arg1 = s.substr(s2.size());
-						break;
-					case 'e':
-						*arg1 = s.substr(0, s.size()-s2.size());
-						break;
-					case 'c':
-						*arg1 = s;
-						break;
-					}
-				}
-				break;
+		bool b = false;
+		switch(ci_->type_){
+		case 'b':
+			if(s_.find(s2) == 0) {
+				arg1_->push_back(s_.substr(s2.size()));
+				b = true;
 			}
-		default:
-			b=(s2==s);
 			break;
+		case 'e':
+			if(s_.size() >= s2.size() && s_.rfind(s2) == s_.size()-s2.size()) {
+				arg1_->push_back(s_.substr(0, s_.size()-s2.size()));
+				b = true;
+			}
+			break;
+		case 'c':
+			if(s_.find(s2) != string::npos) {
+				arg1_->push_back(s_);
+				b = true;
+			}
+			break;
+		case 'r': {
+#define pm_len 128
+			regmatch_t pm[pm_len];
+			size_t off = 0;
+			while(off < s_.size() && regexec(ci_->reg_, s_.c_str() + off, pm_len, pm, 0) == 0) {
+				for(int i2 = 1; i2 < pm_len; i2++) {
+					if(pm[i2].rm_so == -1)
+						break;
+					string s;
+					for(int i = pm[i2].rm_so; i < pm[i2].rm_eo; i++)
+						s += s_[i];
+					arg1_->push_back(s);
+				}
+				off += pm[0].rm_eo;
+				b = true;
+			}
+			break;
+		}
+		default:
+			b = (s2==s_);
+			break;
+		}
+		if(b) {
+			*src2_ = s2.c_str();
 		}
 		return b;
 	}
@@ -196,14 +202,11 @@ public:
 int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pause,
 		char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv)
 {
-	const char**argv2 = new const char*[argc];
 	char no1[16];
 	int has=0;
-	const char* src2 = flag;
-	string arg1;
+	const char* src2 = NULL;
+	list<string> argv3, argv4;
 	for(int scan = 0; scan < 2 && !has; scan++) {
-		int start=0,i2=0;
-		int i2_old = i2;
 		for(list<clpars_item___*>::iterator cii=item_.begin();cii!=item_.end();cii++){
 			clpars_item___* ci=*cii;
 			if(ci->pause_ == 2) {
@@ -219,7 +222,7 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 					if(!b){
 						bool b2 = true;
 						switch(ci->type_) {
-						case 'b': case 'e': case 'c':
+						case 'b': case 'e': case 'c': case 'r':
 							if(has > 0)
 								b2 = false;
 							break;
@@ -227,7 +230,7 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 						if(b2) {
 							list<string>::iterator si = find_if(
 									ci->flags_.begin(), ci->flags_.end(),
-									comp___(flag,ci->type_,&src2,&arg1) );
+									comp___(flag,ci,&src2,&argv3) );
 							b=(si != ci->flags_.end());
 						}
 					}
@@ -251,12 +254,13 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 				switch(scan) {
 				case 0:
 					if(by_help){
+						src2 = (*ci->flags_.begin()).c_str();
 					} else {
 						if(has==1){
 							switch(ci->type_){
-							case 'b':case 'e':case 'c':
-								argv2[i2++] = arg1.c_str();
-								start++;
+							case 'b':case 'e':case 'c':case 'r':
+								for(list<string>::iterator si = argv3.begin(); si != argv3.end(); si++)
+									argv4.push_back(*si);
 								break;
 							}
 						}
@@ -265,34 +269,40 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 				case 1:
 					if(no) {
 						sprintf(no1,"%d",++i1);
-						argv2[i2++]=no1;
-						start++;
+						argv4.push_back(no1);
 					}
-					argv2[i2++]=flag;
-					if(ci->type_ == 'a')
-						start++;
+					argv4.push_back(flag);
 					break;
 				}
 				if(has==1){
 					if(ci->argc_ > 0 || ci->type_ == 'a'){
-						int argc2 = start + (ci->type_ == 'a' ?
-								argc - i : ci->argc_);
-						for(;i2<argc2;i2++,i++){
-							argv2[i2] = va_arg(argv, char*);
+						int argc2 = ci->type_ == 'a' ? argc - i : (ci->argc_ - (ci->flag_.empty() ? 1 : 0));
+						if(ci->type_ == 'a') {
+							if(argc2 < ci->argc_) {
+								sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
+								*err=1;
+								return has;
+							}
 						}
-						if(i>argc){
-							sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
-							*err=1;
-							break;
+						for(int i2 = 0; i2 < argc2; i2++, i++){
+							if(i>=argc){
+								sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
+								*err=1;
+								return has;
+							}
+							argv4.push_back(va_arg(argv, char*));
 						}
 					}
-					i2_old = i2;
-				}else{
-					i2 = i2_old;
 				}
 				if(ci->pause_)
 					continue;
+				const char**argv2 = new const char*[argv4.size()];
+				int i2=0;
+				for(list<string>::iterator si = argv4.begin(); si != argv4.end(); si++, i2++) {
+					argv2[i2] = (*si).c_str();
+				}
 				cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
+				delete argv2;
 				if(*err == jieshiqi_err_go_+keyword_continue_){
 					*err=0;
 					continue;
@@ -306,7 +316,6 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 			}
 		}
 	}
-	delete argv2;
 	return has;
 }
 
@@ -321,7 +330,15 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 	i++;
 
 	int pause = 0;
+	if(par_1_ > 100) {
+		sprintf(buf,"is loop");
+		*err=11;
+		par_1_ = 0;
+		return 1;
+	}
+	par_1_++;
 	int has=cb__(flag,by_help,no,i1,i,pause,buf,err,ce,shangji,argc,argv);
+	par_1_--;
 	if(*err)
 		return 1;
 	if(has)
@@ -340,7 +357,7 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 		return 1;
 	}
 
-	sprintf(buf,"no parse");
+	sprintf(buf,"'%s' no parse", flag);
 	*err=3;
 	return 1;
 }

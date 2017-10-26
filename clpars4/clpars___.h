@@ -11,6 +11,7 @@
 #include <list>
 using namespace std;
 #include <stdarg.h>
+#include <regex.h>
 
 class clpars_item___ {
 private:
@@ -20,26 +21,30 @@ public:
 	list<string> flags_;
 	string info_;
 	int argc_;
+	regex_t *reg_ = NULL;
 	string code_;
 	char type_;
 	int pause_;
-	clpars_item___(const char*flag,const char*info,const char*code,
-			int argc1,char type){
+	clpars_item___(const char*flag,const char*info,const char*code,int argc1,
+			regex_t *reg, char type){
 		flag_=flag;
 		info_=info;
 		code_=code;
 		argc_=argc1;
+		reg_ = reg;
 		type_=type;
 
 		pause_ = 0;
 
 		flags__();
 	}
+	~clpars_item___();
 };
 
 class clpars___ {
 private:
 	list<clpars_item___*> item_;
+	int par_1_;
 	int cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pause,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv);
 	int par__(int& i1,int& i,const char* flag,bool by_help,
