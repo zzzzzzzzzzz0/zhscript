@@ -33,30 +33,35 @@ char ctrl0_ = '\xff';
 dlle___ int o4__(int*err,callback2_2___ cb,void*jsq,void*shangji,void*ce,int argc,...){
 	if(argc < 2)
 		return 265;
+	std::string no = "0";
 	std::string script, script_err, script_info;
 	char*cmd;
 	_for_args( argc )
 		switch(i) {
 		case 0:
-			script = s;
+			if(s) script = s;
 			break;
 		case 1:
 			if(argc == 2)
 				cmd = s;
 			else
-				script_info = s;
+				if(s) script_info = s;
 			break;
 		case 2:
 			if(argc == 3)
 				cmd = s;
 			else
-				script_err = s;
+				if(s) script_err = s;
 			break;
 		case 3:
 			cmd = s;
 			break;
 		}
 	_next_args
+	if(!cmd)
+		return 265;
+	if(script.empty())
+		return 265;
 	
 	fflush(stdout);
 
@@ -114,7 +119,7 @@ dlle___ int o4__(int*err,callback2_2___ cb,void*jsq,void*shangji,void*ce,int arg
 				buf2 += c;
 		}
 		int count_err = 0;
-		if(!script_err.empty()) {
+		if(!script_err.empty() && script_err != no) {
 			count_err = read( fd_err[0], &c, sizeof(c) );
 			if(count_err > 0){
 				if(c == '\n' || c == '\r') {
@@ -139,7 +144,7 @@ dlle___ int o4__(int*err,callback2_2___ cb,void*jsq,void*shangji,void*ce,int arg
 	if(!buf2.empty()){
 		cb(jsq,shangji,err,ce,script.c_str(),false,NULL,1,buf2.c_str());
 	}
-	if(!buf2_err.empty()){
+	if(!buf2_err.empty() && script_err != no){
 		cb(jsq,shangji,err,ce,script_err.c_str(),false,NULL,1,buf2_err.c_str());
 	}
 	int status;
