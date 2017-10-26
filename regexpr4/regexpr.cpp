@@ -99,25 +99,37 @@ int eflags__(char*s,char*buf,int defa){
 	return eflags;
 }
 
+bool flags__(int argc, va_list &argv, char*buf, int &cflags, int &eflags) {
+	for (int i = 0; i < argc; ++i) {
+		char*s = va_arg(argv, char*);
+		switch(i){
+		case 0:
+			if((cflags=cflags__(s,buf,cflags))==-1){
+				return false;
+			}
+			break;
+		case 1:
+			if((eflags=eflags__(s,buf,eflags))==-1){
+				return false;
+			}
+			break;
+		}
+	}
+	va_end(argv);
+	return true;
+}
+
 dlle___ void dlln___(regexpr_test__)(char*buf,size_t siz,char*src,char*exp,int argc,...){
 	if(!src||!exp)
 		return;
-	int   cflags=REG_EXTENDED|REG_NOSUB, eflags=0;
-	_for_args(argc)
-	switch(i){
-	case 0:
-		if((cflags=cflags__(s,buf,cflags))==-1){
+	int cflags=REG_EXTENDED|REG_NOSUB, eflags=0;
+	{
+		va_list argv;
+		va_start(argv, argc);
+		if(!flags__(argc, argv, buf, cflags, eflags))
 			return;
-		}
-		break;
-	case 1:
-		if((eflags=eflags__(s,buf,eflags))==-1){
-			return;
-		}
-		break;
 	}
-	_next_args
-	regex_t      reg;
+	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(exp), cflags);
 	if(z==0){
 		z = regexec(&reg, src, 0, 0, eflags);
@@ -141,7 +153,7 @@ dlle___ void dlln___(regexpr_get__)(int*err,char*buf,long siz,
 		return;
 	string head;
 	bool readonly=false;
-	int   cflags=REG_EXTENDED, eflags=0;
+	int cflags=REG_EXTENDED, eflags=0;
 	bool rmcf=false;
 
 	int argi;
@@ -215,24 +227,24 @@ dlle___ void dlln___(regexpr_get__)(int*err,char*buf,long siz,
 
 	list<string> cf_v;
 
-	regex_t      reg;
+	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(exp), cflags);
 	if(z != 0)
-    {
+	{
 		regerror(z, &reg, buf, siz);
 		regfree(&reg);
 		*err=1;
 		return;
 	}
-	regmatch_t   pm[nmatch_];
- 	bzero(pm, sizeof(pm));
- 	unsigned int start=0,len=strlen(src);
- 	int i1=0,i2=0;
+	regmatch_t pm[nmatch_];
+	bzero(pm, sizeof(pm));
+	unsigned int start=0,len=strlen(src);
+	int i1=0,i2=0;
 	for(;;){
 		z = regexec(&reg, src+start, nmatch_, pm, eflags);
 		if(z == REG_NOMATCH || z != 0)
 			break;
-    	int max=get_maxlen__(pm,nmatch_);
+		int max=get_maxlen__(pm,nmatch_);
 		if(max==0)
 			break;
 		i2=0;
@@ -320,17 +332,17 @@ void add_pm__(char* str,regmatch_t pm,string& s){
 }
 
 bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
-		char* to,void* shangji,int cflags,int eflags,string* s,bool duocan){
-	regex_t      reg;
+		char* to,void* shangji,int cflags,int eflags,string* s,bool duocan, bool all_s){
+	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(from), cflags);
 	if(z != 0)
-    {
-    	get_reg_err__(z,&reg,buf,siz);
-    	regfree(&reg);
-    	*err=1;
+	{
+		get_reg_err__(z,&reg,buf,siz);
+		regfree(&reg);
+		*err=1;
 		return false;
 	}
-	regmatch_t   pm[nmatch_];
+	regmatch_t pm[nmatch_];
  	bzero(pm, sizeof(pm));
  	unsigned int start=0,len=strlen(src);
  	int i1=0;
@@ -340,7 +352,7 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 		if(z == REG_NOMATCH || z != 0)
 			break;
 		i1++;
-		if(s)
+		if(s && all_s)
 		for(int i2=0;i2<pm[0].rm_so;i2++)
 			*s+=src[start+i2];
 		if(shangji){
@@ -365,7 +377,7 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 				if(*err==jieshiqi_err_go_+keyword_continue_)
 					*err=0;
 			}else{
-			 	char buf1[16],buf2[8];
+			 	char buf1[16],buf2[8], buf3[16] = "";
 				sprintf(buf1,"%d",i1);
 				for(int i2=1;i2<nmatch_;i2++){
 					regmatch_t pm2=pm[i2];
@@ -375,9 +387,11 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 					char c_old=src[eo];
 					src[eo]=0;
 					sprintf(buf2,"%d",i2);
-					const char* ret=callback_(jsq_,shangji,err,ce,to,false,NULL,3,
+					if(s)
+						sprintf(buf3,"%u",(*s).size());
+					const char* ret=callback_(jsq_,shangji,err,ce,to,false,NULL,4,
 							src+start+pm2.rm_so,
-							buf2,buf1);
+							buf2,buf1, buf3);
 					if(s)
 						*s+=ret;
 					src[eo]=c_old;
@@ -417,7 +431,7 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 			}
 		}
 
-    	int max=get_maxlen__(pm,nmatch_);
+		int max=get_maxlen__(pm,nmatch_);
 		if(max==0)
 			break;
 		start+=max;
@@ -425,36 +439,29 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 			break;
 	}
 	regfree(&reg);
-	if(s){
-		for(unsigned int i2=start;i2<len;i2++)
-			*s+=src[i2];
-	}else
-		sprintf(buf,"%d",i1);
+	if(all_s) {
+		if(s){
+			for(unsigned int i2=start;i2<len;i2++)
+				*s+=src[i2];
+		}else
+			sprintf(buf,"%d",i1);
+	}
 	return true;
 }
 
 dlle___ void dlln___(regexpreplace__)(int*err,char**addr_ret,char*buf,long siz,
-		bool fore,bool duocan,void* ce,void* shangji,char* src,char* from,char* to,int argc,...){
+		bool fore,bool duocan, bool all_s, void* ce,void* shangji,char* src,char* from,char* to,int argc,...){
 	if(!src||!from||!to)
 		return;
 	int cflags=REG_EXTENDED,eflags=0;
-	_for_args(argc)
-	switch(i){
-	case 0:
-		if((cflags=cflags__(s,buf,cflags))==-1){
+	{
+		va_list argv;
+		va_start(argv, argc);
+		if(!flags__(argc, argv, buf, cflags, eflags))
 			return;
-		}
-		break;
-	case 1:
-		if((eflags=eflags__(s,buf,eflags))==-1){
-			return;
-		}
-		break;
 	}
-	_next_args
-
 	string s;
-	if(!regexpreplace__(err,ce,buf,siz,src,from,to,shangji,cflags,eflags,fore?NULL:&s,duocan))
+	if(!regexpreplace__(err,ce,buf,siz,src,from,to,shangji,cflags,eflags,fore?NULL:&s,duocan, all_s))
 		return;
 	*addr_ret=dup__(s.c_str());
 }
@@ -488,55 +495,55 @@ dlle___ void dlln___(regexpr__)(int*err,char**addr_ret,char*buf,long siz,int arg
 		}
 	_next_args
 
-	regex_t      reg;
+	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(exp), REG_EXTENDED|REG_NEWLINE);
 	if(z != 0)
-    {
+	{
 		get_reg_err__(z,&reg,buf,siz);
 		regfree(&reg);
 		*err=1;
 		return;
 	}
 	string s;
-	regmatch_t   pm[nmatch_];
- 	bzero(pm, sizeof(pm));
- 	unsigned int start=0;
+	regmatch_t pm[nmatch_];
+	bzero(pm, sizeof(pm));
+	unsigned int start=0;
 	for(int i1=1;;i1++){
-	    if(btm>0 && i1>btm)
-	        break;
-	 	z = regexec(&reg, src+start, nmatch_, pm, 0);
-	 	//printf("%d=%s/%d %s\n",z,str+start,start,exp);
+		if(btm>0 && i1>btm)
+			break;
+		z = regexec(&reg, src+start, nmatch_, pm, 0);
+		//printf("%d=%s/%d %s\n",z,str+start,start,exp);
 		if(z == REG_NOMATCH || z != 0)
-	    {
-		   break;
+		{
+			break;
 		}
-	    if(i1>=top){
-	        for(int i2=0;fmt[i2];i2++){
-	            char c=fmt[i2];
-	            switch(c){
-	            case'%':
-	                c=fmt[++i2];
-	                if(c>='0' && c<='9'){
-               			add_pm__(src+start,pm[c-'0'],s);
+		if(i1>=top){
+			for(int i2=0;fmt[i2];i2++){
+				char c=fmt[i2];
+				switch(c){
+				case'%':
+					c=fmt[++i2];
+					if(c>='0' && c<='9'){
+						add_pm__(src+start,pm[c-'0'],s);
 					}
-	                else if(c>='a' && c<='f'){
-               			add_pm__(src+start,pm[c-'a'+10],s);
+					else if(c>='a' && c<='f'){
+						add_pm__(src+start,pm[c-'a'+10],s);
 					}
-	                else{
-	                    s+=c;
+					else{
+						s+=c;
 					}
-	                break;
-	            default:
-	                s+=c;
+					break;
+				default:
+					s+=c;
 				}
 			}
-   		}
-    	int max=get_maxlen__(pm,nmatch_);
-    	if(max==0)
-    		break;
-    	start+=max;
-    	if(start>=strlen(src))
-   			break;
+		}
+		int max=get_maxlen__(pm,nmatch_);
+		if(max==0)
+			break;
+		start+=max;
+		if(start>=strlen(src))
+			break;
 	}
 	regfree(&reg);
 	*addr_ret=dup__(s.c_str());
