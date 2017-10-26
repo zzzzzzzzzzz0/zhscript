@@ -111,7 +111,11 @@ public:
 	void* new_qu__(void* shangji){return l4_new_qu__(shangji);}
 	void delete_qu__(void* qu){l4_delete_qu__(qu);}
 	int exit_code__(){return l4_exit_code__(l4_);}
-	bool is_end__(){return l4_is_end__(l4_);}
+	bool is_end__(){
+		if(!dl_)
+			return false;
+		return l4_is_end__(l4_);
+	}
 
 	err___ err_;
 };

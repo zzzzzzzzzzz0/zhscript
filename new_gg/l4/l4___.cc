@@ -176,7 +176,7 @@ bool which__(const char* s,string& buf2){
 }
 
 void get_path__(string& path){
-	unsigned int i=path.rfind('/');
+	size_t i=path.rfind('/');
 	if(i==string::npos)
 		i=path.rfind('\\');
 	if(i==string::npos)
