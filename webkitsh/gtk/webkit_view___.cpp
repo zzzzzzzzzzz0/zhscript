@@ -106,6 +106,11 @@ static void window_object_cleared__(
 	/*bool b=*/JSObjectSetPrivate(func, (void*)webkit_view___::from__(wv));
 }
 
+static bool geolocation_policy_decision_requested__(WebKitWebView*, WebKitWebFrame*, WebKitGeolocationPolicyDecision* decision) {
+	webkit_geolocation_policy_allow(decision);
+	return true;
+}
+
 GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {
 	GtkWidget* webview = webkit_web_view_new ();
 	//g_object_ref_sink(webview);
@@ -123,6 +128,9 @@ GtkWidget* webkit_view___::webview_new__(GtkWidget* scrolled) {
 		}
 
 		g_signal_connect(webview,"window-object-cleared",G_CALLBACK(window_object_cleared__),NULL);
+		g_object_connect(G_OBJECT(webview),
+				"signal::geolocation-policy-decision-requested",
+				geolocation_policy_decision_requested__, 0, NULL);
 		signal_connect__(webview);
 	}
 	if(!user_agent_.empty()) {

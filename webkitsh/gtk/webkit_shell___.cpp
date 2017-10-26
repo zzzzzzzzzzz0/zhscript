@@ -54,7 +54,7 @@ static WebKitWebView* create_web_view__(WebKitWebView* page, WebKitWebFrame* fra
 			v2=(webkit_view___*)v->target_;
 		else {
 			window___* w = window__(v);
-			v2=(webkit_view___*)shell___::new_page__(NULL, w);
+			v2=(webkit_view___*)shell___::new_page__(NULL, true, w);
 			if(!v2)
 				v2 = (webkit_view___*)w->view__(0);
 		}
@@ -243,7 +243,17 @@ bool webkit_shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long 
 				window___* w=get_window__(p0,page_num,p1, true, &page_num2);if(!w)return true;
 				v=(webkit_view___*)w->view__(page_num);
 				if(page_num2.empty() || !v){
-					v=(webkit_view___*)new_page__(page_num2.c_str(), w);
+					bool to = true;
+					if(p->size() >= 4) {
+						const string& p3 = (*p)[3];
+						if(p3 == "不激活")
+							to = false;
+						else {
+							err_buzhichi__(p3, p1.c_str());
+							return true;
+						}
+					}
+					v=(webkit_view___*)new_page__(page_num2.c_str(), to, w);
 					if(!v)
 						wv = NULL;
 					else
