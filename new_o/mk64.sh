@@ -12,9 +12,14 @@ sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev
 sudo apt-get install libgtksourceviewmm-2.0-dev
 
 u1604=
-if cat /etc/issue | grep -q 16.04
+if cat /etc/issue | grep -q -E 'Ubuntu (16|17)\.'
 then
 	u1604=1
+fi
+debian8=
+if cat /etc/issue | grep -q 'Debian GNU/Linux 8'
+then
+	debian8=1
 fi
 
 p_lib3="-Wl,-rpath=lib3,-rpath=zhscript/lib3,-rpath=/usr/lib/zhscript/lib3"
@@ -77,7 +82,7 @@ fi
 
 sudo apt-get install libmagick++-dev
 #sudo apt install graphicsmagick-libmagick-dev-compat
-if [ -n "$u1604" ]
+if [ -n "$u1604" ] || [ -n "$debian8" ]
 then
 	./mk_.sh r gxx_lib_ imagemagick4 "`pkg-config Magick++ --cflags --libs`"
 else
@@ -113,12 +118,14 @@ then
 	./mk_.sh r gxx_gtkmmsh_plugin_ webkit "-D ver_3_ -I $wk/WebKit/gtk/ -I $wk/Source/WebCore/platform/network/soup/cache/ -I $wk/DerivedSources/ -L$wk/.libs/ -lwebkitgtk-1.0 $wk_f1" 3
 fi
 
-dir="`pwd`/.."
+#dir="`pwd`/.."
 
 #$dir/webkitsh/gtk/mk-release.sh
 #$dir/cairogsh/mk-release.sh
 #$dir/vtesh/mk-release.sh
 #$dir/srcvwsh/mk-release.sh
-./mk-sh2.zs 1 u1604=$u1604
 
-find "$dir" \( -name '*.o' -o -name '*.d' \) -exec rm "{}" \;
+#find "$dir" \( -name '*.o' -o -name '*.d' \) -exec rm "{}" \;
+
+/usr/bin/zhscript ./mk-sh2.zs 1 2.91=$u1604$debian8
+
