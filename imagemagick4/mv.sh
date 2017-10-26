@@ -1,2 +1,2 @@
 #!/bin/sh
-mv *.so* *4 ../new_o/lib
+mv *.so*  ../new_o/lib/
