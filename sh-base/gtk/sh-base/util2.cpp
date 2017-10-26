@@ -27,7 +27,7 @@ const char* call4__(int* err,const char* code,const char* src2,int argc,const ch
 	return call4__(err, NULL, code, src2, NULL, argc, argv2, from);
 }
 const char* call4__(const char* code,const char* src2,int argc,const char**argv2,int from){
-	int err = 0;
+	int err;
 	return call4__(&err, code, src2, argc, argv2, from);
 }
 const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
@@ -62,16 +62,6 @@ const char* call4__(GtkWidget* sw,window___* w,s1___* s1,int argc,...){
 	return call4__(code,src2,argc,argv2);
 }
 
-void err__(const char* s,const char* s2,const char* s3){
-	cerr<<endl;
-	if(s)
-		cerr<<s;
-	if(s2)
-		cerr<<s2;
-	if(s3)
-		cerr<<s3;
-	cerr<<endl;
-}
 void err_buzu__(const char* s){
 	err__(s,"参数不足");
 }

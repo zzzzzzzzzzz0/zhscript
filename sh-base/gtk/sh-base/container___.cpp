@@ -11,6 +11,7 @@
 #include "extern.h"
 #include"l4/keyword.h"
 #include"def1.h"
+#include "call_util.h"
 
 void container_add__(GtkWidget* w, GtkWidget* scrolled) {
 #ifdef ver_gtk3_
@@ -210,10 +211,17 @@ GtkWidget* container___::nth_page2__(int page_num) {
 	return nth_page__(page_num);
 }
 
-void container___::set_data__(int page_num, const char *key, gpointer data) {
+void container___::set_data__(int page_num, const char *key, const string& data1) {
 	GtkWidget* w = nth_page2__(page_num);
-	if(w)
+	if(w) {
+		char* data = (char*)gtk_object_get_data(GTK_OBJECT(w), key);
+		if(data)
+			delete data;
+		size_t siz1 = data1.size() + 1;
+		data = new char[siz1];
+		cpy__(data, data1.c_str(), siz1);
 		gtk_object_set_data(GTK_OBJECT(w), key, data);
+	}
 }
 
 gpointer container___::get_data__(int page_num, const char *key) {

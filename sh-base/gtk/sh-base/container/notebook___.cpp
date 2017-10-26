@@ -88,7 +88,7 @@ GtkWidget* notebook___::new__(GtkWidget* scrolled) {
 	container_add__(notebook_, scrolled);
 	if(!has_1page_)
 		return NULL;
-	return page_new__(NULL);
+	return page_new__(NULL, true);
 }
 
 void notebook___::signal_connect__() {
@@ -107,7 +107,7 @@ view___* notebook___::view__(int page_num) {
 	return (view___*)get_data__(notebook__(), num, object_data_view_);
 }
 
-GtkWidget* notebook___::page_new__(const char* name) {
+GtkWidget* notebook___::page_new__(const char* name, bool to) {
 	GtkWidget* scrolled2 = page_new1__(name);
 	GtkWidget *label=NULL;
 	switch(label_style_){
@@ -133,10 +133,15 @@ GtkWidget* notebook___::page_new__(const char* name) {
 	}
 	}
 
-	int i=current_page__();
-    opener_ = nth_page__(i);
-    i++;
-	gtk_notebook_insert_page (notebook__(), scrolled2, label,i);
+	int i;
+	if(to) {
+		i=current_page__();
+		opener_ = nth_page__(i);
+		i++;
+		gtk_notebook_insert_page (notebook__(), scrolled2, label,i);
+	} else {
+		i = gtk_notebook_append_page (notebook__(), scrolled2, label);
+	}
 	gtk_notebook_set_tab_reorderable (notebook__(), scrolled2, true);
 	gtk_object_set_data(GTK_OBJECT(scrolled2),object_data_window_,window_);
 	gtk_widget_show_all (scrolled2);
@@ -147,7 +152,8 @@ GtkWidget* notebook___::page_new__(const char* name) {
 		break;
 	}
 
-	set_page__(i);
+	if(to)
+		set_page__(i);
 	return scrolled2;
 }
 
@@ -187,7 +193,7 @@ void notebook___::close__(int page_num){
 	if(gtk_notebook_get_n_pages(nb) == 0) {
 		if(has_1page_)
 			w->destroy__();
-		else
+		else if(!w->is_main__())
 			w->hide__();
 	}
 }

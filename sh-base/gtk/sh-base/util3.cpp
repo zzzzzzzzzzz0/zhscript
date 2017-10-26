@@ -12,32 +12,32 @@ static void cb__(GtkWidget *widget, gpointer data) {
 	callback_item___* cbi = (callback_item___*)data;
 	cbi->i_++;
 	if(cbi->tooltip_ == "get") {
-		if((void*)cbi->i_ == cbi->data_) {
-			cbi->data2_ = widget;
+		if((void*)cbi->i_ == cbi->data__(0)) {
+			cbi->data__(1, widget);
 		}
 		return;
 	}
 	char buf[8];
 	sprintf(buf, "%d", cbi->i_);
 	const char* argv[2] = {gtk_widget_get_name(widget), buf};
-	call4__(cbi->data_, cbi->code_, cbi->data2_, 2, argv);
+	call4__(cbi->data__(0), cbi->code__(0), cbi->data__(1), 2, argv);
 }
 
 GtkWidget* get__(GtkWidget* w, int i) {
 	callback_item___* cbi = new callback_item___();
 	cbi->tooltip_ = "get";
-	cbi->data_ = (void*)i;
+	cbi->add_data__((void*)i);
 	gtk_container_foreach (GTK_CONTAINER (w), cb__, (gpointer)cbi);
-	GtkWidget* ret = (GtkWidget*)cbi->data2_;
+	GtkWidget* ret = (GtkWidget*)cbi->data__(1);
 	delete cbi;
 	return ret;
 }
 
 void foreach__(GtkWidget* w, const char* code, void* ce, void* shangji) {
 	callback_item___* cbi = new callback_item___();
-	cbi->code_ = code;
-	cbi->data_ = ce;
-	cbi->data2_ = shangji;
+	cbi->add_code__(code);
+	cbi->add_data__(ce);
+	cbi->add_data__(shangji);
 	gtk_container_foreach (GTK_CONTAINER (w), cb__, (gpointer)cbi);
 	delete cbi;
 }

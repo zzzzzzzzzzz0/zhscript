@@ -23,7 +23,7 @@ public:
 	static table___* new__(deque<string>* p, size_t from, void* w);
 	GtkWidget* new__(GtkWidget* scrolled);
 
-	GtkWidget* page_new__(const char* name);
+	GtkWidget* page_new__(const char* name, bool to);
 
 	int current_page__();
 };

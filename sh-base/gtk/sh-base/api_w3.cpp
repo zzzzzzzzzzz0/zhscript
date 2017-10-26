@@ -47,12 +47,20 @@ bool shell___::api_w3__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,
 		GdkRegion *region = gdk_region_new ();
 		gdk_window_input_shape_combine_region (w->widget__()->window, region, 0, 0);
 		gdk_region_destroy (region);
+#else
+		cairo_region_t *r = cairo_region_create();
+		gtk_widget_input_shape_combine_region (w->widget__(), r);
+		cairo_region_destroy(r);
 #endif
 		return true;
 	}
-	if(p1=="地址"){
+	if(p1=="地址" || p1 == "客区地址") {
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		l2x__((long)w->window__(), buf);
+		long l = p1=="地址" ? (long)w->window__() : (long)w->scrolled__();
+		if(addr_fmt_ == 16)
+			l2x__(l, buf);
+		else
+			l2s__(l, buf);
 		return true;
 	}
 	if(p1=="xid"){

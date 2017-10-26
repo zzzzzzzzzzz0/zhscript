@@ -28,7 +28,7 @@ static int get_id__(GtkTreeModel *model, GtkTreePath *path, bool path_free = tru
 	return id;
 }
 
-static void get_icon_view_select(GtkIconView *view, const char* code3 = NULL, void* shangji = NULL, void* ce = NULL) {
+static void icon_view_select__(GtkIconView *view, const char* code3 = NULL, void* shangji = NULL, void* ce = NULL) {
 	GtkTreeModel *model = gtk_icon_view_get_model (view);
 
 	GList *list = gtk_icon_view_get_selected_items (view);
@@ -41,7 +41,7 @@ static void get_icon_view_select(GtkIconView *view, const char* code3 = NULL, vo
 	g_list_free (list);
 }
 static void selection_changed__ (GtkIconView *view, gpointer user_data) {
-	get_icon_view_select(view);
+	icon_view_select__(view);
 }
 static void
 item_activated__ (GtkIconView *iconview,
@@ -106,14 +106,23 @@ row_activated__ (GtkTreeView       *tree_view,
                GtkTreePath       *path,
                GtkTreeViewColumn *column,
                gpointer           user_data) {
-    GtkTreeIter   iter;
-    GtkTreeModel *model = gtk_tree_view_get_model(tree_view);
-    if (gtk_tree_model_get_iter(model, &iter, path))
-    {
-		int id = 0;
-		gtk_tree_model_get(model, &iter, ID_COLUMN, &id, -1);
+	int id = get_id__(gtk_tree_view_get_model(tree_view), path, false);
+	if(id > 0)
 		call_item__(id, 1);
-    }
+}
+static gboolean button_press_event__(GtkWidget *widget, GdkEventButton *event, gpointer userdata) {
+	if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
+		GtkTreePath *path;
+		GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+		if(gtk_tree_view_get_path_at_pos (tree_view, (int) event->x, (int) event->y, &path, NULL, NULL, NULL)) {
+			int id = get_id__(gtk_tree_view_get_model(tree_view), path, false);
+			if(id > 0) {
+				call_item__(id, 32);
+				return TRUE;
+			}
+		}
+	}
+	return FALSE;
 }
 
 static bool iter_by_id__(GtkTreeModel *m, int id2, GtkTreeIter *i) {
@@ -131,17 +140,21 @@ static bool iter_by_id__(GtkTreeModel *m, int id2, GtkTreeIter *i) {
 	return false;
 }
 
-GtkNotebook* toolbar2___::left_book__(GtkBox* box2) {
+GtkNotebook* toolbar2___::book__(GtkBox* box2, char in) {
 	GtkNotebook* n = NULL;
-	if(!left_book_) {
+	GtkWidget *&nb = in == 'l' ? left_book_ : right_book_;
+	if(!nb) {
 		GtkWidget* w = gtk_notebook_new ();
 		n = GTK_NOTEBOOK (w);
 		gtk_notebook_set_tab_pos (n, GTK_POS_TOP);
 		gtk_notebook_set_scrollable (n, true);
-		gtk_box_pack_start(box2,w,FALSE,FALSE,0);
-		left_book_ = w;
+		if(in == 'l')
+			gtk_box_pack_start(box2,w,FALSE,FALSE,0);
+		else
+			gtk_box_pack_end(box2,w,FALSE,FALSE,0);
+		nb = w;
 	} else {
-		n = GTK_NOTEBOOK (left_book_);
+		n = GTK_NOTEBOOK (nb);
 	}
 	return n;
 }
@@ -151,13 +164,21 @@ void toolbar2___::init1__(GtkWidget* box1, toolbar2_item___* item) {
 	GtkWidget *scrolled = gtk_scrolled_window_new (NULL, NULL);
 	item->scrolled_ = scrolled;
 	gtk_scrolled_window_set_policy (item->scrolled__(), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	if(item->in_book_) {
+	switch(item->in_book_) {
+	case 'l': case 'r':
+	{
 		GtkWidget* label = gtk_label_new ("");
 		item->label_ = label;
-		gtk_notebook_append_page( left_book__(box2), scrolled, label );
-	} else {
-		gtk_box_pack_start(box2,scrolled,FALSE,FALSE,0);
+		gtk_notebook_append_page(book__(box2, item->in_book_), scrolled, label);
+		break;
+	}
+	default:
+		if(!item->in_book_)
+			gtk_box_pack_start(box2,scrolled,FALSE,FALSE,0);
+		else
+			gtk_box_pack_end(box2,scrolled,FALSE,FALSE,0);
 		item->label_ = NULL;
+		break;
 	}
 }
 
@@ -187,8 +208,8 @@ void toolbar2___::init__(GtkWidget* box1, icon_item___* item) {
 	item->store_ = store;
 	gtk_icon_view_set_model (view2, item->model__());
 	gtk_icon_view_set_pixbuf_column (view2, PIXBUF_COLUMN);
-	gtk_icon_view_set_text_column (view2, TITLE_COLUMN);
-	//gtk_icon_view_set_markup_column (view2, TITLE_COLUMN);
+	//gtk_icon_view_set_text_column (view2, TITLE_COLUMN);
+	gtk_icon_view_set_markup_column (view2, TITLE_COLUMN);
 }
 
 void toolbar2___::init__(GtkWidget* box1, tree_item___* item) {
@@ -205,6 +226,7 @@ void toolbar2___::init__(GtkWidget* box1, tree_item___* item) {
 	GtkTreeSelection *selection = gtk_tree_view_get_selection(view2);
 	g_signal_connect(selection, "changed", G_CALLBACK(changed__), NULL);
 	g_signal_connect(view, "row-activated", (GCallback) row_activated__, NULL);
+	g_signal_connect (view, "button_press_event", G_CALLBACK (button_press_event__), NULL);
 
 	init2__(item);
 
@@ -308,18 +330,18 @@ tree_foreach_cb__ (GtkTreeModel *model,
 	sprintf(buf, "%d", id);
 	callback_item___* cbi2 = callback_item__(id);
 	#define argc 4
-	const char* argv[argc] = {cbi2->title_.c_str(), cbi2->arg_.c_str(), cbi2->tooltip_.c_str(), buf};
-	int err = 0;
-	call4__(cbi->data_, cbi->code_, cbi->data2_, argc, argv, &err, true);
+	const char* argv[argc] = {cbi2->title_.c_str(), cbi2->arg__(0), cbi2->tooltip_.c_str(), buf};
+	int err;
+	call4__(cbi->data__(0), cbi->code__(0), cbi->data__(1), argc, argv, &err, true);
 	if(err)
 		return true;
 	return false;
 }
 static void tree_foreach__(GtkTreeModel *model, const string& code, void* ce, void* shangji) {
 	callback_item___* cbi = new callback_item___();
-	cbi->code_ = code;
-	cbi->data_ = ce;
-	cbi->data2_ = shangji;
+	cbi->add_code__(code);
+	cbi->add_data__(ce);
+	cbi->add_data__(shangji);
 	gtk_tree_model_foreach (model, tree_foreach_cb__, cbi);
 }
 void toolbar2_item___::for__(const string& code, void* ce, void* shangji) {
@@ -337,14 +359,23 @@ static bool set__(size_t& i2, deque<string>* p, string& s) {
 	return true;
 }
 
-void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
+void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p, int addr_fmt, char*buf) {
 	toolbar2_item___* item;
 	if((*p)[1] == toolbar2_tag2_) {
 		init__(w->box2__(), left_icon_item_);
 		item = left_icon_item_;
 	} else if((*p)[1] == toolbar2_tag3_) {
-			init__(w->box2__(), tree_item_);
-			item = tree_item_;
+		init__(w->box2__(), tree_item_);
+		item = tree_item_;
+	} else if((*p)[1] == toolbar2_tag4_) {
+		init__(w->box3__(), right_icon_item_);
+		item = right_icon_item_;
+	} else if((*p)[1] == toolbar2_tag5_) {
+		init__(w->box4__(), bottom_icon_item_);
+		item = bottom_icon_item_;
+	} else if((*p)[1] == toolbar2_tag6_) {
+		init__(w->box3__(), right_tree_item_);
+		item = right_tree_item_;
 	} else {
 		init__(w->box__(), icon_item_);
 		item = icon_item_;
@@ -375,7 +406,7 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 		if(p2 == "遍历") {
 			if(buzu__(++i2, p)) return;
 			item->for__((*p)[i2], ce, shangji);
-			break;
+			continue;
 		}
 		if(p2 == "设") {
 			int id = 0;
@@ -404,6 +435,18 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 					return;
 				}
 				if(p3 == "提示") {if(set__(i2, p, cbi->tooltip_)) continue; return;}
+				if(p3 == "图标") {
+					string name;
+					if(!set__(i2, p, name)) return;
+					GdkPixbuf *pixbuf = item->get_icon__(name);
+					switch(item->tag_) {
+					case 'i':
+						gtk_list_store_set(((icon_item___*)item)->store_, &i, PIXBUF_COLUMN, pixbuf, -1);
+						break;
+					}
+					g_object_unref (pixbuf);
+					continue;
+				}
 				buzhichi__(i2, p);
 			}
 			break;
@@ -413,7 +456,7 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 			if(!set__(i2, p, code3)) return;
 			switch(item->tag_) {
 			case 'i':
-				get_icon_view_select(item->icon_view__(), code3.c_str(), shangji, ce);
+				icon_view_select__(item->icon_view__(), code3.c_str(), shangji, ce);
 				break;
 			}
 			continue;
@@ -463,7 +506,8 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 		}
 		if(p2 == "无标题") {
 			if(item->tag_ == 'i') {
-				gtk_icon_view_set_text_column (item->icon_view__(), -1);
+				//gtk_icon_view_set_text_column (item->icon_view__(), -1);
+				gtk_icon_view_set_markup_column (item->icon_view__(), -1);
 				continue;
 			}
 			buzhichi__(i2, p);
@@ -492,10 +536,10 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 				}
 				item->store_del__(&i);
 			}
-			return;
+			break;
 		}
 		if(p2 == "加钮") {
-			string title, tooltip, code, arg, code2, arg2;
+			string title, tooltip, code, arg, code2, arg2, code3_2;
 			string set_up;
 			int posi = -1;
 			for(i2++;i2<p->size();i2++){
@@ -511,12 +555,14 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 				if(p3 == "双击附") {if(set__(i2, p, arg2)) continue; return;}
 				if(p3 == "缺省双击代码") {if(set__(i2, p, item->def_code2_)) continue; return;}
 				if(p3 == "缺省双击附") {if(set__(i2, p, item->def_arg2_)) continue; return;}
+				if(p3 == "右击代码") {if(set__(i2, p, code3_2)) continue; return;}
+				if(p3 == "缺省右击代码") {if(set__(i2, p, item->def_code3_2_)) continue; return;}
 				if(p3 == "设置上") {if(set__(i2, p, set_up)) continue; return;}
 				if(p3 == "恢复上") {
 					if(item->tag_ == 't') {
 						string restore_up;
 						if(set__(i2, p, restore_up)) {
-							int err = 0;
+							int err;
 							const char* ret = call4__(ce, restore_up, shangji, 0, NULL, &err);
 							if(err) return;
 							((tree_item___*)item)->up_ = ret;
@@ -533,22 +579,15 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 				}
 				if(p3 == "-") continue;
 
-				GdkPixbuf *pixbuf;
-				if(p3.size() > 0) {
-					if(p3.find(".") != string::npos)
-						pixbuf = gdk_pixbuf_new_from_file_at_size (p3.c_str(), item->btn_width_, item->btn_height_, NULL);
-					else
-						pixbuf = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), p3.c_str(), item->btn_width_,
-							GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
-				} else
-					pixbuf = NULL;
+				GdkPixbuf *pixbuf = item->get_icon__(p3);
 
 				callback_item___* si = new callback_item___(title,
 						!code.empty() ? code : item->def_code_,
 						!arg.empty() ? arg : item->def_arg_,
 								tooltip.empty() && item->title_tooltip_ ? title : tooltip);
-				si->code2_ = !code2.empty() ? code2 : item->def_code2_;
-				si->arg2_ = !arg2.empty() ? arg2 : item->def_arg2_;
+				si->add_code__(!code2.empty() ? code2 : item->def_code2_);
+				si->add_arg__(!arg2.empty() ? arg2 : item->def_arg2_);
+				si->add_code__(!code3_2.empty() ? code3_2 : item->def_code3_2_);
 				item->store_add__(si, pixbuf, posi);
 
 				g_object_unref (pixbuf);
@@ -557,7 +596,7 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 					if(item->tag_ == 't') {
 						tree_item___* ti = (tree_item___*)item;
 						const char* argv[] = {ti->up_.c_str()};
-						int err = 0;
+						int err;
 						call4__(ce, set_up, shangji, 1, argv, &err);
 						if(err)
 							return;
@@ -571,24 +610,60 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p) {
 				code.clear();
 				arg.clear();
 				tooltip.clear();
+				code2.clear();
+				arg2.clear();
+				code3_2.clear();
 				posi = -1;
 			}
 			break;
+		}
+		if(p2 == "清空") {
+			switch(item->tag_) {
+			case 'i':
+				gtk_list_store_clear (((icon_item___*)item)->store_);
+				continue;
+			}
+		}
+		if(p2 == "地址") {
+			if(addr_fmt == 16)
+				l2x__((long)item->scrolled_, buf);
+			else
+				l2s__((long)item->scrolled_, buf);
+			continue;
 		}
 		buzhichi__(i2, p);
 		return;
 	}
 }
 
+GdkPixbuf *toolbar2_item___::get_icon__(const string& name) {
+	if(name.size() > 0) {
+		if(name.find(".") != string::npos)
+			return gdk_pixbuf_new_from_file_at_size (name.c_str(), btn_width_, btn_height_, NULL);
+		else
+			return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name.c_str(), btn_width_,
+				GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
+	} else
+		return NULL;
+}
+
 bool toolbar2___::use_tag__(const string& p1) {
-	return p1==toolbar2_tag_ || p1==toolbar2_tag2_ || p1==toolbar2_tag3_;
+	return p1==toolbar2_tag_
+			|| p1==toolbar2_tag2_
+			|| p1==toolbar2_tag3_
+			|| p1==toolbar2_tag4_
+			|| p1==toolbar2_tag5_
+			|| p1==toolbar2_tag6_;
 }
 
 toolbar2___::toolbar2___() {
-	left_book_ = NULL;
-	icon_item_ = new icon_item___(false);
-	left_icon_item_ = new icon_item___(true);
-	tree_item_ = new tree_item___(true);
+	left_book_ = right_book_ = NULL;
+	icon_item_ = new icon_item___(0);
+	left_icon_item_ = new icon_item___('l');
+	tree_item_ = new tree_item___('l');
+	right_icon_item_ = new icon_item___('r');
+	bottom_icon_item_ = new icon_item___('b');
+	right_tree_item_ = new tree_item___('r');
 }
 
 toolbar2___::~toolbar2___() {

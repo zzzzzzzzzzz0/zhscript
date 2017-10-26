@@ -62,41 +62,50 @@ GtkWidget* window___::new__(window_flag___* flag, container___* c){
 
 	if(flag->is_app_paintable_) {
 		gtk_widget_set_app_paintable(window_, TRUE);
-#ifndef ver_gtk3_
 		GdkScreen *screen = gtk_widget_get_screen(window_);
+#ifndef ver_gtk3_
 		GdkColormap *colormap = gdk_screen_get_rgba_colormap(screen);
 		gtk_widget_set_colormap(window_, colormap);
+#else
+		GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+		if (!visual)
+			visual = gdk_screen_get_system_visual(screen);
+		gtk_widget_set_visual(window_, visual);
 #endif
 	}
 
 	box_ = gtk_vbox_new(false,0);
 	gtk_container_add(GTK_CONTAINER(window_),box_);
+	box4_ = gtk_vbox_new(false,0);
+	gtk_box_pack_end(GTK_BOX(box_),box4_,false,false,0);
 	box2_ = gtk_hbox_new(false,0);
 	gtk_box_pack_end(GTK_BOX(box_),box2_,true,true,0);
+	box3_ = gtk_hbox_new(false,0);
+	gtk_box_pack_end(GTK_BOX(box2_),box3_,false,false,0);
 
-	GtkWidget* scrolled = gtk_scrolled_window_new (NULL, NULL);
+	scrolled_ = gtk_scrolled_window_new (NULL, NULL);
 	//g_object_ref_sink(scrolled);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_),
 								  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	if(add_event_box_) {
 		event_box_ = gtk_event_box_new ();
 		gtk_event_box_set_above_child (GTK_EVENT_BOX (event_box_), FALSE);
-		gtk_container_add (GTK_CONTAINER (event_box_), scrolled);
+		gtk_container_add (GTK_CONTAINER (event_box_), scrolled_);
 		//gtk_container_add (GTK_CONTAINER (window_), event_box_);
 		gtk_box_pack_end(GTK_BOX(box2_),event_box_,true,true,0);
 		gtk_widget_realize (event_box_);
 	} else {
 		event_box_ = NULL;
 		//gtk_container_add (GTK_CONTAINER (window_), scrolled);
-		gtk_box_pack_end(GTK_BOX(box2_),scrolled,true,true,0);
+		gtk_box_pack_end(GTK_BOX(box2_),scrolled_,true,true,0);
 	}
 	gtk_widget_set_events(window_, gtk_widget_get_events(window_)
 			| GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK
 			| GDK_BUTTON_PRESS | GDK_BUTTON_RELEASE
 			| GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
 
-	return c__()->new__(scrolled);
+	return c__()->new__(scrolled_);
 }
 
 bool window___::add_event_box_ = false;

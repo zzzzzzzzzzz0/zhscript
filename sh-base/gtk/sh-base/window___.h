@@ -33,7 +33,8 @@ private:
 	window_flag___ flag_;
 	container___* c_;
 	bool is_main_;
-	GtkWidget *box_, *box2_, *event_box_;
+	GtkWidget* scrolled_;
+	GtkWidget *box_, *box2_, *box3_, *box4_, *event_box_;
 public:
 	string code_;
 	map<int, string> codes_;
@@ -49,8 +50,11 @@ public:
 	container___* c__() {return c_;}
 	GtkWidget* widget__(){return window_;}
 	GtkWindow* window__(){return GTK_WINDOW (window_);}
+	GtkWidget* scrolled__() {return scrolled_;}
 	GtkWidget* box__(){return box_;}
 	GtkWidget* box2__(){return box2_;}
+	GtkWidget* box3__(){return box3_;}
+	GtkWidget* box4__(){return box4_;}
 	GtkWidget* event_box__(){
 		//return event_box_;
 		return window_;

@@ -100,6 +100,14 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		l2s__(p1 == "x" ? x : y, buf);
 		return true;
 	}
+	if(p1 == "客区x" || p1 == "客区y") {
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		GtkWidget *w2 = w->c__()->nth_page2__(page_num);
+		gint x, y;
+		gtk_widget_translate_coordinates(w2, gtk_widget_get_toplevel(w2), 0, 0, &x, &y);
+		l2s__(p1 == "客区x" ? x : y, buf);
+		return true;
+	}
 	if(p1=="活动"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		l2s__(gtk_window_is_active(w->window__()),buf);
@@ -177,6 +185,14 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		//gdk_flush();
 		return true;
 	}
+#ifdef ver_gtk3_
+	if(p1 == "客区宽度" || p1 == "客区高度") {
+		w=get_window__(p0,page_num,p1);if(!w)return true;
+		GtkWidget *w2 = w->c__()->nth_page2__(page_num);
+		l2s__(p1 == "客区宽度" ? gtk_widget_get_allocated_width(w2) : gtk_widget_get_allocated_height(w2), buf);
+		return true;
+	}
+#endif
 	if(p1 == "宽度" || p1 == "高度") {
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		gint w1 = 0, h1 = 0;
@@ -185,13 +201,14 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		return true;
 	}
 	if(p1=="大小" || p1 == "定大小"){
-		if(err_buzu2__(p, 4))
+		if(err_buzu2__(p, 3))
 			return true;
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		const string &w2 = (*p)[2], &h2 = (*p)[3];
-		int w1, h1;
-		w1 = s2i__(w2, gdk_screen_width());
-		h1 = s2i__(h2, gdk_screen_height());
+		int w1 = s2i__((*p)[2], gdk_screen_width()), h1;
+		if(p->size() > 3)
+			h1 = s2i__((*p)[3], gdk_screen_height());
+		else
+			h1 = w1;
 		if(p1=="大小") {
 			gtk_window_set_default_size (w->window__(), w1, h1);
 			gtk_window_resize (w->window__(), w1, h1);
@@ -271,10 +288,10 @@ bool shell___::api_w__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,c
 		case 14: gtk_window_unstick(w->window__()); break;
 		case 15: gtk_window_set_position(w->window__(),GTK_WIN_POS_CENTER); break;
 		case 16: gtk_window_set_type_hint(w->window__(), GDK_WINDOW_TYPE_HINT_UTILITY); break;
-		case 17: gtk_window_set_resizable(w->window__(), bool__(p, ++i)); break;
-		case 18: w->c__()->show_tabs__(bool__(p, ++i)); break;
-		case 19: w->c__()->show_border__(bool__(p, ++i)); break;
-		case 20: gtk_window_set_decorated(w->window__(), bool__(p, ++i)); break;
+		case 17: gtk_window_set_resizable(w->window__(), bool__(p, ++i, false)); break;
+		case 18: w->c__()->show_tabs__(bool__(p, ++i, false)); break;
+		case 19: w->c__()->show_border__(bool__(p, ++i, false)); break;
+		case 20: gtk_window_set_decorated(w->window__(), bool__(p, ++i, false)); break;
 		case 21:
 		{
 			GtkWidget* b=w->c__()->close_button__(page_num);

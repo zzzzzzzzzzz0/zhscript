@@ -6,29 +6,44 @@
  */
 
 #include "callbackitem.h"
-#include <deque>
 #include "extern.h"
 #include "extern2.h"
+
+const char* callback_item___::get__(const deque<string> &a, int i) {
+	if(i < 0 || i >= a.size())
+		return "";
+	return a[i].c_str();
+}
+void* callback_item___::data__(int i) {
+	if(i < 0 || i >= datas_.size())
+		return NULL;
+	return datas_[i];
+}
+void callback_item___::data__(int i, void* data) {
+	for(int i2 = datas_.size(); i2 <= i; i2++)
+		add_data__(NULL);
+	callback_item___::datas_[i] = data;
+}
 
 void callback_item___::call__(int i, const char* arg2, const char* code3, void* shangji, void* ce) {
 	const char *code, *arg;
 	switch(i) {
-	case 3:
-		code = code3;
-		arg = arg2_.c_str();
+	case 32:
+		code = code__(2);
+		arg = arg__(0);
 		break;
+	case 3:
 	case 2:
 		code = code3;
-		arg = arg_.c_str();
+		arg = arg__(i - 2);
 		break;
 	case 1:
-		code = code2_.c_str();
-		arg = arg2_.c_str();
+	case 0:
+		code = code__(i);
+		arg = arg__(i);
 		break;
 	default:
-		code = code_.c_str();
-		arg = arg_.c_str();
-		break;
+		return;
 	}
 	char id2[32];
 	l2s__(id_, id2);
@@ -70,7 +85,6 @@ callback_item___* callback_item__(int id) {
 }
 
 void callback_item___::init__(bool has_id) {
-	data_ = data2_ = NULL;
 	i_ = 0;
 
 	if(has_id) {

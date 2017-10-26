@@ -43,7 +43,7 @@ public:
 	virtual void copy__(container___* c) {}
 	void name2__(string& name2, GtkWidget *sw);
 
-	virtual GtkWidget* page_new__(const char* name) {
+	virtual GtkWidget* page_new__(const char* name, bool to) {
 		return NULL;
 	}
 	void label_new__(GtkWidget *box, GtkWidget* scrolled2);
@@ -66,7 +66,7 @@ public:
 	int page_check__(int page_num);
 	GtkWidget* nth_page2__(int page_num);
 	gpointer get_data__(int page_num, const char *key);
-	void set_data__(int page_num, const char *key, gpointer data);
+	void set_data__(int page_num, const char *key, const string& data);
 
 	void for__(const char* code, void*ce, void* shangji);
 

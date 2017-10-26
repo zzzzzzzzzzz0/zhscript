@@ -48,7 +48,7 @@ public:
 		has_1page_ = wf->has_1page_;
 	}
 
-	GtkWidget* page_new__(const char* name);
+	GtkWidget* page_new__(const char* name, bool to);
 
 	int current_page__() {
 		return gtk_notebook_get_current_page (notebook__());
@@ -70,10 +70,10 @@ public:
 		close__(page_num__(view___::scrolled_from__(v)));
 	}
 
-	void set_show_tabs__(bool b) {
+	void show_tabs__(bool b) {
 		gtk_notebook_set_show_tabs(notebook__(), b);
 	}
-	void set_show_border__(bool b) {
+	void show_border__(bool b) {
 		gtk_notebook_set_show_border(notebook__(), b);
 	}
 };

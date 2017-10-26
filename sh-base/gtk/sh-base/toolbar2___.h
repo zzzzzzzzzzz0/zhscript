@@ -13,14 +13,19 @@
 #define toolbar2_tag_ "图标夹"
 #define toolbar2_tag2_ "左图标夹"
 #define toolbar2_tag3_ "树"
+#define toolbar2_tag4_ "右图标夹"
+#define toolbar2_tag5_ "底图标夹"
+#define toolbar2_tag6_ "右树"
 
 class toolbar2_item___ {
 public:
-	bool is_init_, in_book_;
+	bool is_init_;
+	char in_book_;
 	GtkWidget *scrolled_, *widget_, *label_;
 	int btn_width_, btn_height_;
 	string def_code_, def_arg_;
 	string def_code2_, def_arg2_;
+	string def_code3_2_;
 	char tag_;
 	bool title_tooltip_;
 
@@ -28,11 +33,12 @@ public:
 	virtual void store_del__(GtkTreeIter* i) = 0;
 	virtual GtkTreeModel *model__() = 0;
 	virtual void for__(const string& code, void* ce, void* shangji);
+	GdkPixbuf *get_icon__(const string& name);
 
 	GtkIconView *icon_view__() {return GTK_ICON_VIEW(widget_);}
 	GtkTreeView *tree_view__() {return GTK_TREE_VIEW(widget_);}
 
-	toolbar2_item___(bool in_book) {
+	toolbar2_item___(char in_book) {
 		is_init_ = false;
 		in_book_ = in_book;
 		btn_width_ = btn_height_ = -1;
@@ -46,7 +52,7 @@ public:
 class icon_item___ : public toolbar2_item___ {
 public:
 	GtkListStore *store_;
-	icon_item___(bool in_book) : toolbar2_item___(in_book) {
+	icon_item___(char in_book) : toolbar2_item___(in_book) {
 		tag_ = 'i';
 	}
 	GtkTreeModel *model__() {return GTK_TREE_MODEL (store_);}
@@ -59,7 +65,7 @@ public:
 	GtkTreeStore *store_;
 	GtkTreeViewColumn *col_;
 	string up_, last_;
-	tree_item___(bool in_book) : toolbar2_item___(in_book) {
+	tree_item___(char in_book) : toolbar2_item___(in_book) {
 		tag_ = 't';
 	}
 	GtkTreeModel *model__() {return gtk_tree_view_get_model(tree_view__());}
@@ -71,19 +77,19 @@ class toolbar2___ {
 public:
 	toolbar2___();
 	virtual ~toolbar2___();
-	void with__(window___* w, void*shangji,void*ce,deque<string>* p);
+	void with__(window___* w, void*shangji,void*ce,deque<string>* p, int addr_fmt, char*buf);
 	bool use_tag__(const string& p1);
 private:
-	GtkWidget* left_book_;
-	GtkNotebook* left_book__(GtkBox* box2);
+	GtkWidget *left_book_, *right_book_;
+	GtkNotebook* book__(GtkBox* box2, char in);
 
 	void init1__(GtkWidget* box1, toolbar2_item___* item);
 	void init2__(toolbar2_item___* item);
 
-	icon_item___ *icon_item_, *left_icon_item_;
+	icon_item___ *icon_item_, *left_icon_item_, *right_icon_item_, *bottom_icon_item_;
 	void init__(GtkWidget* box1, icon_item___* item);
 
-	tree_item___ *tree_item_;
+	tree_item___ *tree_item_, *right_tree_item_;
 	void init__(GtkWidget* box1, tree_item___* item);
 };
 

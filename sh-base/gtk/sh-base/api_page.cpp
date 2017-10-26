@@ -105,22 +105,15 @@ bool shell___::api_page__(void*shangji,void*ce,deque<string>* p,char*buf,long si
 			gtk_widget_set_tooltip_markup(GTK_WIDGET(l), (*p)[2].c_str());
 		return true;
 	}
-	if(p1=="附"){
+	if(p1=="附" || p1=="变量"){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
 		if(err_buzu2__(p, 3, 0))
 			return true;
 		string name = p1; name += "-"; name += (*p)[2];
-		char* data = (char*)w->c__()->get_data__(page_num, name.c_str());
 		if(p->size() < 4) {
-			cpy__(buf, data, siz);
+			cpy__(buf, (char*)w->c__()->get_data__(page_num, name.c_str()), siz);
 		}else {
-			if(data)
-				delete data;
-			const string& data1 = (*p)[3];
-			size_t siz1 = data1.size() + 1;
-			data = new char[siz1];
-			cpy__(data, data1.c_str(), siz1);
-			w->c__()->set_data__(page_num, name.c_str(), data);
+			w->c__()->set_data__(page_num, name.c_str(), (*p)[3]);
 		}
 		return true;
 	}

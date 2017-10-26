@@ -13,7 +13,6 @@
 #include"def1.h"
 #include"call_util.cpp"
 #include<gdk/gdkx.h>
-#include "s1___.h"
 #include "windows___.h"
 #include "extern.h"
 #include "extern2.h"
@@ -23,8 +22,12 @@
 #include "container/notebook___.h"
 #include "container/table___.h"
 
-bool bool__(deque<string>* p, size_t i) {
-	return p->size() > i ? !bool__((*p)[i]) : false;
+bool bool__(deque<string>* p, size_t i, bool b) {
+	if(p->size() > i) {
+		bool b2 = bool__((*p)[i]);
+		return b ? b2 : !b2;
+	}
+	return b;
 }
 
 static void not_block__() {
@@ -62,15 +65,33 @@ void get_xid__(GtkWidget* w, char* buf) {
 static l4___ l4_;
 static void* l4_main_qu_;
 string null_;
-static string code_;
+static string code_, err_code_;
 static window_flag___ main_window_flag_;
 static container___* main_window_c_ = NULL;
 static windows___ windows_;
 static toolbar2___ toolbar2_;
 
+void err__(const char* s,const char* s2,const char* s3){
+	if(!err_code_.empty()) {
+		int errerr;
+		l4_.l4_callback_2__(l4_.l4__(), &errerr, NULL, err_code_.c_str(), false, NULL, l4_main_qu_,
+				3, s, s2, s3);
+		if(!errerr) return;
+		cerr << endl << err_code_;
+	}
+	cerr<<endl;
+	if(s)
+		cerr<<s;
+	if(s2)
+		cerr<<s2;
+	if(s3)
+		cerr<<s3;
+	cerr<<endl;
+}
 void err__(int err, const char* ret){
 	if(err) {
-		cerr<<endl<<ret<<l4_.err_<<l4_.err__()<<l4_.errinfo__(err)<<endl;
+		err__(ret, l4_.err__(), l4_.errinfo__(err));
+		cerr<<l4_.err_<<endl;
 		l4_.err_clear__();
 	}
 }
@@ -104,7 +125,8 @@ const char* call4__(int* err, void*ce, const char* code, const char* src2,void* 
 
 s1___* new_window_s1_ = new s1___("创建", "", 'w');
 static s1___* show_window_s1_ = new s1___("显现", "", 'w');
-s1___* window_destroy_s1_ = new s1___("销毁", "", 'w');
+s1___* window_destroy_s1_ = new s1___("销毁", "destroy", 'w');
+s1___* window_state_event_s1_ = new s1___("状态", "window-state-event", 'w');
 static s1___* switch_page_s1_ = new s1___("标签页切换", "switch-page", 'n');
 
 static void show_window__(window___* w){
@@ -124,6 +146,29 @@ static void destroy__(GtkWidget *widget,gpointer gdata) {
 		gtk_main_quit();
 	}
 	windows_.erase__(w);
+}
+
+static gboolean window_state_event__(GtkWidget *widget, GdkEvent *event, gpointer user_data) {
+	GdkWindowState ws = ((GdkEventWindowState*)event)->new_window_state;
+	string s1;
+	if ((ws & GDK_WINDOW_STATE_FULLSCREEN))
+		s1 += "全屏";
+	if((ws & GDK_WINDOW_STATE_MAXIMIZED))
+		s1 += "最大化";
+	if((ws & GDK_WINDOW_STATE_ICONIFIED))
+		s1 += "最小化";
+	if((ws & GDK_WINDOW_STATE_ABOVE))
+		s1 += "置顶";
+	if((ws & GDK_WINDOW_STATE_BELOW))
+		s1 += "置底";
+	if((ws & GDK_WINDOW_STATE_STICKY))
+		s1 += "总可见";
+#ifdef ver_gtk3_
+	if((ws & GDK_WINDOW_STATE_TILED))
+		s1 += "平铺";
+#endif
+	call4__(NULL,window___::from__(widget),window_state_event_s1_,1,s1.c_str());
+	return FALSE;
 }
 
 static void switch_page__(GtkNotebook *notebook, gpointer *page,gint page_num){
@@ -148,7 +193,14 @@ static void new_window0__(window___* w, window_flag___* flag, container___* c, s
 	if(w2)
 		w->c__()->push__(sh->new_view__(w2, w));
 
-	g_signal_connect(w->window__(), "destroy", G_CALLBACK(destroy__), NULL);
+	window_destroy_s1_->cb_ = G_CALLBACK(destroy__);
+	window_state_event_s1_->cb_ = G_CALLBACK(window_state_event__);
+	for(size_t i = 0; i < s1s_length__(); i++) {
+		s1___* s1 = s1s__(i);
+		if(s1->type__() == 'w' && s1->cb_) {
+			g_signal_connect(w->window__(), s1->signal__(), s1->cb_, NULL);
+		}
+	}
 	w->c__()->signal_connect__();
 	call4__(NULL,w,new_window_s1_,0);
 }
@@ -159,9 +211,9 @@ view___* shell___::new_view__(GtkWidget* scrolled2, window___* window) {
 	return new view___(scrolled2, window);
 }
 
-view___* shell___::new_page__(const char* name, window___* window) {
+view___* shell___::new_page__(const char* name, bool to, window___* window) {
 	view___* v = NULL;
-	GtkWidget* scrolled2 = window->c__()->page_new__(name);
+	GtkWidget* scrolled2 = window->c__()->page_new__(name, to);
 	if(scrolled2) {
 		v = sh_->new_view__(scrolled2, window);
 		window->c__()->push__(v);
@@ -185,6 +237,10 @@ window___* shell___::new_window__(const char* name, bool is_main) {
 
 window___* shell___::get_window__(const string& name,int& page_num,const string& help,
 		bool chk_can, string* page_num2, bool show_err){
+	if(name.empty()) {
+		page_num = notebook_current_page_;
+		return windows_.main__();
+	}
 	window___* w;
 	size_t i=name.find('#');
 	if(i==string::npos){
@@ -272,7 +328,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(toolbar2_.use_tag__(p1)){
 		w=get_window__(p0,page_num,p1);if(!w)return true;
-		toolbar2_.with__(w, shangji, ce, p);
+		toolbar2_.with__(w, shangji, ce, p, addr_fmt_, buf);
 		return true;
 	}
 	if(api_w2__(shangji, ce, p, buf, siz, addr_ret))
@@ -304,7 +360,7 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 				break;
 			if((c = table___::new__(p, i2, w)))
 				break;
-			err_buzhichi__(p2,p1.c_str());
+			buzhichi__(-1, p);
 			return true;
 		}
 		if(!c)
@@ -317,6 +373,14 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 	}
 	if(p0=="代码"){
 		code_=p1;
+		return true;
+	}
+	if(p0=="错代码"){
+		err_code_=p1;
+		return true;
+	}
+	if(p1=="地址格式"){
+		addr_fmt_ = s2i__(p0);
 		return true;
 	}
 	if(p1 == "等待") {
@@ -358,6 +422,48 @@ bool shell___::api__(void*shangji,void*ce,deque<string>* p,char*buf,long siz,cha
 
 	err_buzhichi__(p1);
 	return false;
+}
+
+bool shell___::api_new_view__(const string& p0, const string& p1, deque<string>* p, s1___* s1, const char* arg_alias, view___**v2) {
+	int page_num;
+	string page_num2;
+	window___*w=get_window__(p0,page_num,p1, true, &page_num2);if(!w)return true;
+	view___*v=w->view__(page_num);
+	if(v2) *v2 = v;
+	bool to = true;
+	string arg;
+	for(size_t i = 2; i < p->size(); i++) {
+		const string& p3 = (*p)[i];
+		if(p3 == "不激活") {
+			to = false;
+			continue;
+		}
+		if(p3 == "参" || (arg_alias && p3 == arg_alias)) {
+			if(++i < p->size()) {
+				arg = (*p)[i];
+				continue;
+			}
+		}
+		err_buzhichi__(p3, p1.c_str());
+		return true;
+	}
+	if(page_num2.empty() || !v){
+		v = new_page__(page_num2.c_str(), to, w);
+		if(v2) *v2 = v;
+		if(v) {
+			if(!arg.empty()) {
+				call4__(v->scrolled__(), w, s1, 1, arg.c_str());
+			} else {
+				call4__(v->scrolled__(), w, s1, 0);
+			}
+		} else {
+			err_wufa__(p1);
+		}
+	} else {
+		if(to)
+			w->c__()->set_page__(page_num);
+	}
+	return true;
 }
 
 static string log_no_="cwdmi";
@@ -451,11 +557,11 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 			err=0;
 		}
 	}
-	err__(err,"");
-	if(err)
-		return 255;
 
 	if(!l4_.is_end__()) {
+		err__(err,"");
+		if(err)
+			return 255;
 		{
 			window___* w = windows_.main__();
 			if(!main_window_c_)
@@ -469,6 +575,7 @@ int shell___::with__(int argc, char *argv[], char* env[]) {
 }
 
 shell___::shell___() {
+	addr_fmt_ = 16;
 	sh_ = this;
 	switch_page_s1_->cb_ = G_CALLBACK(switch_page__);
 }

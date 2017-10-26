@@ -54,10 +54,10 @@ table___* table___::new__(deque<string>* p, size_t from, void* w) {
 GtkWidget* table___::new__(GtkWidget* scrolled) {
 	table_ = gtk_table_new(rows_, cols_, false);
 	container_add__(table_, scrolled);
-	return page_new__(NULL);
+	return page_new__(NULL, true);
 }
 
-GtkWidget* table___::page_new__(const char* name) {
+GtkWidget* table___::page_new__(const char* name, bool to) {
 	if(last_col_ >= cols_) {
 		return NULL;
 	}
