@@ -245,10 +245,13 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 				ss[i6].clear();
 				continue;
 			}
-			for(int i7=ss[i5].size();i7>0;i7--){
-				if(i7 == 1) {
-					char c = ss[i5][0];
-					if(c < ' ' || c > '~')
+			int i5size = ss[i5].size();
+			for(int i7=i5size;i7>0;i7--){
+				if(i7 < i5size) {
+					unsigned char c = ss[i5][i7];
+					if(c >= '0' && c <= '9')
+						continue;
+					if((c & 0xc0) == 0x80)
 						continue;
 				}
 				string s=ss[i5].substr(0,i7);
