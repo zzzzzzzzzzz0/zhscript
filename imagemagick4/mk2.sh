@@ -5,8 +5,9 @@ g++ \
 `pkg-config Magick++ --cflags` \
 *.cpp \
 -I../new_gg \
--shared -o"imagemagick4.so$1" \
+-shared -o"../../bin/zhscript2/lib/imagemagick4.so$1" \
 `pkg-config Magick++ --libs` \
 -fPIC \
 -O3 -Wall -fmessage-length=0 \
+-Wl,-rpath=lib3,-rpath=bin/lib3 \
 $2

@@ -7,6 +7,11 @@
 using namespace std;
 using namespace Magick;
 
+//#include <magick/MagickCore.h>
+#if MAGICKCORE_CHECK_VERSION(0,0,1)
+#warning MAGICKCORE_CHECK_VERSION
+#endif
+
 #if MAGICKCORE_MAJOR_VERSION >= 7
 #define ver_7_
 #endif
@@ -176,7 +181,7 @@ const char* bgc, size_t w3, size_t h3, size_t h2, size_t h22, const char *ctl) {
 			for(size_t x = 0; x < w3; x++) {
 				size_t i = w3 - w2;
 				if(x >= w1 && x < i) {
-					if(y < h4) {
+					if(y < h4 || y < h42) {
 						if(!shangzhongla)
 							continue;
 					} else {
