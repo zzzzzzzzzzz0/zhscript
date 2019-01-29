@@ -25,7 +25,7 @@ static int cmp__(const string& s1, const string& s2, size_t i, int ret) {
 	float l2;
 	if(sscanf(s2.c_str() + i2, "%f", &l2) != 1)
 		return ret;
-	//printf("{%u %.1f %.1f}",i,l1,l2);
+	//printf("{%lu %.1f %.1f}",i,l1,l2);
 	if(l1 > l2)
 		return 1;
 	if(l1 < l2)
@@ -84,8 +84,8 @@ bool list_cmp___::cmp_index(const string& s1, const string& s2, size_t i) {
 	//printf("{%s}",s1.c_str());
 	return true;
 }
-bool list_cmp___::on_type_2(const string& s1, const string& s2, bool& ret) {
-	if(type_ & 2) {
+bool list_cmp___::on_type_2(const string& s1, const string& s2, int type, bool& ret) {
+	if(type & 2) {
 		size_t i;
 		if(is_index(s2, i)) {
 			if(cmp_index(s1, s2, i)) {
@@ -103,34 +103,53 @@ bool list_cmp___::on_type_2(const string& s1, const string& s2, bool& ret) {
 }
 bool list_cmp___::operator() (vector<string>* i, vector<string>* j) {
 	bool ret = false;
-	for(;;) {
-		if(row_ >= i->size()) {
-			ret = false;
+	int type;
+	for(size_t i2 = 0;; i2++) {
+		if(i2 >= items_.size()) {
+			type = 0;
 			break;
 		}
-		if(row_ >= j->size()) {
+		list_cmp_item___* ci = items_[i2];
+		size_t row = ci->row_;
+		type = ci->type_;
+		//printf("%ld %p %ld %d\n",i2,ci,row,type);
+		if(row >= i->size()) {
+			break;
+		}
+		if(row >= j->size()) {
 			ret = true;
 			break;
 		}
-		const string& s1 = (*i)[row_];
-		const string& s2 = (*j)[row_];
-		if(on_type_2(s1, s2, ret))
+		const string& s1 = (*i)[row];
+		const string& s2 = (*j)[row];
+		if(on_type_2(s1, s2, type, ret))
 			return ret;
-		if(cmp__(s1, s2) < 0) {
+		int i3 = cmp__(s1, s2);
+		if(i3 < 0) {
 			ret = true;
 			break;
 		}
-		break;
+		if(i3 > 0) {
+			break;
+		}
 	}
-	on_type_1(ret);
+	on_type_1(type, ret);
 	return ret;
 }
 bool list_cmp___::operator() (const string& s1, const string& s2) {
 	bool ret = false;
-	if(on_type_2(s1, s2, ret))
+	list_cmp_item___* ci = items_[0];
+	if(on_type_2(s1, s2, ci->type_, ret))
 		return ret;
 	if(cmp__(s1, s2) < 0)
 		ret = true;
-	on_type_1(ret);
+	on_type_1(ci->type_, ret);
 	return ret;
 }
+
+/*list_cmp___::~list_cmp___() {
+	for(size_t i = 0; i < items_.size(); i++) {
+		printf("%ld delete %p\n",i,items_[i]);
+		delete items_[i];
+	}
+}*/

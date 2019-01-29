@@ -5,6 +5,7 @@
  *      Author: zzzzzzzzzzz
  */
 #include "list_cmp.h"
+#include "strlen_sp.h"
 
 dlle___ vector<vector<string>*>* new_list__() {
 	return new vector<vector<string>*>();
@@ -118,7 +119,7 @@ dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
 	char num[16];
 	string ret2;
 	int i1 = is_reverse ? p->size() - 1 : 0;
-	for(unsigned i11 = 0; i1 < p->size() && i1 >= 0;) {
+	for(unsigned i11 = 0; i1 < (int)p->size() && i1 >= 0;) {
 		vector<string>* v = (*p)[i1];
 		argc = v->size();
 		size_t add = 0;
@@ -239,12 +240,27 @@ dlle___ vector<string>* list_col__(vector<vector<string>*>* p, size_t i) {
 	return (*p)[i];
 }
 
-dlle___ void sort_list__(vector<vector<string>*>* p, int row, int type) {
+dlle___ void sort_list__(vector<vector<string>*>* p, int row, int type, int argc, ...) {
 	if(!ok__(p))
 		return;
-	list_cmp___* lc = new list_cmp___(--row, type);
-	sort(p->begin(), p->end(), *lc);
-	delete lc;
+	if(argc % 2 != 0)
+		return;
+	list_cmp___ lc(--row, type);
+	{
+		va_list argv;
+		va_start(argv, argc);
+		for(int i = 0; i < argc; i += 2) {
+			int row2, type2;
+			bool b1 = (sscanf(va_arg(argv, char*), "%d", &row2) == 1);
+			bool b2 = (sscanf(va_arg(argv, char*), "%d", &type2) == 1);
+			if(b1 && b2)
+				lc.items_add__(--row2, type2);
+			else
+				return;
+		}
+		va_end(argv);
+	}
+	sort(p->begin(), p->end(), lc);
 }
 
 dlle___ void sort_list_col__(vector<string>* p, int type) {
@@ -261,7 +277,7 @@ void list_to_1_get_max__(vector<string>* v, size_t& max) {
 }
 void list_to_1_get_max_s__(vector<string>* v, size_t i, size_t& s) {
 	if(i < v->size()) {
-		size_t s2 = space_size__((*v)[i]);
+		size_t s2 = strlen_sp__((*v)[i]);
 		if(s < s2) {
 			s = s2;
 		}
@@ -270,7 +286,7 @@ void list_to_1_get_max_s__(vector<string>* v, size_t i, size_t& s) {
 void list_to_1_set_buf__(string* s, bool head, bool center, bool right, bool num_right, size_t max_s, string& buf) {
 	size_t cnt = 0;
 	if(s) {
-		cnt = space_size__(*s);
+		cnt = strlen_sp__(*s);
 		if(!right && num_right) {
 			for(size_t i2 = 0;; i2++) {
 				if(i2 >= cnt) {

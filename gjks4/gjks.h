@@ -20,7 +20,6 @@
 using namespace std;
 
 extern bool ok__(void* p);
-extern size_t space_size__(const string& s);
 
 extern callback3_2___ cb_;
 extern void* jsq_;
