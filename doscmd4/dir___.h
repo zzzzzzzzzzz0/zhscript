@@ -9,9 +9,8 @@
 #define DIR____H_
 #include <regex.h>
 #include "def1.h"
-#include<string>
+#include "listitem.h"
 #include <vector>
-using namespace std;
 
 class dir_opt___{
 public:
@@ -21,7 +20,7 @@ public:
 	bool icase_;
 	int sort_;
 	bool dir_not_tongpei_;
-	bool out_dir_enter_,out_dir_exit_;
+	bool out_dir_enter_,out_dir_exit_,out_dir_exit2_;
 	bool dirlnk_is_dir_;
 	bool not_;
 	bool flag_;
@@ -32,22 +31,36 @@ public:
 		icase_=false;
 		sort_=-1;
 		dir_not_tongpei_=true;
-		out_dir_enter_=out_dir_exit_=false;
+		out_dir_enter_=out_dir_exit_=out_dir_exit2_=false;
 		dirlnk_is_dir_=true;
 		not_=false;
 		flag_ = true;
 	}
 };
 
+class gi_item___ {
+public:
+	regex_t* re_;
+	bool tanhao_;
+	gi_item___(regex_t* re, bool tanhao) : re_(re),tanhao_(tanhao) {}
+};
+
 class dir___ {
 private:
-	int dir2__(const char*dir,int depth,string dir2,regex_t* reg,const char*tongpei,
-			dir_opt___*opt,const char* src,void*ce,void*qu,callback2_2___ cb);
-	int exec__(regex_t* reg,const char*tongpei,dir_opt___*opt,
-			string dir2,const char* name,bool is_dir, bool is_lnk,
-			const char* src,void*ce,void*qu,callback2_2___ cb);
+	const char *tongpei_, *src_;
+	dir_opt___*opt_;
+	regex_t* reg_;
+	void *ce_, *qu_;
+	callback2_2___ func_;
+	vector<gi_item___*> gi_items_;
+	int dir2__(const char*dir,int depth,string dir2);
+	int exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char typ2, size_t begin);
+
+	vector<list_item___*> list2_;
+	bool use2_;
 public:
-	dir___();
+	dir___() {use2_ = false;}
+	dir___(int) {use2_ = true;}
 	virtual ~dir___();
 	void dir__(int*err1,char*buf,long siz,
 			const char*dir,const char*tongpei,const char*opt1,
@@ -55,9 +68,13 @@ public:
 	void sort__(int sort1);
 	void first__(int sort1);
 	bool split__(char c, char*buf,long siz);
+	int count__();
+	void clear__();
 
 	vector<string> list_;
-	int i_, i2_, ii_;
+	long i_, i2_;
+	int ii_;
+	vector<string>* list__();
 };
 
 #endif /* DIR____H_ */
