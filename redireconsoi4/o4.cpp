@@ -104,19 +104,22 @@ dlle___ int o4__(int*err,callback2_2___ cb,void*jsq,void*shangji,void*ce,int arg
 	std::string buf2, buf2_err;
 	for(;;)	{
 		char c;
-		int count = read( fd[0], &c, sizeof(c) );
-		if(count > 0){
-			if(c == '\n' || c == '\r') {
-				cb(jsq,shangji,err,ce,script.c_str(),false,NULL,1,buf2.c_str());
-				if(cb_err__(err) > 0){
-					err2 = 263;
-					break;
-				}
-				buf2.clear();
-			} else if(c == ctrl0_) {
-				read( fd[0], &ret, sizeof(ret) );
-			} else
-				buf2 += c;
+		int count = 0;
+		if(script != no) {
+			count = read( fd[0], &c, sizeof(c) );
+			if(count > 0){
+				if(c == '\n' || c == '\r') {
+					cb(jsq,shangji,err,ce,script.c_str(),false,NULL,1,buf2.c_str());
+					if(cb_err__(err) > 0){
+						err2 = 263;
+						break;
+					}
+					buf2.clear();
+				} else if(c == ctrl0_) {
+					read( fd[0], &ret, sizeof(ret) );
+				} else
+					buf2 += c;
+			}
 		}
 		int count_err = 0;
 		if(!script_err.empty() && script_err != no) {
