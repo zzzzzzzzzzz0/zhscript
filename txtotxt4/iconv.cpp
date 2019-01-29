@@ -16,21 +16,44 @@
 #define bufsiz_ 512
 #endif
 
+static void add__(char* buf, size_t n, char mode, string &ret) {
+	switch(mode) {
+	case 'x': case 'X': {
+		char fmt[] = {'%', '0', '2', mode};
+		char buf2[3];
+		for(size_t i = 0; i < n; i++) {
+			sprintf(buf2, fmt, (unsigned char)buf[i]);
+			ret.append(buf2, 2);
+		}
+		break; }
+	case 0:
+		ret.append(buf, n);
+		break;
+	}
+}
+
 dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
 #ifndef ver_no_iconv_
 	if(!src)
 		return;
 	const char *from="gb18030";
 	const char *to="utf8";
+	char mode = 0;
 	_for_args( argc )
-	switch(i){
-	case 0:
-		from=s;
-		break;
-	case 1:
-		to=s;
-		break;
-	}
+		if(!s) continue;
+		switch(i){
+		case 0:
+			if(s[0])
+				from=s;
+			break;
+		case 1:
+			if(s[0])
+				to=s;
+			break;
+		case 2:
+			mode = s[0];
+			break;
+		}
 	_next_args
 
 	iconv_t cd;
@@ -83,14 +106,14 @@ dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
 		size_t i=iconv (cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
 		int err = errno;
 		if(outbuf!=buf){
-			ret.append(buf, outbuf-buf);
+			add__(buf, outbuf-buf, mode, ret);
 		}
 		if(i != (size_t)-1){
 			outbuf=buf;
 			outbytesleft=bufsiz_;
 			iconv (cd, NULL, NULL, &outbuf, &outbytesleft);
 			if(outbuf!=buf){
-				ret.append(buf, outbuf-buf);
+				add__(buf, outbuf-buf, mode, ret);
 			}
 			break;
 		}
