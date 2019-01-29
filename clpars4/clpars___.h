@@ -13,9 +13,14 @@ using namespace std;
 #include <stdarg.h>
 #include <regex.h>
 
+typedef std::unary_negate<std::pointer_to_unary_function<int, int> > is_sp___;
+
 class clpars_item___ {
 private:
 	void flags__();
+	void flags_add__(string& s);
+	static int is_sp__(int c) {return c >= 0 && c <= ' ';}
+	static is_sp___ is_sp_;
 public:
 	string flag_;
 	list<string> flags_;
@@ -39,6 +44,7 @@ public:
 		flags__();
 	}
 	~clpars_item___();
+	static bool is_help__(const char* flag);
 };
 
 class clpars___ {
@@ -49,6 +55,7 @@ private:
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv);
 	int par__(int& i1,int& i,const char* flag,bool by_help,
 			char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,bool no);
+	bool help__(const char* flag, const char* code, int* err);
 public:
 	clpars___();
 	virtual ~clpars___();
@@ -56,7 +63,7 @@ public:
 	void par__(char*buf,int* err,void*ce,void* shangji,int argc,va_list& argv,int from,bool no);
 	void info__(string& info,const char* t1,const char* t2,const char* n,bool yange);
 	void info__(char**&addr_ret,const char* t1,const char* t2,const char* n,bool yange);
-	void info__(char*buf,int* err,void*ce,void* shangji,char* code);
+	void info__(char*buf,int* err,void*ce,void* shangji,char* code, char**addr_ret);
 	void pause__(int pause, int argc, char** argv);
 };
 

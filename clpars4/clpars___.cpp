@@ -8,9 +8,10 @@
 #include "clpars___.h"
 #include <algorithm>
 #include <stdio.h>
-#include "../new_gg/def1.h"
-#include "../new_gg/l4/keyword.h"
 #include "../new_gg/call_util.cpp"
+#include "pub.h"
+#include "../../zhscript2-lib/i.h"
+#include "../../zhscript2-lib/i2.h"
 
 void* jsq_;
 callback3_2___ cb2_;
@@ -18,28 +19,78 @@ dlle___ void init__(void* jsq,callback3_2___ cb2){
 	jsq_=jsq;
 	cb2_=cb2;
 }
+static callback4_3___ cbx3_ = NULL;
+dlle___ void init2__(callback4_3___ cbx3){
+	cbx3_ = cbx3;
+}
+
+static void attr__(std::vector<std::string>* ret, int* err, clpars_item___* ci, int argc, ...) {
+	va_list argv;
+	va_start(argv, argc);
+	for (int i = 0; i < argc; i++) {
+		char* s = va_arg(argv, char*);
+		if(s) {
+			string s2 = s;
+			if(s2 == "1" || s2 == "flag") {
+				ret->push_back(ci->flag_);
+			} else if(s2 == "2" || s2 == "info" || s2 == "rem") {
+				ret->push_back(ci->info_);
+			} else if(s2 == "3" || s2 == "type" || s2 == "argc") {
+				char buf[16];
+				sprintf(buf, "%c%i", ci->type_, ci->argc_);
+				ret->push_back(buf);
+			} else if(s2 == "4" || s2 == "code") {
+				ret->push_back(ci->code_);
+			} else {
+				*err = 1;
+				break;
+			}
+		}
+	}
+	va_end(argv);
+}
 
 #include <sstream>
 void clpars_item___::flags__() {
 	string s;
-#ifdef ver_sstream_too_bad_
+//#ifdef ver_sstream_too_bad_
 	for(size_t i = 0; i < flag_.size(); i++) {
 		char c = flag_[i];
 		if(c == '|') {
-			flags_.push_back(s);
+			flags_add__(s);
 			s.clear();
 			continue;
 		}
-		s += c;
+		if(!is_sp__(c))
+			s += c;
 	}
-	if(!flag_.empty())
-		flags_.push_back(s);
-#else
+	if(!s.empty())
+		flags_add__(s);
+/*#else
 	stringstream ss(flag_);
 	while(getline(ss,s,'|'))
-		flags_.push_back(s);
-#endif
+		flags_add__(s);
+#endif*/
+	if(code_.empty() && info_.empty()) {
+		bool can = true;
+		for(list<string>::iterator si=flags_.begin();si!=flags_.end();si++){
+			if(is_help__(si->c_str())) {
+				can = false;
+				break;
+			}
+		}
+		if(can)
+			flags_.clear();
+	}
 }
+
+void clpars_item___::flags_add__(string& s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(), is_sp_));
+	s.erase(std::find_if(s.rbegin(), s.rend(), is_sp_).base(), s.end());
+	flags_.push_back(s);
+}
+
+is_sp___ clpars_item___::is_sp_ = std::not1(std::ptr_fun<int, int>(/*std::isspace*/is_sp__));
 
 clpars_item___::~clpars_item___() {
 	if(reg_) {
@@ -290,18 +341,29 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 								*err=1;
 								return has;
 							}
-							argv4.push_back(va_arg(argv, char*));
+							char* s = va_arg(argv, char*);
+							argv4.push_back(s ? s : "NULL");
 						}
 					}
 				}
 				if(ci->pause_)
 					continue;
+				if(help__(by_help ? src2 : flag, code, err))
+					break;
 				const char**argv2 = new const char*[argv4.size()];
 				int i2=0;
 				for(list<string>::iterator si = argv4.begin(); si != argv4.end(); si++, i2++) {
 					argv2[i2] = (*si).c_str();
 				}
-				cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
+				if(cbx3_) {
+					switch(cbx3_(jsq_, ce, code,false,src2,shangji, (void*)attr__, ci, i2,argv2,0)) {
+					case -1: *err = jieshiqi_err_go_+keyword_break_; break;
+					case -2: *err = jieshiqi_err_go_+keyword_continue_; break;
+					case -3: *err = jieshiqi_err_go_+keyword_end_; break;
+					case 0: *err = jieshiqi_err_; break;
+					}
+				} else
+					cb2_(jsq_,shangji,err,ce,code,false,src2,i2,argv2,0);
 				delete argv2;
 				if(*err == jieshiqi_err_go_+keyword_continue_){
 					*err=0;
@@ -317,6 +379,24 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 		}
 	}
 	return has;
+}
+
+bool clpars_item___::is_help__(const char* flag) {
+	string flag2 = flag ? flag : "";
+	if((flag2 == "-h" || flag2 == "--help" || flag2 == "#"))
+		return true;
+	return false;
+}
+
+bool clpars___::help__(const char* flag, const char* code, int* err) {
+	if(clpars_item___::is_help__(flag) && !code[0]) {
+		string info;
+		info__(info, "", "\t", "\n", false);
+		printf("%s", info.c_str());
+		*err = jieshiqi_err_go_+keyword_end_;
+		return true;
+	}
+	return false;
 }
 
 int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
@@ -348,14 +428,8 @@ int clpars___::par__(int& i1,int& i,const char* flag,bool by_help,
 	if(pause)
 		return 0;
 
-	string flag2 = flag;
-	if(flag2 == "-h" || flag2 == "--help") {
-		string info;
-		info__(info, "", "\t", "\n", false);
-		printf("%s", info.c_str());
-		*err = jieshiqi_err_go_+keyword_end_;
+	if(help__(flag, "", err))
 		return 1;
-	}
 
 	sprintf(buf,"'%s' no parse", flag);
 	*err=3;
@@ -395,23 +469,40 @@ void clpars___::info__(char**&addr_ret,const char* t1,const char* t2,const char*
 	*addr_ret=dup__(info.c_str());
 }
 
-void clpars___::info__(char*buf,int* err,void*ce,void* shangji,char* code){
+void clpars___::info__(char*buf,int* err,void*ce,void* shangji,char* code, char**addr_ret){
 	list<clpars_item___*>::iterator cii;
 	clpars_item___* ci;
 	const char*argv2[32];
 	int argc2;
+	string ret;
+	char buf2[16], typ[2] = {0, 0}, pause[2] = {0, 0};
 	for(cii=item_.begin();cii!=item_.end();cii++){
 		ci=*cii;
 		argc2=0;
+		if(addr_ret) {
+			pause[0] = ci->pause_ ? '1' : '0';
+			argv2[argc2++]=pause;
+		}
 		argv2[argc2++]=ci->info_.c_str();
+		if(addr_ret) {
+			argv2[argc2++]=ci->code_.c_str();
+			typ[0] = ci->type_;
+			argv2[argc2++]=typ;
+			sprintf(buf2,"%d",ci->argc_);
+			argv2[argc2++]=buf2;
+		}
 		argv2[argc2++]=ci->flag_.c_str();
 		for(list<string>::iterator si=ci->flags_.begin();si!=ci->flags_.end();si++){
 			argv2[argc2++]=(*si).c_str();
 		}
-		cb2_(jsq_,shangji,err,ce,code,false,NULL,argc2,argv2,0);
+		const char* ret2 = cb2_(jsq_,shangji,err,ce,code,false,NULL,argc2,argv2,0);
+		if(ret2)
+			ret += ret2;
 		if(*err)
 			break;
 	}
+	if(addr_ret)
+		*addr_ret=dup__(ret.c_str());
 }
 
 void clpars___::pause__(int pause, int argc, char** argv) {
