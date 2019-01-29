@@ -342,10 +342,10 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 		*err=1;
 		return false;
 	}
+	unsigned int start=0,len=strlen(src);
+	int i1=0;
 	regmatch_t pm[nmatch_];
- 	bzero(pm, sizeof(pm));
- 	unsigned int start=0,len=strlen(src);
- 	int i1=0;
+	bzero(pm, sizeof(pm));
 	for(;;){
 		z = regexec(&reg, src+start, nmatch_, pm, eflags);
 		//printf("%d=%s/%d %s %s\n",z,src+start,start,from,to);
@@ -383,18 +383,22 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 					regmatch_t pm2=pm[i2];
 					if(pm2.rm_so == -1)
 						break;
-					size_t eo=start+pm2.rm_eo;
+					/*size_t eo=start+pm2.rm_eo;
 					char c_old=src[eo];
-					src[eo]=0;
+					src[eo]=0;*/
 					sprintf(buf2,"%d",i2);
 					if(s)
 						sprintf(buf3,"%u",(*s).size());
+					string buf4;
+					for(int i4 = pm2.rm_so; i4 < pm2.rm_eo; i4++)
+						buf4 += src[i4+start];
 					const char* ret=callback_(jsq_,shangji,err,ce,to,false,NULL,4,
-							src+start+pm2.rm_so,
+							//src+start+pm2.rm_so,
+							buf4.c_str(),
 							buf2,buf1, buf3);
 					if(s)
 						*s+=ret;
-					src[eo]=c_old;
+					//src[eo]=c_old;
 					if(*err){
 						if(*err==jieshiqi_err_go_+keyword_continue_){
 							*err=0;
@@ -438,7 +442,6 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 		if(start>=len)
 			break;
 	}
-	regfree(&reg);
 	if(all_s) {
 		if(s){
 			for(unsigned int i2=start;i2<len;i2++)
@@ -446,6 +449,7 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 		}else
 			sprintf(buf,"%d",i1);
 	}
+	regfree(&reg);
 	return true;
 }
 
