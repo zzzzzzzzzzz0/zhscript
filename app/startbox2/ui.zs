@@ -29,8 +29,9 @@
 上代码。
 
 定义得后不退【主】以下代码
-	使主窗、插脚、“var e=__("no_exit");if(e)”
-		z$("“赋予后不退【主】以”" + (e.checked ? "checked" : ""))。
+	使主窗、插脚、“var e;”
+		e=__("no_exit");    if(e) z$("“赋予后不退【主】以”" + (e.checked ? "checked" : ""));
+		e=__("no_exit_min");if(e) z$("“赋予后不退则小【主】以”" + (e.checked ? "checked" : ""))。
 上代码。
 
 定义点击【主】以下代码
@@ -110,10 +111,11 @@
 	刷新图标夹。
 	赋予样1以“color:‘和谐前景色’;background-color:‘和谐背景色’;
 	border:1px dashed ‘和谐前景色’”。
-	增加图标opt2、“<div class=img>
-	<a style="‘样1’" href="javascript:z$('大刷新图标夹啊')">刷新</a></div>”。
+	增加图标opt2、“<div class=img><a style="‘样1’" href="javascript:z$('大刷新图标夹啊')">刷新</a></div>”。
 	增加图标opt、“<div style="‘样1’;text-align:left;">
-	<input id=no_exit type=checkbox ‘后不退’> 启动后盒不按设定退出</div>”。
+	<input id=no_exit type=checkbox ‘后不退’> 后不按设定退出 
+	<input id=no_exit_min type=checkbox checked onclick="if(this.checked)z$('使主窗、最小化')"> 不退则盒最小化
+	</div>”。
 上代码。
 
 使主窗、侦听、
