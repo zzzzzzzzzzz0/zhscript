@@ -34,6 +34,7 @@ public:
 	virtual GtkTreeModel *model__() = 0;
 	virtual void for__(const string& code, void* ce, void* shangji);
 	GdkPixbuf *get_icon__(const string& name);
+	GdkPixbuf *get_stock_icon__(const char* name);
 
 	GtkIconView *icon_view__() {return GTK_ICON_VIEW(widget_);}
 	GtkTreeView *tree_view__() {return GTK_TREE_VIEW(widget_);}

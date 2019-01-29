@@ -8,6 +8,7 @@
 #include "huitu___.h"
 #include"plugin_def.h"
 #include"util.cpp"
+#include <cairomm/context.h>
 
 float s2f__(const Glib::ustring&s,float d=0.0){
 	sscanf(s.c_str(),"%f",&d);

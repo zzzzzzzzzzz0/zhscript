@@ -12,7 +12,7 @@ sudo apt-get install libgtkmm-2.4-dev libglademm-2.4-dev
 sudo apt-get install libgtksourceviewmm-2.0-dev
 
 u1604=
-if cat /etc/issue | grep -q -E 'Ubuntu (16|17)\.'
+if cat /etc/issue | grep -q -E 'Ubuntu ((16|17)\.|Bionic Beaver)'
 then
 	u1604=1
 fi

@@ -637,14 +637,19 @@ void toolbar2___::with__(window___* w, void*shangji,void*ce,deque<string>* p, in
 }
 
 GdkPixbuf *toolbar2_item___::get_icon__(const string& name) {
+	GdkPixbuf *p = NULL;
 	if(name.size() > 0) {
 		if(name.find(".") != string::npos)
-			return gdk_pixbuf_new_from_file_at_size (name.c_str(), btn_width_, btn_height_, NULL);
+			p =  gdk_pixbuf_new_from_file_at_size (name.c_str(), btn_width_, btn_height_, NULL);
 		else
-			return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name.c_str(), btn_width_,
-				GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
-	} else
-		return NULL;
+			p = get_stock_icon__(name.c_str());
+		if(!p)
+			p = get_stock_icon__("gtk-no");
+	}
+	return p;
+}
+GdkPixbuf *toolbar2_item___::get_stock_icon__(const char* name) {
+	return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), name, btn_width_, GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
 }
 
 bool toolbar2___::use_tag__(const string& p1) {
