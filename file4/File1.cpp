@@ -33,6 +33,8 @@ void extractfilename__(string& buf2,const string& name,int flag){
 	int pan2=-1;
 	int xie3=-1;
 	for(i=0;i<=wei3;i++){
+		if(name[i]=='/' || name[i]=='\\')
+			break;
 		if(name[i]==':'){
 			if(i==1){
 				char c=name[i-1];
@@ -129,8 +131,8 @@ char* strstr__(const char* s, const char* s1) {
 			const char* s2=s1;
 			for(;*s2;s2++){
 				if(!*s)
-					return NULL;
-				if(*s==*s1){
+					break;
+				if(*s==*s2){
 					s++;
 				} else
 					break;
@@ -143,8 +145,40 @@ char* strstr__(const char* s, const char* s1) {
 	}
 	return NULL;
 }
+void strcpy__(char*s1b, char*s2b) {
+	for(;;){
+		if(!*s1b){
+			*s2b=0;
+			break;
+		}
+		*s2b++=*s1b++;
+	}
+}
 
-dlle___ char* remove_dd__(char*src){
+void remove_dd_2__(const char* s, const char* s2, int i) {
+	for(;;) {
+		char* s1 = strstr__(s, s2);
+		if(!s1) break;
+		strcpy__(s1 + i, s1);
+	}
+}
+void remove_dd_3__(char* s, const char* s2) {
+	unsigned int len2=strlen(s2);
+	for(;;) {
+		unsigned int i=strlen(s);
+		if(i > len2) {
+			const char* s3 = s + (i -= len2);
+			const char* s4 = s2;
+			for(; *s4;) {
+				if(*s3++ != *s4++)
+					return;
+			}
+			s[i] = 0;
+		}
+		return;
+	}
+}
+dlle___ char* remove_dd2__(char*src, int opt){
 	if(src){
 		const char*dd="..";
 		unsigned int dd_len=strlen(dd);
@@ -161,27 +195,29 @@ dlle___ char* remove_dd__(char*src){
 				start+=dd_len+1;
 				continue;
 			}
+			for(;;) if(*(s2 - 1) == '/') s2--; else break;
 			char c=s2[0];
 			for(;;){
 				if(--s2<src+start)
 					break;
 				if(*s2==c){
 					//strcpy(s1,s2+1);
-					char*s1b=s1+dd_len;
-					char*s2b=s2;
-					for(;;){
-						if(!*s1b){
-							*s2b=0;
-							break;
-						}
-						*s2b++=*s1b++;
-					}
+					strcpy__(s1+dd_len, s2);
 					break;
 				}
 			}
 		}
+		if(opt & 1) remove_dd_2__(src,"//", 1);
+		if(opt & 2) {
+			remove_dd_2__(src,"/./", 2);
+			remove_dd_3__(src,"/.");
+		}
+		if(opt & 4) remove_dd_3__(src,"/");
 	}
 	return src;
+}
+dlle___ char* remove_dd__(char*src){
+	return remove_dd2__(src, 0);
 }
 
 dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){

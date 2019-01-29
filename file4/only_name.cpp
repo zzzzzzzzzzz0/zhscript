@@ -9,7 +9,7 @@ using namespace std;
 #include"def1.h"
 #include"call_util.h"
 #include <sys/stat.h>
-
+#include"for_arg_.h"
 
 string s__(long i, const string& s1) {
 	string s;
@@ -23,9 +23,19 @@ string s__(long i, const string& s1) {
 	return s;
 }
 
-dlle___ void only_name__(char*buf,long siz,char*dir,char*name){
+dlle___ void only_name2__(char*buf,long siz,char*dir,char*name, int argc, ...){
 	if(!dir||!name)
 		return;
+	const char* end = "";
+	{
+		_for_args( argc )
+			switch(i) {
+			case 0:
+				end = s;
+				break;
+			}
+		_next_args
+	}
 	string name1=name;
 	size_t i;
 	i=name1.rfind('/');
@@ -60,11 +70,14 @@ dlle___ void only_name__(char*buf,long siz,char*dir,char*name){
 		}
 		for (;; l++) {
 			string s3 = s__(l, s4);
-			name1 = s2 + s3 + s1;
+			name1 = s2 + s3 + s1 + end;
 			if (lstat((dir1+name1).c_str(), &info) != 0) {
 				break;
 			}
 		}
 	}
 	cpy__(buf,(dir1+name1).c_str(),siz);
+}
+dlle___ void only_name__(char*buf,long siz,char*dir,char*name){
+	only_name2__(buf,siz,dir,name, 0);
 }
