@@ -57,7 +57,13 @@ dlle___ void info__(char**addr_ret,clpars___* clp,const char* t1,const char* t2,
 dlle___ void info3__(int* err,char*buf,void*ce,void* shangji,clpars___* clp,char* code){
 	if(!clp)
 		clp=&clpars_;
-	clp->info__(buf,err,ce,shangji,code);
+	clp->info__(buf,err,ce,shangji,code, NULL);
+}
+
+dlle___ void info4__(int* err,char*buf,void*ce,void* shangji,clpars___* clp,char* code, char**addr_ret){
+	if(!clp)
+		clp=&clpars_;
+	clp->info__(buf,err,ce,shangji,code, addr_ret);
 }
 
 dlle___ void pause__(clpars___* clp,bool pause,int argc,...){
