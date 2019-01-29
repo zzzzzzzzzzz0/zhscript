@@ -38,7 +38,7 @@ dlle___ bool start__(const char* filename, const char* args) {
 	if(slave_.is_run__())
 		return false;
 	slave_.start__(filename, args);
-	return true;
+	return slave_.is_run__();
 }
 
 dlle___ void stop__() {

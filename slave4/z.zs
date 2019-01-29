@@ -1,11 +1,11 @@
-#!/_no/l  --。
+#!../new_o/l  --。
 加载lib/defi。
 显示‘参数0’--‘参数’换行。
 
 加载lib/gtkmain4。
 调用‘gtk-init-check’。
 
-加载./slave4。
+加载lib/slave4。
 加载lib/defii。
 调用‘初始化被动者’、下代码
 	别名行以参数1。

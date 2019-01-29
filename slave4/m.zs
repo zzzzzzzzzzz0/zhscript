@@ -1,8 +1,8 @@
-#!/_no/l  --。
+#!../new_o/l  --。
 加载lib/gtkmain4。
 调用‘gtk-init-check’。
 
-加载./slave4。
+加载lib/slave4。
 加载lib/defi。
 加载lib/defii。
 （
