@@ -18,6 +18,10 @@ dlle___ void srand__(long l){
     srand(seed);
 }
 
+dlle___ long int rando__(long int min,long int max){
+	return random()%(max-min+1)+min;
+}
+
 #define var_new__(name,val) var_new_(jsq_,qu,name.c_str(),val,false,false,false)
 
 dlle___ int rand__(void* qu,char*head1,long int min,long int max){
@@ -35,7 +39,7 @@ dlle___ int rand__(void* qu,char*head1,long int min,long int max){
 		char buf2[32];
 		for(long int i=0;i<len;i++){
 			for(;;){
-				num[i]=random()%len+min;
+				num[i]=rando__(min, max);
 				bool has=false;
 				for(long int i1=0;i1<i;i1++){
 					if(num[i1]==num[i]){

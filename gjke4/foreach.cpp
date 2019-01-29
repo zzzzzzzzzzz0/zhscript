@@ -1,6 +1,12 @@
 #include "gjke.h"
 #include "for_arg_.h"
 #include "l4/errinfo.h"
+#include "../../zhscript2-lib/i2.h"
+
+static callback4___ cb4_;
+dlle___ void dlln___(init2__)(callback4___ cb) {
+	cb4_ = cb;
+}
 
 dlle___ void dlln___(for_name__)(int*err,void*ce,void* shangji2,const char*code,void* shangji,int max){
 	var_for_name_(jsq_,shangji2,err,ce,code,callback3_,shangji,max);
@@ -18,7 +24,7 @@ dlle___ void dlln___(foreach__)(int*err,char**addr_ret,void*ce,void* shangji,boo
 	_next_args
 	*addr_ret=dup__(ret.c_str());
 }
-dlle___ void dlln___(foreach2__)(int*err,char**addr_ret,void*ce,void* shangji,bool no,const char*code,int argc2,int argc,...){
+dlle___ void dlln___(foreach2__)(int*err,/*char**addr_ret,void*ce*/std::vector<std::string>* ret,void* shangji,bool no,const char*code,int argc2,int argc,...){
 	if(argc2 <= 0) {
 		*err = 1;
 		return;
@@ -33,7 +39,11 @@ dlle___ void dlln___(foreach2__)(int*err,char**addr_ret,void*ce,void* shangji,bo
 		argc2++;
 	const char** argv2 = new const char*[argc2];
 	char buf2[32];
-	string ret;
+	//string ret;
+	std::vector<std::string>* ret2 = ret;
+	std::vector<std::string> ret3;
+	string ret4;
+	bool is_set_1 = false, is_1 = false;
 	va_list argv;
 	va_start(argv, argc);
 	for (int i = 0, i3 = 0; i < argc;) {
@@ -45,11 +55,29 @@ dlle___ void dlln___(foreach2__)(int*err,char**addr_ret,void*ce,void* shangji,bo
 		for (; i2 < argc2; ++i) {
 			argv2[i2++] = va_arg(argv, char*);
 		}
-		ret+=callback3_(jsq_,shangji,err,ce,code,false,buf,argc2,argv2, 0);
-		if(for_err__(err)) break;
+		/*ret+=callback3_(jsq_,shangji,err,ce,code,false,buf,argc2,argv2, 0);
+		if(for_err__(err)) break;*/
+		int ret5 = cb4_(jsq_, code,false,NULL,shangji, argc2,argv2, ret2);
+		if(ret5 == 0 || ret5 == -1) {
+			break;
+		}
+		if(!is_set_1) {
+			is_set_1 = true;
+			is_1 = ret2->size() == 1;
+			if(is_1) {
+				ret4 += (*ret2)[0];
+				ret2->clear();
+				ret2 = &ret3;
+			}
+		}
 	}
 	delete argv2;
-	*addr_ret=dup__(ret.c_str());
+	//*addr_ret=dup__(ret.c_str());
+	if(is_1) {
+		for(size_t i = 0; i < ret3.size(); i++)
+			ret4 += ret3[i];
+		ret->push_back(ret4);
+	}
 }
 
 void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool desc,string&ret){

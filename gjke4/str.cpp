@@ -9,6 +9,11 @@
 #include "for_arg_.h"
 #include "string.h"
 #include "stdio.h"
+#include "strlen_sp.h"
+
+dlle___ int sp_len__(char* s, int len1) {
+	return s ? strlen_sp__(s, len1) : 0;
+}
 
 dlle___ void trim__(char**addr_ret, const char*src, int ctl) {
 	if(!src){
@@ -212,28 +217,61 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	*addr_ret=dup__(buf.c_str());
 }
 
-dlle___ long strpos__(char* src,char* ss, int argc, ...) {
+long strpos__(char* src,char* ss, size_t from, const char* skip, char ctl, bool utf8, bool r) {
 	if(!src || !ss)
 		return -1;
-	size_t from = 0;
-	const char* skip = NULL;
-	_for_args( argc )
-		switch(i) {
-		case 0:
-			from = s2i__(s);
-			break;
-		case 1:
-			skip = s;
-			break;
-		}
-	_next_args
 	if(skip)
 		from += strlen(skip);
 	string buf = src;
-	size_t pos = buf.find(ss, from);
+	size_t pos;
+	if(r)
+		pos = buf.rfind(ss, buf.size() - from);
+	else
+		pos = buf.find(ss, from);
 	if(pos == string::npos)
 		return -1;
+	if(utf8)
+		pos = strlen_sp__(buf, pos, 1);
+	switch(ctl) {
+	case '2':
+		pos += strlen(ss);
+		break;
+	}
 	return pos;
+}
+void strpos__(int i, char* s, size_t &from, const char* &skip, char &ctl) {
+	if(!s)
+		return;
+	switch(i) {
+	case 0: {
+		int i2 = s2i__(s);
+		from = i2 > 0 ? i2 : 0;
+		break; }
+	case 1:
+		skip = s;
+		break;
+	case 2:
+		ctl = s[0];
+		break;
+	}
+}
+dlle___ long strpos__(char* src,char* ss, bool utf8, int argc, ...) {
+	size_t from = 0;
+	const char* skip = NULL;
+	char ctl = 0;
+	_for_args( argc )
+		strpos__(i, s, from, skip, ctl);
+	_next_args
+	return strpos__(src, ss, from, skip, ctl, utf8, false);
+}
+dlle___ long strrpos__(char* src,char* ss, bool utf8, int argc, ...) {
+	size_t from = 0;
+	const char* skip = NULL;
+	char ctl = 0;
+	_for_args( argc )
+		strpos__(i, s, from, skip, ctl);
+	_next_args
+	return strpos__(src, ss, from, skip, ctl, utf8, true);
 }
 
 dlle___ bool strstr__(const char* s1, int c, int argc, ...) {

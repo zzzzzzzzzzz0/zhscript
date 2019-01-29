@@ -143,6 +143,8 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 	if(src1){
 		vector<const char*> tag1;
 		vector<const char*> code;
+		vector<string> code2;
+		int to;
 		_for_args( argc ) {
 			if(!s) {
 				*err = 1;
@@ -153,13 +155,46 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 					*err = 2;
 					return;
 				}
-				tag1.push_back(s);
+				if(!s[0]) {
+					to = 2;
+				} else {
+					to = 0;
+					tag1.push_back(s);
+				}
 			} else {
-				code.push_back(s);
+				switch(to) {
+				case 2:
+					code2.push_back(s);
+					break;
+				default:
+					code.push_back(s);
+					break;
+				}
 			}
 		} _next_args
 
-		const char*src=src1;
+		string src2 = src1;
+		if(code2.size() > 0) {
+			string src3;
+			for(size_t i2 = 0; i2 < src2.size(); i2++) {
+				char c = src2[i2];
+				int add = 0;
+				for(size_t i = 0; i < code2.size() && add == 0; i++) {
+					const string& s = code2[i];
+					if(s == "sp-") {if(!(c >= 0 && c < 0x20)) add++; continue;}
+					if(s == "0-9") {if(c >= '0' && c <= '9') add++; continue;}
+					if(s == "a-z") {if(c >= 'a' && c <= 'z') add++; continue;}
+					if(s == "A-Z") {if(c >= 'A' && c <= 'Z') add++; continue;}
+					if(s.find(c) != string::npos)
+						add++;
+				}
+				if(add > 0)
+					src3 += c;
+			}
+			src2 = src3;
+		}
+
+		const char*src=src2.c_str();
 		for(;*src;){
 			bool b=false;
 			for(size_t i = 0; i < tag1.size(); i++) {
