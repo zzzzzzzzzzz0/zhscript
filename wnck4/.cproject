@@ -55,7 +55,7 @@
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
-								<outputType id="cdt.managedbuild.tool.gnu.cpp.linker.so.debug.output.1042607065" outputPrefix="../../new_o/lib/" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.debug.output"/>
+								<outputType id="cdt.managedbuild.tool.gnu.cpp.linker.so.debug.output.1042607065" outputPrefix="../../../bin/zhscript2/lib/" superClass="cdt.managedbuild.tool.gnu.cpp.linker.so.debug.output"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.so.debug.1143758589" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.so.debug">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1869206132" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

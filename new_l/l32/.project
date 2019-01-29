@@ -3,9 +3,6 @@
 	<name>new_l32</name>
 	<comment></comment>
 	<projects>
-		<project>new_gg</project>
-		<project>new_l432_so</project>
-		<project>zhscript2</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
