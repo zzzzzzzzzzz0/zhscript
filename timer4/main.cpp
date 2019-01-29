@@ -127,33 +127,40 @@ void signal__(int signo) {
 		return;
 	}
 
-	char d_y[8], d_m[8], d_d[8], d_h[8], d_mi[8], d_s[8], d_w[8];
-	const char* argv[] = {d_y, d_m, d_d, d_h, d_mi, d_s, d_w};
-	{
-		time_t tt;
-		tzset();
-		time(&tt);
-		struct tm * t = localtime(&tt);
-		sprintf(d_y, "%d", t->tm_year + 1900);
-		sprintf(d_m, "%d", t->tm_mon + 1);
-		sprintf(d_d, "%d", t->tm_mday);
-		sprintf(d_h, "%d", t->tm_hour);
-		sprintf(d_mi, "%d", t->tm_min);
-		sprintf(d_s, "%d", t->tm_sec);
-		sprintf(d_w, "%d", t->tm_wday);
-	}
+	char d_y[8], d_m1[8], d_d[8], d_h[8], d_m[8], d_s[8], d_w[8];
+	bool d_prf = false;
 
 	for(deque<item___*>::iterator i = items_.begin(); i != items_.end(); i++) {
 		if(!start_)
 			break;
 		item___* i1 = *i;
-		if(!i1->begin__(argv))
-			continue;
 		switch(i1->type_) {
-		case 'd':
+		case 'd': {
+			if(!d_prf) {
+				d_prf = true;
+
+				time_t tt;
+				tzset();
+				time(&tt);
+				struct tm t2;
+				struct tm * t = &t2;
+				localtime_r(&tt, t);
+				sprintf(d_y, "%d", t->tm_year + 1900);
+				sprintf(d_m1, "%d", t->tm_mon + 1);
+				sprintf(d_d, "%d", t->tm_mday);
+				sprintf(d_h, "%d", t->tm_hour);
+				sprintf(d_m, "%d", t->tm_min);
+				sprintf(d_s, "%d", t->tm_sec);
+				sprintf(d_w, "%d", t->tm_wday);
+			}
+			const char* argv[] = {d_y, d_m1, d_d, d_h, d_m, d_s, d_w};
+			if(!i1->begin__(argv))
+				continue;
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 7, argv);
-			break;
+			break; }
 		default:
+			if(!i1->begin__(NULL))
+				continue;
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 0, NULL);
 			break;
 		}
