@@ -128,7 +128,15 @@ dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent,
 			gtk_file_filter_set_name(filter, (*p)[i].c_str());
 			if(err_buzu2__(p, ++i, err))
 				return;
-			gtk_file_filter_add_pattern(filter, (*p)[i].c_str());
+			const string& s = (*p)[i];
+			for(size_t i3 = 0;;) {
+				size_t i2 = s.find('|', i3);
+				const string& s2 = s.substr(i3, i2 - i3);
+				gtk_file_filter_add_pattern(filter, s2.c_str());
+				if(i2 == string::npos)
+					break;
+				i3 = i2 + 1;
+			}
 			gtk_file_chooser_add_filter(fc, filter);
 			continue;
 		}
