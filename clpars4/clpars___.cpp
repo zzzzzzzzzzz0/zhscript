@@ -37,7 +37,12 @@ static void attr__(std::vector<std::string>* ret, int* err, clpars_item___* ci, 
 				ret->push_back(ci->info_);
 			} else if(s2 == "3" || s2 == "type" || s2 == "argc") {
 				char buf[16];
-				sprintf(buf, "%c%i", ci->type_, ci->argc_);
+				int i;
+				if(s2 == "3" || s2 == "type")
+					i = sprintf(buf, "%c", ci->type_);
+				else
+					i = 0;
+				sprintf(buf + i, "%i", ci->argc_);
 				ret->push_back(buf);
 			} else if(s2 == "4" || s2 == "code") {
 				ret->push_back(ci->code_);
