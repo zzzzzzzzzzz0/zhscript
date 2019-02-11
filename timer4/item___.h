@@ -9,9 +9,11 @@
 #define ITEM____H_
 
 #include <stdio.h>
-#include <string>
-using namespace std;
 #include <regex.h>
+#include <string>
+#include <vector>
+
+using namespace std;
 
 #define d_len_ 7
 
@@ -31,6 +33,7 @@ public:
 	bool pause_;
 	unsigned long time_;
 	string time2_;
+	vector<string> args_;
 	virtual ~item___();
 	void init__();
 	int mk_time__(char* time);

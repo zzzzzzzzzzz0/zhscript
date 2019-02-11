@@ -30,6 +30,12 @@ dlle___ void init__(void* jsq, callback3_2___ cb3,
 	main_qu_ = main_qu;
 }
 
+#include "../../zhscript2-lib/i2.h"
+static callback4_4___ cb4_ = NULL;
+dlle___ void init2__(callback4_4___ cb) {
+	cb4_ = cb;
+}
+
 static void call4__(const char* code, const char* name, int argc, const char** argv) {
 	int err;
 	const char*ret = cb3_(jsq_, main_qu_, &err, NULL, code, false, name, argc, argv, 0);
@@ -60,6 +66,11 @@ static item___* find__(char* name) {
 		return *i;
 }
 
+static void push__(vector<string>& v1, const vector<string>& v2) {
+	for(size_t i = 0; i < v2.size(); i++)
+		v1.push_back(v2[i]);
+}
+
 dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, int argc, ...) {
 	switch(type[0]) {
 	case 'd': case 0:
@@ -71,6 +82,7 @@ dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, i
 	}
 
 	char *time = NULL, *code = NULL;
+	vector<string> args;
 	_for_args( argc )
 		switch(i) {
 		case 0:
@@ -78,6 +90,9 @@ dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, i
 			break;
 		case 1:
 			code = s;
+			break;
+		default:
+			args.push_back(s ? s : "NULL");
 			break;
 		}
 	_next_args
@@ -105,6 +120,8 @@ dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, i
 	t->name_ = name;
 	t->is_loop_ = is_loop;
 	t->code_ = code && code[0] ? code : name;
+	t->args_.clear();
+	push__(t->args_, args);
 	if(is_new)
 		items_.push_back(t);
 }
@@ -113,6 +130,14 @@ dlle___ void pause__(char* name, bool b) {
 	item___* t = find__(name);
 	if(t)
 		t->pause_ = b;
+}
+
+static void cb4__(item___* i1, int argc, const char** argv) {
+	vector<string> args;
+	for(int i = 0; i < argc; i++)
+		args.push_back(argv[i]);
+	push__(args, i1->args_);
+	int ret = cb4_(jsq_, NULL, i1->code_.c_str(), false, i1->name_.c_str(), main_qu_, NULL, NULL, &args, NULL);
 }
 
 void signal__(int signo) {
@@ -156,11 +181,19 @@ void signal__(int signo) {
 			const char* argv[] = {d_y, d_m1, d_d, d_h, d_m, d_s, d_w};
 			if(!i1->begin__(argv))
 				continue;
+			if(cb4_) {
+				cb4__(i1, 7, argv);
+				break;
+			}
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 7, argv);
 			break; }
 		default:
 			if(!i1->begin__(NULL))
 				continue;
+			if(cb4_) {
+				cb4__(i1, 0, NULL);
+				break;
+			}
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 0, NULL);
 			break;
 		}
