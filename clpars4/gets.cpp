@@ -17,12 +17,11 @@ dlle___ void gets__(int*err, char*buf, long bufsiz,void*ce, void*shangji, const 
 			break;
 		size_t i = strlen(buf);
 		while(i > 0) {
-			char c = buf[i];
+			char c = buf[--i];
 			if(c == '\n' || c == '\r')
 				buf[i] = 0;
 			else
 				break;
-			i--;
 		}
 		cb2_(jsq_,shangji,err,ce,code,false,NULL,1,argv2,0);
 		if(*err == jieshiqi_err_go_+keyword_continue_){
