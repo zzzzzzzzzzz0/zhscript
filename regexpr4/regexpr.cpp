@@ -42,6 +42,12 @@ dlle___ void dlln___(init__)(void* jsq,
 	kw_dian_=dian;
 }
 
+#include "../../zhscript2-lib/i2.h"
+static callback4_3___ cb4_ = NULL;
+dlle___ void dlln___(init2__)(callback4_3___ cb) {
+	cb4_ = cb;
+}
+
 int get_maxlen__(regmatch_t pm[],int nmatch){
 	int max=0;
 	for(int i=0;i<nmatch;i++){
@@ -332,7 +338,8 @@ void add_pm__(char* str,regmatch_t pm,string& s){
 }
 
 bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
-		char* to,void* shangji,int cflags,int eflags,string* s,bool duocan, bool all_s){
+		char* to,void* shangji,int cflags,int eflags, bool duocan, bool all_s,
+		string* s, std::vector<std::string>* ret1){
 	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(from), cflags);
 	if(z != 0)
@@ -346,15 +353,23 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 	int i1=0;
 	regmatch_t pm[nmatch_];
 	bzero(pm, sizeof(pm));
+	std::string ret1a;
 	for(;;){
 		z = regexec(&reg, src+start, nmatch_, pm, eflags);
 		//printf("%d=%s/%d %s %s\n",z,src+start,start,from,to);
 		if(z == REG_NOMATCH || z != 0)
 			break;
 		i1++;
-		if(s && all_s)
-		for(int i2=0;i2<pm[0].rm_so;i2++)
-			*s+=src[start+i2];
+		if(all_s) {
+			if(ret1) {
+				for(int i2=0;i2<pm[0].rm_so;i2++)
+					ret1a+=src[start+i2];
+			}
+			if(s) {
+				for(int i2=0;i2<pm[0].rm_so;i2++)
+					*s+=src[start+i2];
+			}
+		}
 		if(shangji){
 			if(duocan){
 				int argc=0;
@@ -371,11 +386,29 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 					argv[argc]=argv2[argc].c_str();
 					argc++;
 				}
-				const char* ret=callback3_(jsq_,shangji,err,ce,to,false,NULL,argc,argv,0);
-				if(s)
-					*s+=ret;
-				if(*err==jieshiqi_err_go_+keyword_continue_)
-					*err=0;
+				if(ret1) {
+					std::vector<std::string> ret2;
+					int ret = cb4_(jsq_, ce, to,false,NULL,shangji, NULL,NULL, argc,argv, &ret2);
+					size_t end2 = ret2.size();
+					if(end2 > 1) {
+						ret1a += ret2[0];
+						ret1->push_back(ret1a);
+						ret1a.clear();
+						end2--;
+						for(size_t i = 1; i < end2; i++) {
+							ret1->push_back(ret2[i]);
+						}
+						ret1a += ret2[end2];
+					} else if(end2 == 1)
+						ret1a += ret2[0];
+					cb4_if_err__(ret, 2)
+				} else {
+					const char* ret=callback3_(jsq_,shangji,err,ce,to,false,NULL,argc,argv,0);
+					if(s)
+						*s+=ret;
+					if(*err==jieshiqi_err_go_+keyword_continue_)
+						*err=0;
+				}
 			}else{
 			 	char buf1[16],buf2[8], buf3[16] = "";
 				sprintf(buf1,"%d",i1);
@@ -443,11 +476,19 @@ bool regexpreplace__(int*err,void* ce,char*buf,long siz,char* src,char* from,
 			break;
 	}
 	if(all_s) {
+		if(ret1) {
+			for(unsigned int i2=start;i2<len;i2++)
+				ret1a+=src[i2];
+		}
 		if(s){
 			for(unsigned int i2=start;i2<len;i2++)
 				*s+=src[i2];
-		}else
+		}else if(buf)
 			sprintf(buf,"%d",i1);
+	}
+	if(ret1) {
+		if(!ret1a.empty())
+			ret1->push_back(ret1a);
 	}
 	regfree(&reg);
 	return true;
@@ -465,9 +506,23 @@ dlle___ void dlln___(regexpreplace__)(int*err,char**addr_ret,char*buf,long siz,
 			return;
 	}
 	string s;
-	if(!regexpreplace__(err,ce,buf,siz,src,from,to,shangji,cflags,eflags,fore?NULL:&s,duocan, all_s))
+	if(!regexpreplace__(err,ce,buf,siz,src,from,to,shangji,cflags,eflags,duocan, all_s, fore?NULL:&s, NULL))
 		return;
 	*addr_ret=dup__(s.c_str());
+}
+dlle___ void dlln___(regexpr_get2__)(int*err, std::vector<std::string>* ret,
+		void* ce,void* shangji,char* src,char* from,char* to, bool all_s, int argc,...){
+	if(!src||!from||!to)
+		return;
+	int cflags=REG_EXTENDED,eflags=0;
+	{
+		va_list argv;
+		va_start(argv, argc);
+		char buf[32];
+		if(!flags__(argc, argv, buf, cflags, eflags))
+			return;
+	}
+	regexpreplace__(err,ce,NULL,0,src,from,to,shangji,cflags,eflags,true, all_s, NULL, ret);
 }
 
 dlle___ void dlln___(regexpr__)(int*err,char**addr_ret,char*buf,long siz,int argc,...){
