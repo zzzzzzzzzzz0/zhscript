@@ -23,9 +23,30 @@ using namespace Magick;
 #define ver_image_
 #endif
 
-dlle___ void image_w_h__(char* buf, long siz, const char *name1,
-		const char *name2, const char* bgc, size_t w2, size_t h2, const char *ctl) {
-	char xc = '2', yc = '5';
+static void get_c_use__(const char* s, ColorRGB& c, int& use) {
+	if(!s || !s[0]) {
+		use = 0;
+	} else {
+		if(string(s) == "+") {
+			use = 2;
+		} else {
+			use = 1;
+			c = s;
+			//string(c) != "none"
+		}
+	}
+}
+dlle___ void image_w_h_2__(char* buf, long siz, const char *name1,
+		const char *name2, const char* bgc, const char* bc_t, const char* bc_b, const char* bc_l, const char* bc_r,
+		size_t w2, size_t h2, const char *ctl) {
+	ColorRGB c2_l, c2_r, c2_t, c2_b;
+	int use_c2_t, use_c2_b, use_c2_l, use_c2_r;
+	get_c_use__(bc_t, c2_t, use_c2_t);
+	get_c_use__(bc_b, c2_b, use_c2_b);
+	get_c_use__(bc_l, c2_l, use_c2_l);
+	get_c_use__(bc_r, c2_r, use_c2_r);
+	char xk = '2', yk = '5';
+	string bk;
 	if(ctl) {
 		for(int i = 0;; i++) {
 			char c = ctl[i];
@@ -33,10 +54,13 @@ dlle___ void image_w_h__(char* buf, long siz, const char *name1,
 				break;
 			switch(c) {
 			case '1': case '2': case '3':
-				xc = c;
+				xk = c;
 				continue;
 			case '4': case '5': case '6':
-				yc = c;
+				yk = c;
+				continue;
+			case '7': case '8': case '9': case '0':
+				bk += c;
 				continue;
 			}
 			cpy__(buf, ctl, siz);
@@ -64,26 +88,76 @@ dlle___ void image_w_h__(char* buf, long siz, const char *name1,
 			h1 = ii1.rows();
 		}
 		size_t x3 = 0, y3 = 0, x4 = w1 - 1, y4 = h1 - 1;
-		switch(xc) {
+		switch(xk) {
 		case '2': x3 = (w2 - w1) / 2; break;
 		case '3': x3 = w2 - w1; break;
 		}
-		switch(yc) {
+		switch(yk) {
 		case '5': y3 = (h2 - h1) / 2; break;
 		case '6': y3 = h2 - h1; break;
 		}
-		size_t x5 = w1 + x3, y5 = h1 + y3;
+		size_t x5 = w1 + x3, y5 = h1 + y3,
+			w3 = x3, w4 = w2 - (w1 + x3),
+			h3 = y3, h4 = h2 - (h1 + y3);
 				
 		PixelPacket *pp2 = io2.getPixels(0, 0, (ssize_t)w2, (ssize_t)h2);
 		for(size_t y = 0; y < h2; y++) {
 			for(size_t x = 0; x < w2; x++) {
-				/*if(x < x3 && y < y3) continue;
-				if(x >= x5 && y >= y5) continue;
-				if(x < x3 && y >= y5) continue;
-				if(x >= x5 && y < y3) continue;*/
 				PixelPacket *p2 = pp2 + y * w2 + x;
-				*p2 = ii1.getPixels(x >= x5 ? x4 : (x < x3 ? 0 : x - x3),
-									y >= y5 ? y4 : (y < y3 ? 0 : y - y3), 1, 1)[0];
+				bool
+					x_o_r = x >= x5, x_o_l = x < x3,
+					y_o_b = y >= y5, y_o_t = y < y3;
+				size_t
+					x6 = x_o_r ? x4 : (x_o_l ? 0 : x - x3),
+					y6 = y_o_b ? y4 : (y_o_t ? 0 : y - y3);
+
+				ColorRGB c1 = (ColorRGB)ii1.getPixels(x6,y6,1,1)[0];
+				if(y_o_b || y_o_t) {
+					if(x_o_l) {
+						if(y_o_t && bk.find('7') != string::npos) continue;
+						if(y_o_b && bk.find('9') != string::npos) continue;
+						*p2 = c1;
+						continue;
+					}
+					if(x_o_r) {
+						if(y_o_t && bk.find('8') != string::npos) continue;
+						if(y_o_b && bk.find('0') != string::npos) continue;
+						*p2 = c1;
+						continue;
+					}
+				}
+				if((use_c2_b && y_o_b) || (use_c2_t && y_o_t)) {
+					size_t i = y_o_b ? y - (h1 + y3) : y, n = y_o_b ? h4 : h3;
+					if(use_c2_t == 2 || use_c2_b == 2) {
+						i = y_o_b ? i : i + h4;
+						n = h4 + h3;
+					}
+					ColorRGB
+						c4 = y_o_b ? c1 : (use_c2_t == 2 ? (ColorRGB)ii1.getPixels(x6,y4,1,1)[0] : c2_t),
+						c5 = y_o_b ? (use_c2_b == 2 ? (ColorRGB)ii1.getPixels(x6,0,1,1)[0] : c2_b) : c1;
+					ColorRGB c3(c4.red() + (c5.red() - c4.red()) * i / n,
+							c4.green() + (c5.green() - c4.green()) * i / n,
+							c4.blue() + (c5.blue() - c4.blue()) * i / n);
+					*p2 = c3;
+					continue;
+				}
+				if((use_c2_r && x_o_r) || (use_c2_l && x_o_l)) {
+					size_t i = x_o_r ? x - (w1 + x3) : x, n = x_o_r ? w4 : w3;
+					if(use_c2_l == 2 || use_c2_r == 2) {
+						i = x_o_r ? i : i + w4;
+						n = w3 + w4;
+						//std::cout << x_o_l << x_o_r << " " << i << "/" << n << "(" << w3 << "," << w4 << ")\n";
+					}
+					ColorRGB
+						c4 = x_o_r ? c1 : (use_c2_l == 2 ? (ColorRGB)ii1.getPixels(x4,y6,1,1)[0] : c2_l),
+						c5 = x_o_r ? (use_c2_r == 2 ? (ColorRGB)ii1.getPixels(0,y6,1,1)[0] : c2_r) : c1;
+					ColorRGB c3(c4.red() + (c5.red() - c4.red()) * i / n,
+							c4.green() + (c5.green() - c4.green()) * i / n,
+							c4.blue() + (c5.blue() - c4.blue()) * i / n);
+					*p2 = c3;
+					continue;
+				}
+				*p2 = c1;
 			}
 		}
 		io2.syncPixels();
@@ -92,6 +166,10 @@ dlle___ void image_w_h__(char* buf, long siz, const char *name1,
 	} catch (Exception &e) {
 		cpy__(buf, e.what(), siz);
 	}
+}
+dlle___ void image_w_h__(char* buf, long siz, const char *name1,
+		const char *name2, const char* bgc, size_t w2, size_t h2, const char *ctl) {
+	image_w_h_2__(buf, siz, name1, name2, bgc, NULL, NULL, NULL, NULL, w2, h2, ctl);
 }
 
 dlle___ void image2to1__(char* buf, long siz, const char *name1, const char *name2, const char *name3,
