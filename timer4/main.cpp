@@ -128,8 +128,15 @@ dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, i
 
 dlle___ void pause__(char* name, bool b) {
 	item___* t = find__(name);
-	if(t)
+	if(t) {
 		t->pause_ = b;
+	}
+}
+dlle___ void reset__(char* name) {
+	item___* t = find__(name);
+	if(t) {
+		t->i_ = 0;
+	}
 }
 
 static void cb4__(item___* i1, int argc, const char** argv) {
@@ -138,6 +145,13 @@ static void cb4__(item___* i1, int argc, const char** argv) {
 		args.push_back(argv[i]);
 	push__(args, i1->args_);
 	int ret = cb4_(jsq_, NULL, i1->code_.c_str(), false, i1->name_.c_str(), main_qu_, NULL, NULL, &args, NULL);
+	switch(ret) {
+	case 0:
+		l4_err_out_(jsq_, "", jieshiqi_err_, 1);
+	case -3: case -4:
+		i1->pause_ = true;
+		break;
+	}
 }
 
 void signal__(int signo) {

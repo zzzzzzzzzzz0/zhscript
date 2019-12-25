@@ -21,7 +21,6 @@ using namespace std;
 
 class item___ {
 private:
-	unsigned long i_;
 	regex_t d_[d_len_];
 	void d_free__(int len2);
 	int d_len2_;
@@ -34,6 +33,7 @@ public:
 	unsigned long time_;
 	string time2_;
 	vector<string> args_;
+	unsigned long i_;
 	virtual ~item___();
 	void init__();
 	int mk_time__(char* time);
