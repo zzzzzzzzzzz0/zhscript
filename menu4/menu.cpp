@@ -156,8 +156,12 @@ bool menu_1__(GtkWidget *menu,
 			GtkWidget *item;
 			if(icon) {
 				item = gtk_image_menu_item_new_with_label (label.c_str());
-				gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(item),
-						gtk_image_new_from_stock(icon, size));
+				GtkWidget *img;
+				if(icon[0] == '/')
+					img = gtk_image_new_from_pixbuf(gdk_pixbuf_new_from_file(icon, NULL));
+				else
+					img = gtk_image_new_from_stock(icon, size);
+				gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM(item), img);
 				icon = NULL;
 			} else {
 				switch(type) {
