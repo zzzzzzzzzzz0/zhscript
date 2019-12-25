@@ -1,7 +1,11 @@
 #ifndef slave_h_
 #define slave_h_
 
+#ifdef ver_glibmmm_
+#include "glibmmm.h"
+#else
 #include <glibmm.h>
+#endif
 #include <unistd.h>
 
 class slave___ {

@@ -95,7 +95,7 @@ void slave___::start__(const char* filename, const char* args) {
 	if(select(sv_[0] + 1, NULL, &set, NULL, NULL) == -1)
 		return;
 	fcntl(sv_[0], F_SETFL, fcntl(sv_[0], F_GETFL, 0) | O_NONBLOCK);
-	wait_ = Glib::signal_child_watch().connect(sigc::mem_fun(*this, &slave___::wait__), pid, 0);
+	wait_ = Glib::signal_child_watch().connect(sigc::mem_fun(*this, &slave___::wait__), pid);
 	is_run_ = true;
 }
 
