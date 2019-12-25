@@ -8,7 +8,7 @@
 #include"1.h"
 #include "for_arg_.h"
 
-static char* int2stri__(long l,int i3,char* s1){
+static char* int2stri__(long l,int i3,const char* s1){
 	int i1;
 	long i2;
 	char* s3;
@@ -36,10 +36,30 @@ static char* int2stri__(long l,int i3,char* s1){
     return s3;
 }
 
-static char* s1_="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static const char
+	*s1_="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	*s1_aA_ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	*s1_a_  = "abcdefghijklmnopqrstuvwxyz",
+	*s1_A_  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static const char* s1__(const char* s1) {
+	if(s1) {
+		if(!s1[0]) {
+			return s1_;
+		}
+		if(!s1[1]) {
+			switch(s1[0]) {
+			case '1': return s1_;
+			case '2': return s1_aA_;
+			case 'a': return s1_a_;
+			case 'A': return s1_A_;
+			}
+		}
+	}
+	return s1;
+}
 
 _dle const char* int2str__(int*c4w4,char*buf,long siz,long l,int argc,...){
-	char* s1=s1_;
+	const char* s1="";
 	int i3=10;
 	char* s3;
 	int len1;
@@ -55,7 +75,7 @@ _dle const char* int2str__(int*c4w4,char*buf,long siz,long l,int argc,...){
 		}
 	_next_args
 
-    if(s1==NULL)
+    if((s1 = s1__(s1))==NULL)
       return NULL;
 	len1=strlen(s1);
 	if (i3 == -1)
@@ -82,7 +102,7 @@ _dle const char* int2str__(int*c4w4,char*buf,long siz,long l,int argc,...){
 
 
 _dle long str2int__(int*c4w4,char*buf,long siz,char* s0,int argc,...) {
-	char* s1=s1_;
+	const char* s1="";
 	long l = 0;
 	int i0;
 	int len,len1,jinzhi=10;
@@ -102,7 +122,7 @@ _dle long str2int__(int*c4w4,char*buf,long siz,char* s0,int argc,...) {
 		}
 	_next_args
 
-    if(s1==NULL)
+    if((s1 = s1__(s1))==NULL)
       return 0;
 
 	len=strlen(s0);
