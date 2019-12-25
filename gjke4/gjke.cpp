@@ -87,3 +87,43 @@ long s2l__(const char* s, long i){
 }
 
 #include"call_util.cpp"
+
+
+/*#include <sys/utsname.h>
+#include "../../zhscript2-lib/i2.h"
+#include "for_arg_.h"
+
+dlle___ void uname__(std::vector<std::string>* ret, int argc, ...) {
+	struct utsname testbuff;
+	if(uname(&testbuff) < 0)
+		return;
+	_for_args( argc ) {
+		string s1 = s;
+		if(s1 == "-s") {
+			ret->push_back(testbuff.sysname);
+			continue;
+		}
+		if(s1 == "-n") {
+			ret->push_back(testbuff.nodename);
+			continue;
+		}
+		if(s1 == "-r") {
+			ret->push_back(testbuff.release);
+			continue;
+		}
+		if(s1 == "-v") {
+			ret->push_back(testbuff.version);
+			continue;
+		}
+		if(s1 == "-m") {
+			ret->push_back(testbuff.machine);
+			continue;
+		}
+		if(s1 == "-d") {
+			ret->push_back(testbuff.domainname);
+			continue;
+		}
+		ret->push_back(s);
+	} _next_args
+}*/
+

@@ -141,9 +141,12 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 
 	long i1=0;
 	long i2=0;
-	char *s2=0, *s3 = 0;
+	char *s2=0, *s3 = 0, *s4 = 0;
 	_for_args( argc )
 		switch(i){
+		case 4:
+			s4=s;
+			break;
 		case 3:
 			s3=s;
 			break;
@@ -160,24 +163,33 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	_next_args
 
 	string buf = s;
+	long siz = buf.size();
+	int use_s4 = 0;
 
 	if(i2<=0)
-		i2+=buf.size();
-	if(i1<0)
-		i1+=buf.size();
-	if(i2<0 || i1<0)
+		i2+=siz;
+	if(i1<0) {
+		i1+=siz;
+		if(i1 > 0)
+			use_s4 |= 1;
+	}
+	if(i2<0)
 		return;
+	if(i1<0)
+		i1 = 0;
 
 	if(s2)
 		i1+=strlen(s2);
 	if(s3)
 		i2 -= strlen(s3);
+	if(i2 < siz)
+		use_s4 |= 2;
 
-	if(i1>=(long)buf.size())
+	if(i1>=siz)
 		return;
 
-	if(i2>(long)buf.size())
-		i2=buf.size();
+	if(i2>siz)
+		i2=siz;
 
 	for(; i1 > 0 && i1 < i2; i1++) {
 		if(((unsigned char)buf[i1] & 0xc0) != 0x80)
@@ -201,7 +213,7 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 		}
 		//10000000
 		if(c == 0x80) {
-			if(i2 == buf.size())
+			if(i2 == siz)
 				break;
 			if(((unsigned char)buf[i2] & 0xc0) != 0x80)
 				break;
@@ -213,6 +225,12 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	if(len <= 0)
 		return;
 	buf = buf.substr(i1, len);
+	if(s4) {
+		if(use_s4 & 1)
+			buf = s4 + buf;
+		if(use_s4 & 2)
+			buf += s4;
+	}
 
 	*addr_ret=dup__(buf.c_str());
 }
@@ -220,14 +238,17 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 long strpos__(char* src,char* ss, size_t from, const char* skip, char ctl, bool utf8, bool r) {
 	if(!src || !ss)
 		return -1;
-	if(skip)
-		from += strlen(skip);
 	string buf = src;
 	size_t pos;
-	if(r)
-		pos = buf.rfind(ss, buf.size() - from);
-	else
+	if(r) {
+		if(skip)
+			from -= strlen(skip);
+		pos = buf.rfind(ss, from);
+	} else {
+		if(skip)
+			from += strlen(skip);
 		pos = buf.find(ss, from);
+	}
 	if(pos == string::npos)
 		return -1;
 	if(utf8)
@@ -265,7 +286,7 @@ dlle___ long strpos__(char* src,char* ss, bool utf8, int argc, ...) {
 	return strpos__(src, ss, from, skip, ctl, utf8, false);
 }
 dlle___ long strrpos__(char* src,char* ss, bool utf8, int argc, ...) {
-	size_t from = 0;
+	size_t from = string::npos;
 	const char* skip = NULL;
 	char ctl = 0;
 	_for_args( argc )

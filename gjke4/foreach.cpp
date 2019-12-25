@@ -24,7 +24,8 @@ dlle___ void dlln___(foreach__)(int*err,char**addr_ret,void*ce,void* shangji,boo
 	_next_args
 	*addr_ret=dup__(ret.c_str());
 }
-dlle___ void dlln___(foreach2__)(int*err,std::vector<std::string>* ret,void*ce,void* shangji,bool no,const char*code,int argc2,int argc,...){
+static void foreach2__(int*err,std::vector<std::string>* ret,void*ce,void* shangji,bool no,
+		const char*code,int argc2,int argc,va_list& argv, bool jianrong){
 	if(argc2 <= 0) {
 		*err = 1;
 		return;
@@ -39,12 +40,10 @@ dlle___ void dlln___(foreach2__)(int*err,std::vector<std::string>* ret,void*ce,v
 		argc2++;
 	const char** argv2 = new const char*[argc2];
 	char buf2[32];
-	std::vector<std::string>* ret2 = ret;
 	std::vector<std::string> ret3;
+	std::vector<std::string>* ret2 = jianrong ? ret : &ret3;
 	string ret4;
 	bool is_set_1 = false, is_1 = false;
-	va_list argv;
-	va_start(argv, argc);
 	for (int i = 0, i3 = 0; i < argc;) {
 		int i2 = 0;
 		if(no) {
@@ -55,23 +54,53 @@ dlle___ void dlln___(foreach2__)(int*err,std::vector<std::string>* ret,void*ce,v
 			argv2[i2++] = va_arg(argv, char*);
 		}
 		int ret5 = cb4_(jsq_, ce, code,false,NULL,shangji, NULL,NULL, argc2,argv2, ret2);
-		cb4_if_err__(ret5, 3)
-		if(!is_set_1) {
-			is_set_1 = true;
-			is_1 = ret2->size() == 1;
-			if(is_1) {
-				ret4 += (*ret2)[0];
-				ret2->clear();
-				ret2 = &ret3;
+		cb4_if_err__(ret5, 3);
+		if(jianrong) {
+			if(!is_set_1) {
+				is_set_1 = true;
+				is_1 = ret2->size() == 1;
+				if(is_1) {
+					ret4 += (*ret2)[0];
+					ret2->clear();
+					ret2 = &ret3;
+				}
+			}
+		} else {
+			if(ret3.size() >= 1) {
+				size_t end1 = ret->size();
+				if(end1 == 0)
+					ret->push_back(ret3[0]);
+				else {
+					std::string s = (*ret)[--end1] + ret3[0];
+					ret->pop_back();
+					ret->push_back(s);
+				}
+				for(size_t i = 1; i < ret3.size(); i++)
+					ret->push_back(ret3[i]);
+				ret3.clear();
 			}
 		}
 	}
 	delete argv2;
-	if(is_1) {
+	if(jianrong) if(is_1) {
 		for(size_t i = 0; i < ret3.size(); i++)
 			ret4 += ret3[i];
 		ret->push_back(ret4);
 	}
+}
+dlle___ void dlln___(foreach2__)(int*err,std::vector<std::string>* ret,void*ce,void* shangji,bool no,
+		const char*code,int argc2,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	foreach2__(err, ret,ce, shangji, no, code, argc2, argc, argv, true);
+	va_end(argv);
+}
+dlle___ void dlln___(foreach3__)(int*err,std::vector<std::string>* ret,void*ce,void* shangji,bool no,
+		const char*code,int argc2,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	foreach2__(err, ret,ce, shangji, no, code, argc2, argc, argv, false);
+	va_end(argv);
 }
 
 void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool desc,string&ret){
