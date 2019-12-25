@@ -43,26 +43,25 @@ dlle___ int msgbox__(GtkWindow*parent, int argc, ...) {
 	type=GTK_MESSAGE_INFO;
 	buttons=GTK_BUTTONS_OK;
 	_for_args2( argc )
-	switch(i) {
-	case 0:
-		text = s;
-		break;
-	case 1:
-		title = s;
-		break;
-	case 2:
-		type=(GtkMessageType)s2i__(s, type);
-		break;
-	case 3:
-		buttons=(GtkButtonsType)s2i__(s,buttons);
-		break;
-	case 4:
-		flags=(GtkDialogFlags)s2i__(s,flags);
-		break;
-	}
+		switch(i) {
+		case 0:
+			text = s;
+			break;
+		case 1:
+			title = s;
+			break;
+		case 2:
+			type=(GtkMessageType)s2i__(s, type);
+			break;
+		case 3:
+			buttons=(GtkButtonsType)s2i__(s,buttons);
+			break;
+		case 4:
+			flags=(GtkDialogFlags)s2i__(s,flags);
+			break;
+		}
 	_next_args
-	GtkWidget* dialog = gtk_message_dialog_new (parent,
-		flags,type,buttons,"%s",text);
+	GtkWidget* dialog = gtk_message_dialog_new (parent, flags,type,buttons,"%s",text);
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
 	int ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy (dialog);
@@ -112,7 +111,7 @@ dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent,
 			if(name.length()>0){
 				size_t i1=name.rfind('/');
 				if(i1!=string::npos){
-					gtk_file_chooser_set_current_folder(fc, name.substr(0,i1).c_str());
+					gtk_file_chooser_set_current_folder(fc, (i1 == 0 ? name : name.substr(0,i1)).c_str());
 				}
 				if(i1!=name.length()-1){
 					gtk_file_chooser_set_filename(fc, name.c_str());
