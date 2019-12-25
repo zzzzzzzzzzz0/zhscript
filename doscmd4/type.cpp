@@ -36,7 +36,7 @@ char* getfile___(char* filename){
 			string s2;
 			int c;
 			for(; (c = fgetc(f)) != EOF;)
-				s2.push_back(c);
+				s2.push_back(c ? c : '\n');
 			s=(char*)malloc(s2.length() + 1);
 			if(s != NULL) {
 				size_t i = 0;
@@ -60,10 +60,9 @@ void file__(FILE* tfs,long l_begin,long l_end,string&buf1,bool hex_get){
 			lo=l_begin;
 	}
 	unsigned char buf[512];
-	int siz;
 	bool b=false;
 	for(;!b;){
-		siz=fread(buf,1,sizeof(buf),tfs);
+		int siz=fread(buf,1,sizeof(buf),tfs);
 		if(siz<=0)
 			break;
 		for(int i1=0;i1<siz;i1++,lo++){
@@ -76,12 +75,14 @@ void file__(FILE* tfs,long l_begin,long l_end,string&buf1,bool hex_get){
 				}
 			}
 
+			unsigned char c = buf[i1];
 			if(hex_get){
 				char buf2[16];
-				sprintf(buf2,"%02X",buf[i1]);
+				sprintf(buf2,"%02X",c);
 				buf1+=buf2;
-			}else
-				buf1+=buf[i1];
+			}else {
+				buf1+= c ? c : '\n';
+			}
 		}
 	}
 }

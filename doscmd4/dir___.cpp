@@ -39,7 +39,12 @@ void dir___::dir__(int*err1,char*buf,long siz,
 		case's':
 			opt.subdir_=true;
 			continue;
-		case'T':case'A':case'C':case'I':
+		case'I':
+			opt.sort_=0;
+			opt.subdir_=true;
+			opt.a_hidden_=opt.a_dir_=opt.a_lnk_=true;
+			opt.dirlnk_is_dir_=false;
+		case'T':case'A':case'C':
 			opt.tongpei_=*opt1;
 			continue;
 		case'l':
@@ -128,6 +133,9 @@ void dir___::dir__(int*err1,char*buf,long siz,
 			}
 			break; }
 		case 'I': {
+#ifdef ver_debugi_
+			printf("%s----\n",tongpei);
+#endif
 			string s = tongpei;
 			size_t i1 = 0;
 			bool b = false;
@@ -139,39 +147,51 @@ void dir___::dir__(int*err1,char*buf,long siz,
 				}
 				string s3;
 				bool tanhao = false;
+				char c = 0, c_old;
 				for(size_t i2 = i1; i2 < i; i2++) {
-					char c = s[i2];
+					c_old = c;
+					c = s[i2];
 					if(c == '#') break;
 					if(i2 == i1) {
 						switch(c) {
-						case '/': s3 += '^'; break;
-						default: s3 += '/'; break;
-						case '*': break;
-						case '!': tanhao = true; s3 += '^'; continue;
+						case '/': s3 += '^'; continue;
+						case '!': tanhao = true; continue;
 						}
 					}
 					switch(c) {
 					case '.': s3 += '\\'; break;
-					case '*': case '?': s3 += '.'; break;
+					case '?': s3 += '.'; break;
+					case '*': s3 += c_old == '/' ? "[^/]+" : ".+"; continue;
 					}
 					s3 += c;
 					switch(c) {
-					case ']': s3 += '*'; break;
+					//case ']': s3 += '*'; break;
 					}
 				}
 				if(!s3.empty()) {
+					string xx = "[^/]+.+";
+					for(size_t i; (i = s3.find(xx)) != s3.npos;) {
+						s3.replace(i, xx.length(), ".*");
+					}
+					size_t end = s3.size() - 1;
+					if(s3[end] == '/') {
+						s3 = s3.substr(0, end);
+					}
 					s3 += "$";
 #ifdef ver_debugi_
 					printf(" %s\n",s3.c_str());
 #endif
 					regex_t *re = new regex_t;
 					regcomp(re, s3.c_str(), cflags);
-					gi_items_.push_back(new gi_item___(re, tanhao));
+					gi_items_.push_back(new gi_item___(re, tanhao, s3));
 				}
 				if(b)
 					break;
 				i1 = i + 1;
 			}
+#ifdef ver_debugi_
+			printf("----\n");
+#endif
 			break; }
 		}
 	}
@@ -231,25 +251,28 @@ int dir___::dir2__(const char*dir,int depth,string dir2) {
 					continue;
 			}
 			switch(opt_->tongpei_){
-			case 'I': {
-				string path = '/' + dir2 + name;
-				bool b = true;
-				for(size_t i = 0; i < gi_items_.size(); i++) {
-					gi_item___* gii = gi_items_[i];
-					if(regexec(gii->re_, path.c_str(), 0, 0, 0)==0) {
+			case 'I':
+				if(exec == 0) {
+					string path = dir2 + name;
+					bool b = false;
+					for(size_t i = 0; i < gi_items_.size(); i++) {
+						gi_item___* gii = gi_items_[i];
+						if(regexec(gii->re_, path.c_str(), 0, 0, 0)==0) {
 #ifdef ver_debugi_
-						printf("\tgitignore %s\n",path.c_str());
+							printf("\t%d %s %s\n", exec, gii->s_.c_str(), path.c_str());
 #endif
-						b = false;
-						if(gii->tanhao_) {
 							b = true;
+							if(gii->tanhao_) {
+								b = !b;
+							}
 							break;
 						}
 					}
+					if(opt_->not_) b=!b;
+					if(b) break;
+					continue;
 				}
-				if(opt_->not_) b=!b;
-				if(b) break;
-				continue; }
+				break;
 			}
 			mode_t st_mode;
 			{

@@ -42,7 +42,8 @@ class gi_item___ {
 public:
 	regex_t* re_;
 	bool tanhao_;
-	gi_item___(regex_t* re, bool tanhao) : re_(re),tanhao_(tanhao) {}
+	string s_;
+	gi_item___(regex_t* re, bool tanhao, const string& s) : re_(re),tanhao_(tanhao), s_(s) {}
 };
 
 class dir___ {
