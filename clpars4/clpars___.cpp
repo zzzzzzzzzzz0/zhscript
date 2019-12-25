@@ -57,6 +57,11 @@ static void attr__(std::vector<std::string>* ret, int* err, clpars_item___* ci, 
 
 #include <sstream>
 void clpars_item___::flags__() {
+	switch(this->type_) {
+	case 'r':
+		flags_add__(flag_);
+		return;
+	}
 	string s;
 //#ifdef ver_sstream_too_bad_
 	for(size_t i = 0; i < flag_.size(); i++) {
@@ -151,7 +156,11 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 			type=s[0];
 			argc1=0;
 			reg = new regex_t;
-			int z = regcomp(reg, flag, REG_EXTENDED|REG_NEWLINE);
+			string flag2;
+			flag2 += '^';
+			flag2 += flag;
+			flag2 += '$';
+			int z = regcomp(reg, flag2.c_str(), REG_EXTENDED|REG_NEWLINE);
 			if(z != 0) {
 				regerror(z, reg, buf, 512);
 				*err=2;
