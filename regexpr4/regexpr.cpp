@@ -121,7 +121,6 @@ bool flags__(int argc, va_list &argv, char*buf, int &cflags, int &eflags) {
 			break;
 		}
 	}
-	va_end(argv);
 	return true;
 }
 
@@ -134,6 +133,7 @@ dlle___ void dlln___(regexpr_test__)(char*buf,size_t siz,char*src,char*exp,int a
 		va_start(argv, argc);
 		if(!flags__(argc, argv, buf, cflags, eflags))
 			return;
+		va_end(argv);
 	}
 	regex_t reg;
 	int z=regcomp(&reg, no_empty_sub_expression__(exp), cflags);
@@ -504,6 +504,7 @@ dlle___ void dlln___(regexpreplace__)(int*err,char**addr_ret,char*buf,long siz,
 		va_start(argv, argc);
 		if(!flags__(argc, argv, buf, cflags, eflags))
 			return;
+		va_end(argv);
 	}
 	string s;
 	if(!regexpreplace__(err,ce,buf,siz,src,from,to,shangji,cflags,eflags,duocan, all_s, fore?NULL:&s, NULL))
@@ -521,6 +522,7 @@ dlle___ void dlln___(regexpr_get2__)(int*err, std::vector<std::string>* ret,
 		char buf[32];
 		if(!flags__(argc, argv, buf, cflags, eflags))
 			return;
+		va_end(argv);
 	}
 	regexpreplace__(err,ce,NULL,0,src,from,to,shangji,cflags,eflags,true, all_s, NULL, ret);
 }
