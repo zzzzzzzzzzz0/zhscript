@@ -11,8 +11,16 @@
 #include "stdio.h"
 #include "strlen_sp.h"
 
-dlle___ int sp_len__(char* s, int len1) {
-	return s ? strlen_sp__(s, len1) : 0;
+dlle___ int sp_len__(char* s1, int argc,...) {
+	int len1 = -1;
+	_for_args( argc )
+		switch(i){
+		case 0:
+			len1 = s2i__(s);
+			break;
+		}
+	_next_args
+	return s1 ? strlen_sp__(s1, len1) : 0;
 }
 
 dlle___ void trim__(char**addr_ret, const char*src, int ctl) {
@@ -296,29 +304,33 @@ dlle___ long strrpos__(char* src,char* ss, bool utf8, int argc, ...) {
 }
 
 dlle___ bool strstr__(const char* s1, int c, int argc, ...) {
-	string s11 = s1;
-	_for_args( argc )
-		switch(c) {
-		case 1:
-			if(s11.find(s) == 0)
-				return true;
-			break;
-		case 2:
-		{
-			size_t pos = s11.rfind(s);
-			if(pos != string::npos && pos == s11.length() - string(s).length())
-				return true;
-			break;
-		}
-		case 3:
-			if(s11 == s)
-				return true;
-			break;
-		default:
-			if(s11.find(s) != string::npos)
-				return true;
-			break;
-		}
-	_next_args
+	if(s1) {
+		string s11 = s1;
+		_for_args( argc )
+			if(s) {
+				switch(c) {
+				case 1:
+					if(s11.find(s) == 0)
+						return true;
+					break;
+				case 2:
+				{
+					size_t pos = s11.rfind(s);
+					if(pos != string::npos && pos == s11.length() - string(s).length())
+						return true;
+					break;
+				}
+				case 3:
+					if(s11 == s)
+						return true;
+					break;
+				default:
+					if(s11.find(s) != string::npos)
+						return true;
+					break;
+				}
+			}
+		_next_args
+	}
 	return false;
 }

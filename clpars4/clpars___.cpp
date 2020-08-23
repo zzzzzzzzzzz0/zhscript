@@ -180,6 +180,10 @@ void clpars___::set__(char*buf,int*err,bool add,int argc,va_list& argv,int* sp){
 			}
 			s++;
 		default:
+			if(s[0] == 'a' && !s[1]) {
+				argc1 = -1;
+				break;
+			}
 			if(sscanf(s,"%d",&argc1)!=1){
 				sprintf(buf,"'%s' no int", s);
 				*err=2;
@@ -340,21 +344,16 @@ int clpars___::cb__(const char*flag,bool by_help,bool no,int& i1,int&i, int& pau
 					break;
 				}
 				if(has==1){
-					if(ci->argc_ > 0 || ci->type_ == 'a'){
-						int argc2 = ci->type_ == 'a' ? argc - i : (ci->argc_ - (ci->flag_.empty() ? 1 : 0));
-						if(ci->type_ == 'a') {
-							if(argc2 < ci->argc_) {
-								sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
-								*err=1;
-								return has;
-							}
+					if(ci->argc_ || ci->type_ == 'a'){
+						int argc2 = ci->type_ == 'a' || ci->argc_ == -1 ? argc - i :
+								(ci->argc_ - (ci->flag_.empty() ? 1 :
+										0));
+						if((ci->type_ == 'a' && argc2 < ci->argc_) || i + argc2 > argc) {
+							sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
+							*err=1;
+							return has;
 						}
 						for(int i2 = 0; i2 < argc2; i2++, i++){
-							if(i>=argc){
-								sprintf(buf,"'%s'(%c%d) no arg",flag,ci->type_,ci->argc_);
-								*err=1;
-								return has;
-							}
 							char* s = va_arg(argv, char*);
 							argv4.push_back(s ? s : "NULL");
 						}

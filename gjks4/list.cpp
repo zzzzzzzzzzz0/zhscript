@@ -189,13 +189,15 @@ static vector<string>* list_get__(int* err, vector<vector<string>*>* p,
 	return v;
 }
 
-dlle___ void list_get__(int* err, char** addr_ret, vector<vector<string>*>* p, char* i1i2) {
+dlle___ void list_get__(int* err, vector<string>* ret, vector<vector<string>*>* p, int argc, ...) {
 	int i1, i2;
-	vector<string>* v = list_get__(err, p, i1i2, &i1, &i2);
-	if(!v) {
-		return;
-	}
-	*addr_ret = dup__((*v)[i2].c_str());
+	_for_args( argc ) {
+		vector<string>* v = list_get__(err, p, s, &i1, &i2);
+		if(v)
+			ret->push_back((*v)[i2]);
+		else
+			ret->push_back("");
+	} _next_args
 }
 
 dlle___ void list_set__(int* err, vector<vector<string>*>* p, char* i1i2, char* s) {

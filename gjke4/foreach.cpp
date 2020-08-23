@@ -54,7 +54,6 @@ static void foreach2__(int*err,std::vector<std::string>* ret,void*ce,void* shang
 			argv2[i2++] = va_arg(argv, char*);
 		}
 		int ret5 = cb4_(jsq_, ce, code,false,NULL,shangji, NULL,NULL, argc2,argv2, ret2);
-		cb4_if_err__(ret5, 3);
 		if(jianrong) {
 			if(!is_set_1) {
 				is_set_1 = true;
@@ -80,6 +79,7 @@ static void foreach2__(int*err,std::vector<std::string>* ret,void*ce,void* shang
 				ret3.clear();
 			}
 		}
+		cb4_if_err__(ret5, 3);
 	}
 	delete argv2;
 	if(jianrong) if(is_1) {

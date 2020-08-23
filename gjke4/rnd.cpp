@@ -19,6 +19,8 @@ dlle___ void srand__(long l){
 }
 
 dlle___ long int rando__(long int min,long int max){
+	if(max < min)
+		return min;
 	return random()%(max-min+1)+min;
 }
 

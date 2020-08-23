@@ -29,6 +29,13 @@ void extractfilename__(string& buf2,const string& name,int flag){
 			break;
 		}
 	}
+	int dian3a=dian3;
+	for(i=mo4;i<dian3;i++){
+		if(name[i]=='.'){
+			dian3a=i;
+			break;
+		}
+	}
 	int tou2=0;
 	int pan2=-1;
 	int xie3=-1;
@@ -76,6 +83,10 @@ void extractfilename__(string& buf2,const string& name,int flag){
 		from=mo4;
 		to=dian3;
 		break;
+		case 11:
+		from=mo4;
+		to=dian3a;
+		break;
 		case 2://Â·¾¶
 		from=tou2;
 		to=mo4;
@@ -111,6 +122,8 @@ void extractfilename___(char* buf,long siz,char* name0,int argc,...){
 	_for_args( argc )
 		if(sscanf(s, "%d", &flag) == 1)
 			extractfilename__(buf2, name, flag);
+		else if(s[0] == '\\')
+			buf2 += s + 1;
 		else
 			buf2 += s;
 	_next_args
@@ -225,6 +238,7 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 		return;
 
 	bool quhouzhui=false;
+	size_t youchang = 0;
 	char* fengefu="/";
 	bool qukongceng=true;
 	_for_args( argc )
@@ -238,6 +252,12 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 			case'_':
 				qukongceng=false;
 				break;
+			case'l':
+				youchang = 15;
+				sscanf(s + 1, "%lu", &youchang);
+				break;
+			default:
+				return;
 			}
 	_next_args
 	int len=0;
@@ -317,8 +337,18 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 			}
 		}
 	}
+	int i5=0;
+	if(youchang) {
+		size_t i2 = 0;
+		for(i = len; --i >= 0;) {
+			if((i2 += ss[i].size()) >= youchang) {
+				i5 = i;
+				break;
+			}
+		}
+	}
 	string o;
-	for(int i5=0;i5<len;i5++){
+	for(;i5<len;i5++){
 		if(ss[i5].size()<1&&(i5==len-1||qukongceng))
 				continue;
 		if(o.size()>0)

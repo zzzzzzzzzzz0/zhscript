@@ -48,11 +48,13 @@ dlle___ void find_and_get__(int*err,char**addr_ret,const char*src1,int from,
 				}
 			}
 		}
+		const char*src2=src, *src3=src;
 		bool b=false;
 		for(;*src;src++){
 			for(list<const char*>::iterator li=lst.begin();li!=lst.end();li++){
 				const char*sp=*li;
 				if(startswith__(src,sp)){
+					src3=src;
 					src+=strlen(sp);
 					b=true;
 					break;
@@ -63,10 +65,15 @@ dlle___ void find_and_get__(int*err,char**addr_ret,const char*src1,int from,
 			buf+=*src;
 		}
 		if(code){
-			char i[8]="-1";
-			if(*src)
+			if(*src) {
+				char i[8], i2[8], i3[8];
 				sprintf(i,"%ld",src-src1);
-			callback_(jsq_,shangji,err,ce,code,false,NULL,1,i);
+				sprintf(i2,"%ld",src3-src1);
+				sprintf(i3,"%ld",src2-src1);
+				callback_(jsq_,shangji,err,ce,code,false,NULL,3, i, i2, i3);
+			} else {
+				callback_(jsq_,shangji,err,ce,code,false,NULL,1,"-1");
+			}
 		}
 	}
 	*addr_ret=dup__(buf.c_str());
@@ -137,7 +144,7 @@ dlle___ void tag_replace__(int*err,char**addr_ret,char*src1,void*ce,void*shangji
 }
 
 dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
-		const char*src1,int argc,...)
+		bool no_code, const char*src1,int argc,...)
 {
 	string buf;
 	if(src1){
@@ -203,10 +210,14 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 					src+=strlen(sp);
 					b=true;
 
-					buf += callback_(jsq_,shangji,err,ce,
-							code[i],false,sp,0);
-					if(*err)
-						return;
+					const char* src4 = code[i];
+					if(no_code) {
+						buf += src4;
+					} else {
+						buf += callback_(jsq_,shangji,err,ce, src4,false,sp,0);
+						if(*err)
+							return;
+					}
 					break;
 				}
 			}
