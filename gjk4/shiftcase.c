@@ -3,7 +3,7 @@
 #include "for_arg_.h"
 
 static char a_[]="`~1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|;:\'\",<.>/?";
-static void case__(char* buf,char* s,int i2_min,int i2_max,long siz,int*i1,int ctrl){
+static void case__(char* buf,char* s,int i2_min,int i2_max,long siz,int*i1,int ctrl,int _a){
 	int s_len=strlen(s);
 	if(i2_max<=0)
 		i2_max+=s_len;
@@ -40,6 +40,15 @@ static void case__(char* buf,char* s,int i2_min,int i2_max,long siz,int*i1,int c
 				}
 				if(ctrl & 0x10){
 					if(c>='A'&&c<='Z'){
+						if(_a) {
+							if(_a == 1) {
+								_a = 2;
+							} else {
+								if(*i1>=siz)
+									return;
+								buf[(*i1)++] = '_';
+							}
+						}
 						c=c-'A'+'a';
 						break;
 					}
@@ -69,7 +78,7 @@ static void case__(char* buf,char* s,int i2_min,int i2_max,long siz,int*i1,int c
 
 static void case2__(char* buf,long siz,int argc,va_list argv,int ctrl){
 	char* s=NULL;
-	int i2_min = 0, i2_max = 0;
+	int i2_min = 0, i2_max = 0, _a = 0;
 	int c4w4;
 	if(argc >= 1)
 		s = va_arg(argv, char*);
@@ -83,10 +92,22 @@ static void case2__(char* buf,long siz,int argc,va_list argv,int ctrl){
 		if(c4w4)
 			return;
 	}
+	if(argc >= 4) {
+		char* s2 = va_arg(argv, char*);
+		if(s2) for(; *s2; s2++) {
+			switch(*s2) {
+			case '_':
+				_a = 1;
+				break;
+			default:
+				return;
+			}
+		}
+	}
 	if(!s)
 		return;
 	int i1=0;
-	case__(buf,s,i2_min,i2_max,siz,&i1,ctrl);
+	case__(buf,s,i2_min,i2_max,siz,&i1,ctrl, _a);
 	buf[i1]=0;
 }
 

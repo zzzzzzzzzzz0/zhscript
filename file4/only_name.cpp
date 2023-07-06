@@ -27,11 +27,23 @@ dlle___ void only_name2__(char*buf,long siz,char*dir,char*name, int argc, ...){
 	if(!dir||!name)
 		return;
 	const char* end = "";
+	bool end2 = false;
 	{
 		_for_args( argc )
+			if(!s)
+				return;
 			switch(i) {
 			case 0:
 				end = s;
+				break;
+			default:
+				switch(s[0]) {
+				case 'e':
+					end2 = true;
+					break;
+				default:
+					return;
+				}
 				break;
 			}
 		_next_args
@@ -43,12 +55,14 @@ dlle___ void only_name2__(char*buf,long siz,char*dir,char*name, int argc, ...){
 		name1=name1.substr(i+1);
 	}
 	string dir1=dir;
-	i=dir1.rfind('/');
-	if(i==string::npos||i!=dir1.size()-1)
-		dir1+='/';
+	if(!dir1.empty()) {
+		i=dir1.rfind('/');
+		if(i==string::npos||i!=dir1.size()-1)
+			dir1+='/';
+	}
 	struct stat info;
 	if (lstat((dir1+name1).c_str(), &info) == 0) {
-		i=name1.rfind('.');
+		i=end2 ? 0 : name1.rfind('.');
 		string s1,s2;
 		char c;
 		if(i!=string::npos && i>0){

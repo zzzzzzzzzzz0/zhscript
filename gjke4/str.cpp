@@ -10,6 +10,7 @@
 #include "string.h"
 #include "stdio.h"
 #include "strlen_sp.h"
+#include "rust.h"
 
 dlle___ int sp_len__(char* s1, int argc,...) {
 	int len1 = -1;
@@ -23,17 +24,27 @@ dlle___ int sp_len__(char* s1, int argc,...) {
 	return s1 ? strlen_sp__(s1, len1) : 0;
 }
 
-dlle___ void trim__(char**addr_ret, const char*src, int ctl) {
-	if(!src){
-		return;
-	}
+static string trim__(const char*src, int ctl, const char* sp1) {
+	if(!src)
+		return "";
 	string buf = src;
-	const char* s = " \t\r\n";
+	const char* sp = sp1 ? sp1 : " \t\r\n";
 	if(ctl & 1)
-		buf.erase(0, buf.find_first_not_of(s));
+		buf.erase(0, buf.find_first_not_of(sp));
 	if(ctl & 2)
-		buf.erase(buf.find_last_not_of(s) + 1);
+		buf.erase(buf.find_last_not_of(sp) + 1);
+	return buf;
+}
+dlle___ void trim__(char**addr_ret, const char*src, int ctl) {
+	string buf = trim__(src, ctl, NULL);
 	*addr_ret = dup__(buf.c_str());
+}
+dlle___ void rust_trim2__(rust_add___ add, void* env, const char*src, const char*sp, int ctl) {
+	string buf = trim__(src, ctl, sp);
+	add(buf.c_str(), false, env);
+}
+dlle___ void rust_trim__(rust_add___ add, void* env, const char*src, int ctl) {
+	rust_trim2__(add, env, src, NULL, ctl);
 }
 
 dlle___ void dlln___(addslashes__)(char**addr_ret,const char*src,const char*ctl){
@@ -143,14 +154,15 @@ dlle___ bool is_noname__(const char*s) {
 	return true;
 }
 
-dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
+static void strmid__(string& buf2,char* s,int argc,va_list& argv){
 	if(!s)
 		return;
 
 	long i1=0;
 	long i2=0;
 	char *s2=0, *s3 = 0, *s4 = 0;
-	_for_args( argc )
+	for (int i = 0; i < argc; ++i){
+		char*s = va_arg(argv, char*);
 		switch(i){
 		case 4:
 			s4=s;
@@ -168,7 +180,7 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 			i1=s2l__(s);
 			break;
 		}
-	_next_args
+	}
 
 	string buf = s;
 	long siz = buf.size();
@@ -239,8 +251,23 @@ dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 		if(use_s4 & 2)
 			buf += s4;
 	}
-
+	buf2 = buf;
+}
+dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	string buf;
+	strmid__(buf, s, argc, argv);
+	va_end(argv);
 	*addr_ret=dup__(buf.c_str());
+}
+dlle___ void rust_strmid__(rust_add___ add, void* env,char* s,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	string buf;
+	strmid__(buf, s, argc, argv);
+	va_end(argv);
+	add(buf.c_str(), 0, env);
 }
 
 long strpos__(char* src,char* ss, size_t from, const char* skip, char ctl, bool utf8, bool r) {
@@ -333,4 +360,16 @@ dlle___ bool strstr__(const char* s1, int c, int argc, ...) {
 		_next_args
 	}
 	return false;
+}
+
+#include "strcmp.h"
+dlle___ int strcmp__(char* s1, char* s2) {
+	if(!s1 && !s2) return 0;
+	if(s1 && !s2) return 1;
+	if(!s1 && s2) return -1;
+	return strcmp__(s1, s2, 0);
+}
+dlle___ int strcm2__(char* s1, char* s2) {
+	if(!s1 || !s2) return 0;
+	return strcmp2__(s1, s2);
 }

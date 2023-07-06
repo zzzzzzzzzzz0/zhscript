@@ -40,11 +40,19 @@ void extractfilename__(string& buf2,const string& name,int flag){
 	int pan2=-1;
 	int xie3=-1;
 	for(i=0;i<=wei3;i++){
-		if(name[i]=='/' || name[i]=='\\')
-			break;
-		if(name[i]==':'){
+		char c=name[i];
+		{
+			bool b = false;
+			switch(c) {
+			case '/': case '\\': case '.':
+				b = true;
+			}
+			if(b)
+				break;
+		}
+		if(c==':'){
 			if(i==1){
-				char c=name[i-1];
+				c=name[i-1];
 				if((c>='a' && c<='z') || (c>='A' && c<='Z')){
 					pan2=i-1;
 					tou2=i+1;
@@ -60,7 +68,7 @@ void extractfilename__(string& buf2,const string& name,int flag){
 				else
 					tou2=xie3;
 			}else{
-				char c=name[i-1];
+				c=name[i-1];
 				if((c>='a' && c<='z') || (c>='A' && c<='Z')){
 					pan2=i-1;
 					tou2=i+1;
@@ -75,11 +83,19 @@ void extractfilename__(string& buf2,const string& name,int flag){
 
 	int from=0,to=0;
 	switch(flag){
-		case 0://À©Õ¹Ãû
+		case 0://ï¿½ï¿½Õ¹ï¿½ï¿½
 		from=dian3;
 		to=wei3+1;
 		break;
-		case 1://Ö÷Ãû
+		case 10:
+		from=dian3 + 1;
+		to=wei3+1;
+		break;
+		case 100:
+		from=dian3a;
+		to=wei3+1;
+		break;
+		case 1://ï¿½ï¿½ï¿½ï¿½
 		from=mo4;
 		to=dian3;
 		break;
@@ -87,23 +103,31 @@ void extractfilename__(string& buf2,const string& name,int flag){
 		from=mo4;
 		to=dian3a;
 		break;
-		case 2://Â·¾¶
+		case 2://Â·ï¿½ï¿½
 		from=tou2;
 		to=mo4;
 		break;
-		case 3://ÅÌ·û
+		case 22:
+		to=mo4 - 1;
+		for(from=to - 1;from > tou2;from--)
+			if(name[from]=='/' || name[from]=='\\') {
+				from++;
+				break;
+			}
+		break;
+		case 3://ï¿½Ì·ï¿½
 		if(pan2>=0){
 			from=pan2;
 			to=tou2;
 		}
 		break;
-		case 4://Ð­Òé
+		case 4://Ð­ï¿½ï¿½
 		if(xie3>=0){
 			from=0;
 			to=xie3+1;
 		}
 		break;
-		case -1://À©Õ¹Ãû
+		case -1://ï¿½ï¿½Õ¹ï¿½ï¿½
 		from=wei3+2;
 		to=wei3ba1+1;
 		break;
@@ -191,6 +215,50 @@ void remove_dd_3__(char* s, const char* s2) {
 		return;
 	}
 }
+dlle___ char* remove_dd2_x__(char*src, int opt){
+	if(src){
+		string src1 = src, dd = "/..";
+		for(size_t i0 = 0;;) {
+			size_t i = src1.find(dd, i0);
+			if(i == string::npos) {
+				break;
+			}
+			string s1 = src1.substr(i0, i - i0), s2 = src1.substr(i + dd.size()), s0 = src1.substr(0, i0);
+			printf("|s0=%s i0=%lu\n|s1=%s dd=%s=i=%lu\n|s2=%s\n",s0.c_str(),i0,s1.c_str(),dd.c_str(),i,s2.c_str());
+			if(s1 == ".") {
+				src1 = s0 + s1 + s2;
+				i0 += s1.length();
+			} else if(s1 == "..") {
+				i0 += s1.length() + dd.length();
+			} else if(s1 == "") {
+				src1 = s0 + dd + s2;
+				i0 += dd.size();
+			} else {
+				size_t i1 = s1.rfind("/");
+				printf("rs1/=i1=%lu\n",i1);
+				if(i1 == string::npos) {
+					if(i0 == 0) for(; s2[0] == '/';)
+						s2 = s2.substr(1);
+					src1 = s0 + s2;
+				} else {
+					s1 = s1.substr(0, i1);
+					printf("|s1=%s\n",s1.c_str());
+					src1 = s0 + s1 + s2;
+					//i0 += s1.length();
+				}
+			}
+			printf("|%s\n",src1.c_str());
+		}
+		for(size_t i = 0;; i++) {
+			if(i >= src1.size()) {
+				src[i] = 0;
+				break;
+			}
+			src[i] = src1[i];
+		}
+	}
+	return src;
+}
 dlle___ char* remove_dd2__(char*src, int opt){
 	if(src){
 		const char*dd="..";
@@ -233,24 +301,65 @@ dlle___ char* remove_dd__(char*src){
 	return remove_dd2__(src, 0);
 }
 
+dlle___ void add__(char*buf,long siz, char*src0, char*tag){
+	if(!src0 || !tag) return;
+	int pos = -1;
+	for(int i = 0;; i++) {
+		char c1 = src0[i], c2 = tag[i];
+		if(!c1 || !c2 || c1 != c2) break;
+		if(c1 == '/') pos = i;
+	}
+	string src = src0;
+	if(pos > -1) {
+		src = src.substr(pos + 1);
+		size_t cnt = 0;
+		for(int i = pos;; i++) {
+			char c2 = tag[i];
+			if(!c2) break;
+			if(c2 == '/') cnt++;
+		}
+		for(; cnt > 0; cnt--) {
+			src = "../" + src;
+		}
+	}
+	size_t i = 0;
+	for(; i < siz - 1 && i < src.size(); i++) {
+		buf[i] = src[i];
+	}
+	buf[i] = 0;
+}
+
+static void shenglvename_1__(string& s, char*name, int start, bool qugangtou) {
+	s = &name[start];
+	if((s[0]=='i' &&
+		s[1]=='n' &&
+		s[2]=='d' &&
+		s[3]=='e' &&
+		s[4]=='x')
+	|| (qugangtou && s.size() >= 2 && s[s.size() - 1] == '_')){
+		s.clear();
+	}
+}
 dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 	if(!name)
 		return;
 
-	bool quhouzhui=false;
+	bool quhouzhui=false, qukongceng=true, qugangtou=false;
 	size_t youchang = 0;
 	char* fengefu="/";
-	bool qukongceng=true;
 	_for_args( argc )
 			switch(s[0]){
 			case'x':
 				quhouzhui=true;
 				break;
-			case'/':
-				fengefu=s + 1;
-				break;
 			case'_':
 				qukongceng=false;
+				break;
+			case'-':
+				qugangtou=true;
+				break;
+			case'/':
+				fengefu=s + 1;
 				break;
 			case'l':
 				youchang = 15;
@@ -283,13 +392,14 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 	int i1=0,start=0;
 	for(i=0;;i++){
 		if(!name[i]){
-			ss[i1]=&name[start];
+			shenglvename_1__(ss[i1], name, start, qugangtou);
 			break;
 		}
 		switch(name[i]){
 		case'/':
 			name[i]=0;
-			ss[i1++]=&name[start];
+			
+			shenglvename_1__(ss[i1++], name, start, qugangtou);
 			start=i+1;
 			break;
 		}
@@ -297,10 +407,6 @@ dlle___ void shenglvename__(char*buf,long bufsiz,char*name,int argc,...){
 	//for(i=0;i<len;i++)printf("%d/%d=%s\n",i,len,ss[i].c_str());
 	for(int i5=0;i5<len-1;i5++){
 		for(int i6=i5+1;i6<len;i6++){
-			if(ss[i6]=="index"){
-				ss[i6].clear();
-				continue;
-			}
 			int i5size = ss[i5].size();
 			for(int i7=i5size;i7>0;i7--){
 				if(i7 < i5size) {

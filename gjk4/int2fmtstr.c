@@ -2,11 +2,18 @@
 #include "gjk2.h"
 #include "for_arg_.h"
 
+static void f__(char** fenge, int i3, int* ret_i, char* ret) {
+	int i1=strlen(fenge[i3]), i2;
+	*ret_i-=i1;
+	for(i2=0;i2<i1;i2++)
+		ret[*ret_i+i2]=fenge[i3][i2];
+}
+
 _dle void int2fmtstr__(int* c4w4,char* buf,long siz,unsigned long src,int argc,...){
 	char ret[128];
 	int jinzhi[32]={60};
 	char* fenge[32]={(char*)":"};
-	int jinzhi_len=-1,jinzh_i;
+	int jinzhi_len=-1,jinzh_i, fenge_len = 0;
 	unsigned long quan,shu;
 	int i1=(argc + 1)/2 - 1,i2,i3,ret_i;
 	_for_args( argc )
@@ -22,6 +29,7 @@ _dle void int2fmtstr__(int* c4w4,char* buf,long siz,unsigned long src,int argc,.
 			jinzhi[i1 - jinzhi_len]=i3;
 		}else{
 			fenge [i1 - jinzhi_len]=s;
+			fenge_len++;
 		}
 	_next_args
 	if(++jinzhi_len<1)
@@ -35,6 +43,9 @@ _dle void int2fmtstr__(int* c4w4,char* buf,long siz,unsigned long src,int argc,.
 		printf("%d%s",jinzhi[i1],fenge[i1]);*/
 	ret_i=127;
 	ret[ret_i]=0;
+	if(fenge_len == jinzhi_len) {
+		f__(fenge, 0, &ret_i, ret);
+	}
 	for(jinzh_i=0;jinzh_i<32;jinzh_i++){
 		quan=jinzhi[jinzh_i];
 		shu=src%quan;
@@ -53,10 +64,11 @@ _dle void int2fmtstr__(int* c4w4,char* buf,long siz,unsigned long src,int argc,.
 			strcpy(buf,"over");
 			return;
 		}
-		i1=strlen(fenge[i3]);
+		/*i1=strlen(fenge[i3]);
 		ret_i-=i1;
 		for(i2=0;i2<i1;i2++)
-			ret[ret_i+i2]=fenge[i3][i2];
+			ret[ret_i+i2]=fenge[i3][i2];*/
+		f__(fenge, i3, &ret_i, ret);
 	}
 	strcpy(buf,ret+ret_i);
 }

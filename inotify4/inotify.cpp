@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string>
+#include "../gjke4/rust.h"
 
 dlle___ int init__(){
 	return inotify_init();
@@ -77,7 +78,12 @@ dlle___ uint32_t s2mask__(char* s) {
 	return ret;
 }
 
-static int for__(int fd,callback2___ cb, callback2_2___ cb2, void* jsq,void* shangji, void* ce, const char* src){
+static int for__(int fd,
+		callback2___ cb,
+		callback2_2___ cb2,
+		rust_cb___ rust_cb, rust_cb_free___ rust_f,
+		void* jsq,void* shangji, void* ce,
+		const char* src){
 	int len, index;
 #define MAX_BUF_SIZE 1024
 	char buffer[MAX_BUF_SIZE];
@@ -92,21 +98,30 @@ static int for__(int fd,callback2___ cb, callback2_2___ cb2, void* jsq,void* sha
 			event = (struct inotify_event *)(buffer+index);
 			sprintf(num,"%d",event->mask);
 			mask2s__(event->mask, s);
-			if(event->len>0){
-				if(cb2) {
-					if(!cb2(jsq,shangji,&err, ce, src,false, 0, 2,s.c_str(),event->name))
-						return err;
-				} else {
-					if(!cb(jsq,shangji,&err,src,false,2,num,event->name))
-						return err;
-				}
-			}else{
-				if(cb2) {
-					if(!cb2(jsq,shangji,&err, ce, src,false, 0, 1,s.c_str()))
-						return err;
-				} else {
-					if(!cb(jsq,shangji,&err,src,false,1,num))
-						return err;
+			if(rust_cb) {
+				const char*argv[] = {s.c_str(),event->name};
+				rust_f(rust_cb(ce, shangji, &err, '0', src, event->len>0 ? 2 : 1, argv));
+				if(err)
+					return err;
+			} else {
+				if(event->len>0){
+					if(cb2) {
+						cb2(jsq,shangji,&err, ce, src,false, 0, 2,s.c_str(),event->name);
+						if(err)
+							return err;
+					} else {
+						if(!cb(jsq,shangji,&err,src,false,2,num,event->name))
+							return err;
+					}
+				}else{
+					if(cb2) {
+						cb2(jsq,shangji,&err, ce, src,false, 0, 1,s.c_str());
+						if(err)
+							return err;
+					} else {
+						if(!cb(jsq,shangji,&err,src,false,1,num))
+							return err;
+					}
 				}
 			}
 			index += sizeof(struct inotify_event)+event->len;
@@ -115,9 +130,12 @@ static int for__(int fd,callback2___ cb, callback2_2___ cb2, void* jsq,void* sha
 	return 0;
 }
 dlle___ int for__(int fd,callback2___ cb,void* jsq,void* shangji,const char* src){
-	return for__(fd, cb, 0, jsq, shangji, 0, src);
+	return for__(fd, cb, 0, 0, 0, jsq, shangji, 0, src);
 }
 dlle___ int for2__(int fd,callback2_2___ cb,void* jsq,void* shangji, void* ce, const char* src){
-	return for__(fd, 0, cb, jsq, shangji, ce, src);
+	return for__(fd, 0, cb, 0, 0, jsq, shangji, ce, src);
+}
+dlle___ int rust_for__(int fd,rust_cb___ cb, rust_cb_free___ f, void* env, void* ret,const char* src){
+	return for__(fd, 0, 0, cb, f, 0, ret, env, src);
 }
 

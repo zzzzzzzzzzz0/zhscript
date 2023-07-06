@@ -33,5 +33,4 @@ extern unsigned long x2lu__(char*s, unsigned long l=0);
 extern int s2i__(const char* s, int i=0);
 extern long s2l__(const char* s, long i=0);
 extern bool startswith__(const char*src,const char*tag);
-extern int for_err__(int*err);
 #endif /* GJKE_H_ */

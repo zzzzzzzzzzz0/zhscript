@@ -5,6 +5,8 @@ using namespace std;
 #include"call_util.cpp"
 #include "api1.cpp"
 
+typedef void*add___(const char*,bool,void*);
+
 void urldecode__(const char*url, const string& mask, string& out) {
 	char buf[] = {0, 0, 0};
 	unsigned int im=0, c2;
@@ -50,25 +52,28 @@ dlle___ void urldecode__(int*c4w4,char**addr_ret,char*url,int argc,...){
 	urldecode__(url, mask, out);
 	*addr_ret=dup__(out.c_str());
 }
-
-dlle___ void urlencode__(int*c4w4,char**addr_ret,char*url,int argc,...){
+dlle___ void rust_urldecode__(add___ add, void* env, char*url,int argc,...){
 	if(!url)
 		return;
 
-	string unchr;
 	string mask;
 	_for_args( argc )
 	switch(i){
 	case 0:
 		mask+=s;
 		break;
-	case 1:
-		unchr+=s;
-		break;
 	}
 	_next_args
 
 	string out;
+	urldecode__(url, mask, out);
+	add(out.c_str(), false, env);
+}
+
+void urlencode__(char*url,const string& unchr,const string& mask, string& out){
+	if(!url)
+		return;
+
 	char buf[8];
 	unsigned int im=0;
 	for(;;url++){
@@ -122,7 +127,38 @@ dlle___ void urlencode__(int*c4w4,char**addr_ret,char*url,int argc,...){
 			out+=buf;
 		}
 	}
+}
+dlle___ void urlencode__(int*c4w4,char**addr_ret,char*url,int argc,...){
+	string unchr, mask;
+	_for_args( argc )
+	switch(i){
+	case 0:
+		mask+=s;
+		break;
+	case 1:
+		unchr+=s;
+		break;
+	}
+	_next_args
+	string out;
+	urlencode__(url, unchr,mask, out);
 	*addr_ret=dup__(out.c_str());
+}
+dlle___ void rust_urlencode__(add___ add, void* env, char*url,int argc,...){
+	string unchr, mask;
+	_for_args( argc )
+	switch(i){
+	case 0:
+		mask+=s;
+		break;
+	case 1:
+		unchr+=s;
+		break;
+	}
+	_next_args
+	string out;
+	urlencode__(url, unchr,mask, out);
+	add(out.c_str(), false, env);
 }
 
 static string xieyi_ge_ = "://";

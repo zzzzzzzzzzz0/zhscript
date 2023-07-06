@@ -16,10 +16,38 @@
 #include<string>
 using namespace std;
 
-char*ltoa(long l,char*buf,char fmt1='d'){
+dlle___ void fmtbyte__(char*buf, int siz,unsigned long long l) {
+	unsigned l2 = 0;
+	int i = 0;
+	for(; l >= 1024 && i < 9; i++) {
+		l2 = l % 1024;
+		l /= 1024;
+	}
+	char s[] = {0, 'B', 0};
+	switch(i) {
+	case 1: s[0] = 'K'; break;
+	case 2: s[0] = 'M'; break;
+	case 3: s[0] = 'G'; break;
+	case 4: s[0] = 'T'; break;
+	case 5: s[0] = 'P'; break;
+	case 6: s[0] = 'E'; break;
+	case 7: s[0] = 'Z'; break;
+	case 8: s[0] = 'Y'; break;
+	case 9: s[0] = 'B'; break;
+	default:s[0] = s[1]; s[1] = 0; break;
+	}
+	for(; l2 && l2 % 10 == 0;)
+		l2 /= 10;
+	if(l2)
+		sprintf(buf, "%llu.%u%s", l, l2, s);
+	else
+		sprintf(buf, "%llu%s", l, s);
+}
+
+char*ltoa(unsigned long l,char*buf,char fmt1='u'){
 	char fmt[]={'%',fmt1, 0, 0};
 	if(fmt1 == 'l')
-		fmt[2] = 'd';
+		fmt[2] = 'u';
 	sprintf(buf,fmt,l);
 	return buf;
 }

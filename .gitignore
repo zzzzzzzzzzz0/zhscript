@@ -9,6 +9,7 @@ Debug3/
 *.o
 *.d
 *.so
+*.so-*
 *.dll
 *.exe
 /new_o/demo/z.zs

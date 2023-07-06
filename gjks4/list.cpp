@@ -5,7 +5,11 @@
  *      Author: zzzzzzzzzzz
  */
 #include "list_cmp.h"
-#include "strlen_sp.h"
+#include "../gjke4/strlen_sp.cpp"
+#include "../gjke4/rust.h"
+#include "../gjke4/for_err.cpp"
+
+#define it___ vector<vector<string>*>::iterator
 
 dlle___ vector<vector<string>*>* new_list__() {
 	return new vector<vector<string>*>();
@@ -26,6 +30,15 @@ dlle___ void delete_list__(vector<vector<string>*>* p) {
 	if(!ok__(p))
 		return;
 	delete p;
+}
+
+dlle___ void list_delete__(vector<vector<string>*>* p, size_t from, int n) {
+	if(!ok__(p))
+		return;
+	for(int i = 0; (n < 0 || i < n) && p->size() > from; i++) {
+		/*it___ it =*/ p->erase(p->begin() + from);
+		//delete *it;
+	}
 }
 
 dlle___ size_t list_length__(vector<vector<string>*>* p, int i1) {
@@ -102,8 +115,8 @@ dlle___ void list_add_by_split__(vector<vector<string>*>* p, int colnum,
 	}
 }
 
-dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
-		bool has_num, bool is_reverse, vector<vector<string>*>* p, char* code)
+void list_foreach__(int* err, void*ce, void* shangji, rust_cb___ cb1, rust_cb_free___ f,
+		bool has_num, bool is_reverse, vector<vector<string>*>* p, char* code, string& ret2)
 {
 	if(!ok__(p) || !code) {
 		*err = 1;
@@ -117,7 +130,6 @@ dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
 	}
 	const char**argv = new const char*[argc + 1];
 	char num[16];
-	string ret2;
 	int i1 = is_reverse ? p->size() - 1 : 0;
 	for(unsigned i11 = 0; i1 < (int)p->size() && i1 >= 0;) {
 		vector<string>* v = (*p)[i1];
@@ -130,24 +142,30 @@ dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
 		}
 		for(size_t i = 0; i < argc; i++)
 			argv[i + add] = (*v)[i].c_str();
-		const char *ret = cb_(jsq_, shangji, err, ce, code, false, NULL, argc + add, argv, 0);
-		if(addr_ret && ret)
+		if(cb1) {
+			char *ret = cb1(ce, shangji, err, '0', code, argc + add, argv);
 			ret2 += ret;
-		if(*err == jieshiqi_err_go_+keyword_continue_) {
-			*err=0;
+			f(ret);
+			if(for_err__(err, true)) break;
+		} else {
+			const char *ret = cb_(jsq_, shangji, err, ce, code, false, NULL, argc + add, argv, 0);
+			if(ret)
+				ret2 += ret;
+			if(for_err__(err)) break;
 		}
-		else if(*err == jieshiqi_err_go_+keyword_break_) {
-			*err=0;
-			break;
-		}
-		else if(*err)
-			break;
 		if(is_reverse)
 			i1--;
 		else
 			i1++;
 	}
 	delete argv;
+}
+
+dlle___ void list_foreach__(int* err, char** addr_ret, void*ce, void* shangji,
+		bool has_num, bool is_reverse, vector<vector<string>*>* p, char* code)
+{
+	string ret2;
+	list_foreach__(err, ce, shangji, NULL, NULL, has_num, is_reverse, p, code, ret2);
 	if(addr_ret)
 		*addr_ret = dup__(ret2.c_str());
 }
@@ -167,8 +185,27 @@ dlle___ void list_foreach2__(int* err, char** addr_ret, void*ce, void* shangji,
 		*addr_ret = dup__(ret2.c_str());
 }
 
+dlle___ void rust_list_foreach__(int* err, rust_cb___ cb, rust_cb_free___ f, void* env, void* ret,
+		bool has_num, bool is_reverse, vector<vector<string>*>* p, char* code) {
+	string ret2;
+	list_foreach__(err, env, ret, cb, f, has_num, is_reverse, p, code, ret2);
+}
+
+dlle___ void rust_list_foreach2__(int* err, rust_cb___ cb, rust_cb_free___ f, void* env, void* ret,
+		bool has_num, bool is_reverse, char* code, long int argc, ...) {
+	_for_args1( argc )
+		long l;
+		if(sscanf(va_arg(argv, char*), "%lu", &l) != 1) {
+			*err = 1;
+			break;
+		}
+		rust_list_foreach__(err, cb, f, env, ret, has_num, is_reverse, (vector<vector<string>*>*)l, code);
+		if(*err) break;
+	_next_args
+}
+
 static vector<string>* list_get__(int* err, vector<vector<string>*>* p,
-		char* i1i2, int* i1, int* i2) {
+		char* i1i2, int* i1, int* i2, bool by_set = false) {
 	if(!ok__(p) || !i1i2) {
 		*err = 1;
 		return NULL;
@@ -179,12 +216,22 @@ static vector<string>* list_get__(int* err, vector<vector<string>*>* p,
 	}
 	(*i1)--;
 	(*i2)--;
-	if(*i1 < 0 || (size_t)*i1 >= p->size()) {
+	if(*i1 < 0 || ((size_t)*i1 >= p->size() && !by_set)) {
 		return NULL;
 	}
+	if(by_set) {
+		int num = *i1 - p->size();
+		for(int i = 0; i <= num; i++)
+			p->push_back(new vector<string>());
+	}
 	vector<string>* v = (*p)[*i1];
-	if(*i2 < 0 || (size_t)*i2 >= v->size()) {
+	if(*i2 < 0 || ((size_t)*i2 >= v->size() && !by_set)) {
 		return NULL;
+	}
+	if(by_set) {
+		int num = *i2 - v->size();
+		for(int i = 0; i <= num; i++)
+			v->push_back("");
 	}
 	return v;
 }
@@ -199,6 +246,13 @@ dlle___ void list_get__(int* err, vector<string>* ret, vector<vector<string>*>* 
 			ret->push_back("");
 	} _next_args
 }
+dlle___ void rust_list_get__(int* err, rust_add___ add, void* env, vector<vector<string>*>* p, int argc, ...) {
+	int i1, i2;
+	_for_args( argc ) {
+		vector<string>* v = list_get__(err, p, s, &i1, &i2);
+		add(v ? (*v)[i2].c_str() : "", i > 0, env);
+	} _next_args
+}
 
 dlle___ void list_set__(int* err, vector<vector<string>*>* p, char* i1i2, char* s) {
 	if(!s) {
@@ -206,7 +260,7 @@ dlle___ void list_set__(int* err, vector<vector<string>*>* p, char* i1i2, char* 
 		return;
 	}
 	int i1, i2;
-	vector<string>* v = list_get__(err, p, i1i2, &i1, &i2);
+	vector<string>* v = list_get__(err, p, i1i2, &i1, &i2, true);
 	if(!v) {
 		return;
 	}
@@ -285,41 +339,62 @@ void list_to_1_get_max_s__(vector<string>* v, size_t i, size_t& s) {
 		}
 	}
 }
+static size_t sp_tag_ = 1000000;
+static size_t sp2_tag_ = 2 * sp_tag_;
 void list_to_1_set_buf__(string* s, bool head, bool center, bool right, bool num_right, size_t max_s, string& buf) {
 	size_t cnt = 0;
-	if(s) {
-		cnt = strlen_sp__(*s);
-		if(!right && num_right) {
-			for(size_t i2 = 0;; i2++) {
-				if(i2 >= cnt) {
-					right = true;
-					break;
+	int sp_tag = 0;
+	if(max_s >= sp2_tag_) {
+		max_s -= sp2_tag_;
+		sp_tag = 2;
+	}
+	else if(max_s >= sp_tag_) {
+		max_s -= sp_tag_;
+		sp_tag = 1;
+	}
+	if(sp_tag) {
+		if(!head && s) {
+			buf += *s;
+			cnt = strlen_sp__(*s);
+		}
+		for(; cnt < max_s; cnt++)
+			buf += ' ';
+	} else {
+		if(s) {
+			cnt = strlen_sp__(*s);
+			if(!right && num_right) {
+				for(size_t i2 = 0;; i2++) {
+					if(i2 >= cnt) {
+						right = true;
+						break;
+					}
+					char c = (*s)[i2];
+					if(!(c >= '0' && c <= '9'))
+						break;
 				}
-				char c = (*s)[i2];
-				if(!(c >= '0' && c <= '9'))
-					break;
 			}
 		}
+		char c = head ? '-' : (s ? ' ' : '\\');
+		if(center) {
+			size_t i2 = (max_s - cnt) / 2;
+			for(size_t i = 0; i < i2; i++)
+				buf += c;
+			if(s)
+				buf += *s;
+			i2 = max_s - cnt - i2;
+			for(size_t i = 0; i < i2; i++)
+				buf += c;
+		} else {
+			if(s && !right)
+				buf += *s;
+			for(; cnt < max_s; cnt++)
+				buf += c;
+			if(s && right)
+				buf += *s;
+		}
 	}
-	char c = head ? '-' : (s ? ' ' : '\\');
-	if(center) {
-		size_t i2 = (max_s - cnt) / 2;
-		for(size_t i = 0; i < i2; i++)
-			buf += c;
-		if(s)
-			buf += *s;
-		i2 = max_s - cnt - i2;
-		for(size_t i = 0; i < i2; i++)
-			buf += c;
-	} else {
-		if(s && !right)
-			buf += *s;
-		for(; cnt < max_s; cnt++)
-			buf += c;
-		if(s && right)
-			buf += *s;
-	}
-	buf += "|";
+	if(sp_tag != 1)
+		buf += "|";
 }
 void list_to_1_set_buf__(vector<string>* v, bool head, bool center, bool right, bool num_right, size_t max, const vector<size_t>& max_s, string& buf) {
 	for(size_t i = 0; i < max; i++) {
@@ -327,14 +402,9 @@ void list_to_1_set_buf__(vector<string>* v, bool head, bool center, bool right, 
 	}
 	buf += "\n";
 }
-dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, ...) {
+void list_to_1__(string& buf, vector<vector<string>*>* p, vector<string>& head) {
 	if(!ok__(p))
 		return;
-
-	vector<string> head;
-	_for_args( argc )
-		head.push_back(s ? s : "");
-	_next_args
 
 	size_t max = 0;
 	list_to_1_get_max__(&head, max);
@@ -349,6 +419,19 @@ dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, .
 		for(size_t i1 = 0; i1 < p->size(); i1++) {
 			list_to_1_get_max_s__((*p)[i1], i, s);
 		}
+		if(i < head.size()) {
+			const string& h = head[i];
+			do {
+				if(h == "--") {
+					s += sp2_tag_;
+					break;
+				}
+				if(h == "-") {
+					s += sp_tag_;
+					break;
+				}
+			} while(false);
+		}
 		max_s.push_back(s);
 	}
 
@@ -357,7 +440,6 @@ dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, .
 	string num2 = num;
 	size_t max_s2 = num2.size();
 
-	string buf;
 	list_to_1_set_buf__(NULL, true, false, false, false, max_s2, buf);
 	list_to_1_set_buf__(&head, true, true, true, false, max, max_s, buf);
 	for(size_t i1 = 0; i1 < p->size(); i1++) {
@@ -366,5 +448,22 @@ dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, .
 		list_to_1_set_buf__(&num2, false, false, false, true, max_s2, buf);
 		list_to_1_set_buf__((*p)[i1], false, false, false, true, max, max_s, buf);
 	}
+}
+dlle___ void list_to_1__(char**addr_ret, vector<vector<string>*>* p, int argc, ...) {
+	vector<string> head;
+	_for_args( argc )
+		head.push_back(s ? s : "");
+	_next_args
+	string buf;
+	list_to_1__(buf, p, head);
 	*addr_ret = dup__(buf.c_str());
+}
+dlle___ void rust_list_to_1__(rust_add___ add, void* env, vector<vector<string>*>* p, int argc, ...) {
+	vector<string> head;
+	_for_args( argc )
+		head.push_back(s ? s : "");
+	_next_args
+	string buf;
+	list_to_1__(buf, p, head);
+	add(buf.c_str(), false, env);
 }

@@ -19,13 +19,13 @@ static int cmp__(const string& s1, const string& s2, size_t i, int ret) {
 	i1 = i2 = i;
 	num_i__(i1, s1);
 	num_i__(i2, s2);
-	float l1;
-	if(sscanf(s1.c_str() + i1, "%f", &l1) != 1)
+	double l1;
+	if(sscanf(s1.c_str() + i1, "%lf", &l1) != 1)
 		return ret;
-	float l2;
-	if(sscanf(s2.c_str() + i2, "%f", &l2) != 1)
+	double l2;
+	if(sscanf(s2.c_str() + i2, "%lf", &l2) != 1)
 		return ret;
-	//printf("{%lu %.1f %.1f}",i,l1,l2);
+	//printf("{%lu %f %f}",i,l1,l2);
 	if(l1 > l2)
 		return 1;
 	if(l1 < l2)

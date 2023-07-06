@@ -36,6 +36,15 @@ dlle___ void init2__(callback4_4___ cb) {
 	cb4_ = cb;
 }
 
+#include "../gjke4/rust.h"
+#include "../gjke4/for_err.cpp"
+static rust_cb2___     rust_cb_      = NULL;
+static rust_cb_free___ rust_cb_free_;
+dlle___ void rust_init__(rust_cb2___ cb, rust_cb_free___ f){
+	rust_cb_ = cb;
+	rust_cb_free_ = f;
+}
+
 static void call4__(const char* code, const char* name, int argc, const char** argv) {
 	int err;
 	const char*ret = cb3_(jsq_, main_qu_, &err, NULL, code, false, name, argc, argv, 0);
@@ -45,6 +54,46 @@ static void call4__(const char* code, const char* name, int argc, const char** a
 	default:
 		l4_err_out_(jsq_, ret, err, 1);
 	}
+}
+
+static void push__(vector<string>& v1, const vector<string>& v2) {
+	for(size_t i = 0; i < v2.size(); i++)
+		v1.push_back(v2[i]);
+}
+
+static bool cb4__(item___* i1, int argc, const char** argv) {
+	if(rust_cb_) {
+		string code = "解释【" + i1->name_ + "】下代码" + i1->code_ + "上代码" "、‘参数栈’";
+		int err = 0;
+		rust_cb_free_(rust_cb_(&err, '0', code.c_str(), argc, argv));
+		/*if(for_err__(&err, true)) {
+		}*/
+		switch(err) {
+		case 0:
+		case jieshiqi_err_go_+keyword_continue_:
+			break;
+		default:
+			i1->pause_ = true;
+			break;
+		}
+		return true;
+	}
+	if(cb4_) {
+		vector<string> args;
+		for(int i = 0; i < argc; i++)
+			args.push_back(argv[i]);
+		push__(args, i1->args_);
+		int ret = cb4_(jsq_, NULL, i1->code_.c_str(), false, i1->name_.c_str(), main_qu_, NULL, NULL, &args, NULL);
+		switch(ret) {
+		case 0:
+			l4_err_out_(jsq_, "", jieshiqi_err_, 1);
+		case -3: case -4:
+			i1->pause_ = true;
+			break;
+		}
+		return true;
+	}
+	return false;
 }
 
 static deque<item___*> items_;
@@ -64,11 +113,6 @@ static item___* find__(char* name) {
 		return NULL;
 	else
 		return *i;
-}
-
-static void push__(vector<string>& v1, const vector<string>& v2) {
-	for(size_t i = 0; i < v2.size(); i++)
-		v1.push_back(v2[i]);
 }
 
 dlle___ void add__(/*int* err*/char* buf, char* type, int is_loop, char* name, int argc, ...) {
@@ -139,21 +183,6 @@ dlle___ void reset__(char* name) {
 	}
 }
 
-static void cb4__(item___* i1, int argc, const char** argv) {
-	vector<string> args;
-	for(int i = 0; i < argc; i++)
-		args.push_back(argv[i]);
-	push__(args, i1->args_);
-	int ret = cb4_(jsq_, NULL, i1->code_.c_str(), false, i1->name_.c_str(), main_qu_, NULL, NULL, &args, NULL);
-	switch(ret) {
-	case 0:
-		l4_err_out_(jsq_, "", jieshiqi_err_, 1);
-	case -3: case -4:
-		i1->pause_ = true;
-		break;
-	}
-}
-
 void signal__(int signo) {
 	if(!start_)
 		return;
@@ -195,27 +224,23 @@ void signal__(int signo) {
 			const char* argv[] = {d_y, d_m1, d_d, d_h, d_m, d_s, d_w};
 			if(!i1->begin__(argv))
 				continue;
-			if(cb4_) {
-				cb4__(i1, 7, argv);
+			if(cb4__(i1, 7, argv))
 				break;
-			}
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 7, argv);
 			break; }
 		default:
 			if(!i1->begin__(NULL))
 				continue;
-			if(cb4_) {
-				cb4__(i1, 0, NULL);
+			if(cb4__(i1, 0, NULL))
 				break;
-			}
 			call4__(i1->code_.c_str(), i1->name_.c_str(), 0, NULL);
 			break;
 		}
-		i1->end__();
 		if(stop_) {
 			stop_ = false;
 			return;
 		}
+		i1->end__();
 	}
 }
 
@@ -233,6 +258,11 @@ dlle___ void start__() {
 dlle___ void stop__() {
 	stop_ = true;
 	start_ = false;
+
+	struct itimerval it;
+	getitimer(ITIMER_REAL, &it);
+	it.it_value.tv_usec = 0;
+
 	for(deque<item___*>::iterator i = items_.begin(); i != items_.end();) {
 		item___* i1 = *i;
 		delete i1;
@@ -240,7 +270,7 @@ dlle___ void stop__() {
 	}
 }
 
-dlle___ void for__(int* err, void*ce, void* qu, char* code) {
+static void for__(int* err, void*ce, void* qu, rust_cb___ cb, rust_cb_free___ f, char* code) {
 	#define argc 6
 	const char* argv[argc];
 	char type[] = {0, 0}, is_loop[] = {0, 0}, is_pause[] = {0, 0};
@@ -255,17 +285,18 @@ dlle___ void for__(int* err, void*ce, void* qu, char* code) {
 		argv[3] = i1->time2_.c_str();
 		argv[4] = i1->code_.c_str();
 		is_pause[0] = i1->pause_ + '0';
-		cb3_(jsq_, qu, err, ce, code, false, NULL, argc, argv, 0);
-		if(*err) {
-			if(*err == jieshiqi_err_go_ + keyword_continue_) {
-				*err = 0;
-				continue;
-			}
-			if(*err == jieshiqi_err_go_ + keyword_break_) {
-				*err = 0;
-				break;
-			}
-			break;
+		if(cb) {
+			f(cb(ce, qu, err, '0', code, argc, argv));
+		} else {
+			cb3_(jsq_, qu, err, ce, code, false, NULL, argc, argv, 0);
 		}
+		if(for_err__(err, cb))
+			break;
 	}
+}
+dlle___ void for__(int* err, void*ce, void* qu, char* code) {
+	for__(err, ce, qu, NULL, NULL, code);
+}
+dlle___ void rust_for__(int*err, rust_cb___ cb, rust_cb_free___ f, void* env, void* ret, char*code) {
+	for__(err, env, ret, cb, f, code);
 }

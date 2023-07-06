@@ -11,6 +11,8 @@
 #include <list>
 #include <vector>
 #include "for_arg_.h"
+#include "rust.h"
+#include "for_err.h"
 
 bool startswith__(const char*src,const char*tag){
 	if(!tag)
@@ -23,6 +25,13 @@ bool startswith__(const char*src,const char*tag){
 		if(*tag++!=*src++)
 			return false;
 	}
+}
+
+static void rust_cb__(int*err,string& buf, rust_cb___ cb, rust_cb_free___ f, void*ce,void*shangji,
+		const char* src4) {
+	const char* a[]  {buf.c_str()};
+	f(cb(ce, shangji, err, '0', src4 ? src4 : "‘参数1’", 1, a));
+	buf.clear();
 }
 
 dlle___ void find_and_get__(int*err,char**addr_ret,const char*src1,int from,
@@ -143,16 +152,16 @@ dlle___ void tag_replace__(int*err,char**addr_ret,char*src1,void*ce,void*shangji
 	*addr_ret=dup__(buf.c_str());
 }
 
-dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
-		bool no_code, const char*src1,int argc,...)
+static void replace__(int*err,string& buf, rust_cb___ cb, rust_cb_free___ f, void*ce,void*shangji,
+		bool no_code, const char*src1,int argc,va_list& argv)
 {
-	string buf;
 	if(src1){
 		vector<const char*> tag1;
 		vector<const char*> code;
 		vector<string> code2;
 		int to;
-		_for_args( argc ) {
+		for (int i = 0; i < argc; ++i){
+			char*s = va_arg(argv, char*);
 			if(!s) {
 				*err = 1;
 				return;
@@ -178,7 +187,7 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 					break;
 				}
 			}
-		} _next_args
+		}
 
 		string src2 = src1;
 		if(code2.size() > 0) {
@@ -214,8 +223,14 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 					if(no_code) {
 						buf += src4;
 					} else {
-						buf += callback_(jsq_,shangji,err,ce, src4,false,sp,0);
-						if(*err)
+						if(cb) {
+							if(!buf.empty())
+								rust_cb__(err, buf, cb, f, ce,shangji, NULL);
+							buf = sp;
+							rust_cb__(err, buf, cb, f, ce,shangji, src4);
+						} else
+							buf += callback_(jsq_,shangji,err,ce, src4,false,sp,0);
+						if(for_err__(err, cb))
 							return;
 					}
 					break;
@@ -225,6 +240,29 @@ dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
 				continue;
 			buf+=*src++;
 		}
+		if(cb) {
+			if(!buf.empty())
+				rust_cb__(err, buf, cb, f, ce,shangji, NULL);
+		}
 	}
+}
+dlle___ void replace__(int*err,char**addr_ret,void*ce,void*shangji,
+		bool no_code, const char*src1,int argc,...)
+{
+	string buf;
+	va_list argv;
+	va_start(argv, argc);
+	replace__(err, buf, NULL, NULL, ce,shangji, no_code, src1, argc, argv);
+	va_end(argv);
 	*addr_ret=dup__(buf.c_str());
 }
+dlle___ void rust_replace__(int*err, rust_cb___ cb, rust_cb_free___ f, void* env, void* ret,
+		bool no_code, const char*src1,int argc,...)
+{
+	string buf;
+	va_list argv;
+	va_start(argv, argc);
+	replace__(err, buf, cb, f, env, ret, no_code, src1, argc, argv);
+	va_end(argv);
+}
+

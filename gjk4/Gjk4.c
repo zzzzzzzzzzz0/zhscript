@@ -106,6 +106,18 @@ _dle size_t wstrftime( char * s, size_t maxsize, const char * fmt )
   return strftime___(s,maxsize,fmt, secs_now );
 }
 
+_dle time_t mktime__(int y, int m, int d, int h, int m2, int s) {
+	struct tm t;
+	t.tm_year = y - 1900;
+	t.tm_mon = m - 1;
+	t.tm_mday = d;
+	t.tm_hour = h;
+	t.tm_min = m2;
+	t.tm_sec = s;
+	t.tm_isdst = -1;
+	return mktime(&t);
+}
+
 _dle long hs7zheng3shu4( char * chuan4, int jin4zhi4 )
 {
   int c4w4;

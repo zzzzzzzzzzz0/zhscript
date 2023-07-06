@@ -48,21 +48,6 @@ dlle___ void dlln___(init__)(void* jsq,
 	kw_yyend_ = kw_yyend;
 }
 
-int for_err__(int*err) {
-	if(*err){
-		if(*err==jieshiqi_err_go_+keyword_continue_){
-			*err=0;
-			return 0;
-		}
-		if(*err==jieshiqi_err_go_+keyword_break_){
-			*err=0;
-			return 1;
-		}
-		return 1;
-	}
-	return 0;
-}
-
 #include<stdio.h>
 
 char* i2s__(int i,char buf[]){

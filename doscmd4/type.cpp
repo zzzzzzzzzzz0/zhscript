@@ -26,7 +26,8 @@ char* getfile___(char* filename){
 			rewind(f);
 			s=(char*)malloc(l+1);
 			if(s!=NULL) {
-				if(fread(s,1,l,f)!=l){
+				size_t l2 = (size_t)l;
+				if(fread(s,1,l2,f)!=l2){
 					free(s);
 					return NULL;
 				}
@@ -87,14 +88,16 @@ void file__(FILE* tfs,long l_begin,long l_end,string&buf1,bool hex_get){
 	}
 }
 
-dlle___ void dlln___(type__)(char**addr_ret,int argNum,...){
+#include "../gjke4/rust.h"
+void type__(char**addr_ret,rust_add___ add, void* env,int argNum,va_list& argv){
 	int is_set=0;
 	bool cmd_end=false;
 	bool hex_get=false;
 	bool is_p=false;
 	long l_begin=-1,l_end=-1;
 	string buf1;
-	_for_args(argNum)
+	for (int i = 0; i < argNum; ++i){
+		char*s = va_arg(argv, char*);
 		if(!cmd_end){
 			if(is_set){
 				switch(is_set){
@@ -149,6 +152,21 @@ dlle___ void dlln___(type__)(char**addr_ret,int argNum,...){
 				free(s1);
 			}
 		}
-	_next_args
-	*addr_ret=dup__(buf1.c_str());
+	}
+	if(addr_ret)
+		*addr_ret=dup__(buf1.c_str());
+	if(add)
+		add(buf1.c_str(), false, env);
+}
+dlle___ void dlln___(type__)(char**addr_ret,int argNum,...){
+	va_list argv;
+	va_start(argv, argNum);
+	type__(addr_ret, NULL, NULL, argNum, argv);
+	va_end(argv);
+}
+dlle___ void rust_type__(rust_add___ add, void* env,int argNum,...){
+	va_list argv;
+	va_start(argv, argNum);
+	type__(NULL, add, env, argNum, argv);
+	va_end(argv);
 }

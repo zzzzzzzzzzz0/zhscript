@@ -68,8 +68,8 @@ dlle___ int msgbox__(GtkWindow*parent, int argc, ...) {
 	return ret;
 }
 
-dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent,
-		const char* type1, int argc, ...) {
+void file_select__(int* err, string& filename2, GtkWindow*parent,
+		const char* type1, deque<string>& p1) {
 	string type = type1;
 	GtkFileChooserAction fca;
 	const char* ok = GTK_STOCK_OPEN;
@@ -87,10 +87,6 @@ dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent,
 		return;
 	}
 
-	deque<string> p1;
-	_for_args( argc )
-		p1.push_back(s ? s : "");
-	_next_args
 	deque<string>* p = &p1;
 
 	GtkWidget *dialog = gtk_file_chooser_dialog_new (
@@ -149,8 +145,28 @@ dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent,
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) ==  GTK_RESPONSE_ACCEPT)
 	{
 		char *filename = gtk_file_chooser_get_filename (fc);
-		*addr_ret = dup__(filename);
+		filename2 = filename;
 		g_free (filename);
 	}
 	gtk_widget_destroy (dialog);
+}
+dlle___ void file_select__(int* err, char**addr_ret, GtkWindow*parent, const char* type1, int argc, ...) {
+	string filename;
+	deque<string> p1;
+	_for_args( argc )
+		p1.push_back(s ? s : "");
+	_next_args
+	file_select__(err, filename, parent, type1, p1);
+	if(!filename.empty())
+		*addr_ret = dup__(filename.c_str());
+}
+dlle___ void file_select2__(int* err, char* buf, long bufsiz, GtkWindow*parent, const char* type1, int argc, ...) {
+	string filename;
+	deque<string> p1;
+	_for_args( argc )
+		p1.push_back(s ? s : "");
+	_next_args
+	file_select__(err, filename, parent, type1, p1);
+	if(!filename.empty())
+		cpy__(buf, filename.c_str(), bufsiz);
 }

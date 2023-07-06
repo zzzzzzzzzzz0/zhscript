@@ -1,6 +1,9 @@
 #include "gjke.h"
 #include "for_arg_.h"
+#include "for_err.h"
 #include "l4/errinfo.h"
+#include "rust.h"
+#include <stdio.h>
 
 #include "../../zhscript2-lib/i2.h"
 static callback4_3___ cb4_ = NULL;
@@ -101,6 +104,34 @@ dlle___ void dlln___(foreach3__)(int*err,std::vector<std::string>* ret,void*ce,v
 	va_start(argv, argc);
 	foreach2__(err, ret,ce, shangji, no, code, argc2, argc, argv, false);
 	va_end(argv);
+}
+
+dlle___ void rust_foreach3__(int*err, char* buf, rust_cb___ cb, rust_cb_free___ f, void* env, void* ret, bool no,
+		const char*code,int argc2,int argc,...){
+	if(argc % argc2 != 0) {
+		*err = 2;
+		sprintf(buf, "argc %d %% %d != 0", argc, argc2);
+		return;
+	}
+	if(no)
+		argc2++;
+	const char** argv2 = new const char*[argc2];
+	char buf2[32];
+	va_list argv;
+	va_start(argv, argc);
+	for (int i = 0,  i3 = 0; i < argc;) {
+		int i2 = 0;
+		if(no) {
+			i2s__(++i3, buf2);
+			argv2[i2++] = buf2;
+		}
+		for (; i2 < argc2; i++)
+			argv2[i2++] = va_arg(argv, char*);
+		f(cb(env, ret, err, '0', code, argc2, argv2));
+		if(for_err__(err, true)) break;
+	}
+	va_end(argv);
+	delete argv2;
 }
 
 void array_cb__(int*err,void*ce,void* qu,const char*code,char*head1,bool no,bool desc,string&ret){

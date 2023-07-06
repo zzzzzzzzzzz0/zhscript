@@ -31,4 +31,12 @@ dlle___ void cb_get_text__(char** addr_ret) {
 	if(!s)
 		return;
 	*addr_ret = dup__(s);
+	g_free((void*)s);
+}
+
+dlle___ void cb_clear__() {
+	GtkClipboard *cb = cb__();
+	if(!cb)
+		return;
+	gtk_clipboard_clear(cb);
 }

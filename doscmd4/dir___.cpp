@@ -30,7 +30,8 @@ dir___::~dir___() {
 
 void dir___::dir__(int*err1,char*buf,long siz,
 		const char*dir,const char*tongpei,const char*opt1,
-		const char* src,void*ce,void*qu,callback2_2___ cb)
+		const char* src,void*ce,void*qu,callback2_2___ cb,
+		const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r)
 {
 	dir_opt___ opt;
 	opt.a_file_=opt.a_lnk_=true;
@@ -74,6 +75,9 @@ void dir___::dir__(int*err1,char*buf,long siz,
 			continue;
 		case'f':
 			opt.flag_ = !opt.flag_;
+			continue;
+		case'P':
+			opt.reg_path_ = !opt.reg_path_;
 			continue;
 		case'o':
 			opt.sort_=*++opt1-'0';
@@ -197,7 +201,7 @@ void dir___::dir__(int*err1,char*buf,long siz,
 	}
 
 	tongpei_ = tongpei; opt_ = &opt; reg_ = &reg; src_=src; ce_=ce; qu_=qu; func_=cb;
-	*err1=dir2__(dir,0,"");
+	*err1=dir2__(dir,0,"", rust_s, rust_cb, rust_f, rust_e, rust_r);
 	tongpei_ = 0; opt_ = 0; reg_ = 0; src_=0; ce_=0; qu_=0; func_=0;
 
 	switch(opt.tongpei_){
@@ -216,10 +220,12 @@ void dir___::dir__(int*err1,char*buf,long siz,
 		break;
 	}
 
-	sort__(opt.sort_);
+	if(!rust_cb)
+		sort__(opt.sort_);
 }
 
-int dir___::dir2__(const char*dir,int depth,string dir2) {
+int dir___::dir2__(const char*dir,int depth,string dir2,
+		const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r) {
 	DIR* d;
 	if((d=opendir(dir && dir[0] ? dir : "."))==NULL)
 		return 0;//'d'
@@ -234,9 +240,8 @@ int dir___::dir2__(const char*dir,int depth,string dir2) {
 	struct dirent* entry;
 	int exec_max = opt_->subdir_ ? 2 : 1;
 	int err = 0;
-	size_t begin = list2_.size() + 1;
 	if(opt_->out_dir_enter_){
-		exec__(dir2,"",true,false, 'b', begin);
+		exec__(dir2,"",true,false, 'b', rust_s, rust_cb, rust_f, rust_e, rust_r);
 	}
 	for(int exec = 0; exec < exec_max; exec++) {
 		if(exec>0)
@@ -312,21 +317,21 @@ int dir___::dir2__(const char*dir,int depth,string dir2) {
 			case 0:
 				if(is_dir){
 					if(opt_->a_dir_){
-						if((err=exec__(dir2,name,is_dir, is_lnk, '-', begin))){
+						if((err=exec__(dir2,name,is_dir, is_lnk, '-', rust_s, rust_cb, rust_f, rust_e, rust_r))){
 							break;
 						}
 					}
 					continue;
 				}
 				if(opt_->a_file_ || is_lnk){
-					if((err=exec__(dir2,name,is_dir, is_lnk, '-', begin))){
+					if((err=exec__(dir2,name,is_dir, is_lnk, '-', rust_s, rust_cb, rust_f, rust_e, rust_r))){
 						break;
 					}
 				}
 				continue;
 			case 1://子目录时
 				if(is_dir){
-					dir2__(name,depth+1,dir2+name);
+					dir2__(name,depth+1,dir2+name, rust_s, rust_cb, rust_f, rust_e, rust_r);
 				}
 				continue;
 			}
@@ -342,22 +347,15 @@ int dir___::dir2__(const char*dir,int depth,string dir2) {
 		}
 	}
 	if(opt_->out_dir_exit_){
-		exec__(dir2,"",true,false, 'e', begin);
-	}
-	if(use2_) {
-		size_t end = list2_.size();
-		if(end > 0) for(size_t i = end - 1; i >= begin; i--) {
-			list_item___* li = list2_[i];
-			if(!li->index_up__(end, begin, opt_->out_dir_enter_))
-				break;
-		}
+		exec__(dir2,"",true,false, 'e', rust_s, rust_cb, rust_f, rust_e, rust_r);
 	}
 	closedir(d);
 	chdir(oldir.c_str());
 	return err;
 }
 
-int dir___::exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char typ2, size_t begin) {
+int dir___::exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char typ2,
+		const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r) {
 	if(dir2.length()==0 && !name[0])
 		return 0;
 	bool b=false;
@@ -388,7 +386,7 @@ int dir___::exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char t
 			}else{
 				switch(opt_->tongpei_){
 				case 0:
-					b=(regexec(reg_, name1.c_str(), 0, 0, 0)==0);
+					b=(regexec(reg_, (opt_->reg_path_ ? path + name1 : name1).c_str(), 0, 0, 0)==0);
 					break;
 				case'C': {
 					int err=0;
@@ -415,10 +413,15 @@ int dir___::exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char t
 	if(b){
 		path += name1;
 		if(use2_) {
-			list2_.push_back(new list_item___(path, type, list2_.size() + 1, typ2, begin));
+			list2_.push_back(new list_item___(path, type, typ2));
 		} else {
 			int err=0;
-			func_((src_ ? jsq_ : this),qu_,&err,ce_,src_,false,NULL,2,path.c_str(), type.c_str());
+			if(rust_cb) {
+				const char* argv[] {path.c_str(), type.c_str()};
+				rust_f(rust_cb(rust_e, rust_r, &err, '0', rust_s, 2, argv));
+			} else {
+				func_((src_ ? jsq_ : this),qu_,&err,ce_,src_,false,NULL,2,path.c_str(), type.c_str());
+			}
 			if(err)
 				return err;
 		}
@@ -509,7 +512,12 @@ void dir___::clear__() {
 
 dlle___ void dlln___(dir__)(int*err1,char*buf,long siz,char*dir,char*tongpei,char*ctrl,const char* src,void*ce,void*qu){
 	dir___ d;
-	d.dir__(err1,buf,siz,dir,tongpei,ctrl,src,ce,qu,cb_);
+	d.dir__(err1,buf,siz,dir,tongpei,ctrl,src,ce,qu,cb_,0,0,0,0,0);
+}
+dlle___ void rust_dir__(int*err1,char*buf,long siz,char*dir,char*tongpei,char*ctrl,const char* src,
+		rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r){
+	dir___ d;
+	d.dir__(err1,buf,siz,dir,tongpei,ctrl, 0,0,0,0, src, rust_cb, rust_f, rust_e, rust_r);
 }
 
 const char* cb__(void* jsq,void* shangji,int* err,void*ce,const char* src,bool src_is_file,const char* src2,int argc,...){
@@ -542,7 +550,7 @@ dlle___ dir___* dlln___(dir_begin__)(int*err1,char*buf,long siz,int argc,...){
 		}
 	_next_args
 	dir___* d=new dir___();
-	d->dir__(err1,buf,siz,dir,tongpei,opt,0,0,0,cb__);
+	d->dir__(err1,buf,siz,dir,tongpei,opt,0,0,0,cb__,0,0,0,0,0);
 	return d;
 }
 dlle___ dir___* dlln___(dir_begin2__)(int*err1,char*buf,long siz,void*ce,void*qu,int argc,...){
@@ -563,7 +571,7 @@ dlle___ dir___* dlln___(dir_begin2__)(int*err1,char*buf,long siz,void*ce,void*qu
 		}
 	_next_args
 	dir___* d=new dir___(0);
-	d->dir__(err1,buf,siz,dir,tongpei,opt,0,ce,qu,0);
+	d->dir__(err1,buf,siz,dir,tongpei,opt,0,ce,qu,0,0,0,0,0,0);
 	return d;
 }
 

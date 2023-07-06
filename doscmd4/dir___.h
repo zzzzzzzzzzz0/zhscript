@@ -11,6 +11,7 @@
 #include "def1.h"
 #include "listitem.h"
 #include <vector>
+#include "../gjke4/rust.h"
 
 class dir_opt___{
 public:
@@ -24,6 +25,7 @@ public:
 	bool dirlnk_is_dir_;
 	bool not_;
 	bool flag_;
+	bool reg_path_;
 	dir_opt___(){
 		subdir_=false;
 		a_hidden_=a_dir_=a_file_=a_lnk_=false;
@@ -35,6 +37,7 @@ public:
 		dirlnk_is_dir_=true;
 		not_=false;
 		flag_ = true;
+		reg_path_ = false;
 	}
 };
 
@@ -54,8 +57,10 @@ private:
 	void *ce_, *qu_;
 	callback2_2___ func_;
 	vector<gi_item___*> gi_items_;
-	int dir2__(const char*dir,int depth,string dir2);
-	int exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char typ2, size_t begin);
+	int dir2__(const char*dir,int depth,string dir2,
+			const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r);
+	int exec__(string dir2,const char* name,bool is_dir, bool is_lnk, char typ2,
+			const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r);
 
 	vector<list_item___*> list2_;
 	bool use2_;
@@ -65,7 +70,8 @@ public:
 	virtual ~dir___();
 	void dir__(int*err1,char*buf,long siz,
 			const char*dir,const char*tongpei,const char*opt1,
-			const char* src,void*ce,void*qu,callback2_2___ cb);
+			const char* src,void*ce,void*qu,callback2_2___ cb,
+			const char *rust_s, rust_cb___ rust_cb, rust_cb_free___ rust_f, void* rust_e, void* rust_r);
 	void sort__(int sort1);
 	void first__(int sort1);
 	bool split__(char c, char*buf,long siz);

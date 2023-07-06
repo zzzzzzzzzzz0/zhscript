@@ -33,6 +33,8 @@ size_t strlen_sp__(const std::string& s, size_t len, size_t len2) {
 		if(b) {
 			i += i3;
 			i2 += len2;
+			if(i3 == 2) //2个长 外文字母、带声调
+				i2 -= 1;
 			continue;
 		}
 		i++;
