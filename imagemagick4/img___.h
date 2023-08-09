@@ -3,6 +3,7 @@ class img___ {
 	Image i_;
 public:
 	img___() {}
+	img___(const img___* i) : i_(i->i_) {}
 	img___(size_t w2, size_t h2, const char* bgc) : i_(Geometry(w2, h2, 0, 0), Color(bgc)) {}
 	void bgc__(const char* bgc) {
 		i_.backgroundColor(Color(bgc));
@@ -32,11 +33,11 @@ public:
 	void read(const char* name) {i_.read(name);}
 	void write(const char* name) {i_.write(name);}
 	void syncPixels() {i_.syncPixels();}
-	void rotate(int r) {i_.rotate(r);}
+	void rotate(double r) {i_.rotate(r);}
 	void flop() {i_.flop();}
 	void flip() {i_.flip();}
 
-	bool hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_t h, const char* pian, int xx, char fang);
+	bool hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_t h, double pian, int xx, char fang);
 	
 	void composite(img___* ii2, size_t x2, size_t y2, int o);
 	void alphaChannel() {

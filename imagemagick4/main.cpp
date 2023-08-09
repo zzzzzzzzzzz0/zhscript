@@ -41,6 +41,15 @@ dlle___ img___* new__(char* buf, long siz, size_t w2, size_t h2, const char* bgc
 		return NULL;
 	}
 }
+dlle___ img___* clone__(char* buf, long siz, img___* i) {
+	try {
+		InitializeMagick(NULL);
+		return new img___(i);
+	} catch (Exception &e) {
+		cpy__(buf, e.what(), siz);
+		return NULL;
+	}
+}
 dlle___ bool bgc__(char* buf, long siz, img___* ii1, const char* bgc) {
 	try {
 		ii1->bgc__(bgc);
@@ -86,7 +95,7 @@ dlle___ bool crop__(char* buf, long siz, img___* ii1, ssize_t x1s, ssize_t y1s, 
 		return false;
 	}
 }
-dlle___ bool rotate__(char* buf, long siz, img___* ii1, int r) {
+dlle___ bool rotate__(char* buf, long siz, img___* ii1, double r) {
 	try {
 		ii1->rotate(r);
 		return true;
@@ -122,7 +131,7 @@ dlle___ bool composite__(char* buf, long siz, img___* ii1, img___* ii2, size_t x
 		return false;
 	}
 }
-dlle___ bool hulasi__(char* buf, long siz, img___* ii1, size_t x1, size_t y1, size_t w, size_t h, const char*  pian, int xx, char fang) {
+dlle___ bool hulasi__(char* buf, long siz, img___* ii1, size_t x1, size_t y1, size_t w, size_t h, double pian, int xx, char fang) {
 	return ii1->hulasi__(buf, siz, x1, y1, w, h, pian, xx, fang);
 }
 dlle___ bool resize__(char* buf, long siz, img___* ii1, char* s) {
