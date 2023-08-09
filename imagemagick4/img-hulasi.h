@@ -1,5 +1,5 @@
 
-bool img___::hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_t h, const char*  pian, int xx, char fang) {
+bool img___::hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_t h, double pian1, int xx, char fang) {
 	try {
 		size_t w3 = i_.columns(), h3 = i_.rows();
 		if(x1 >= w3 || y1 >= h3)
@@ -10,7 +10,6 @@ bool img___::hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_
 			x2 = w3 - 1;
 		if(y2 >= h3)
 			y2 = h3 - 1;
-		double pian1 = atof(pian);
 		switch(fang) {
 		case '|':
 			y2 += xx;
