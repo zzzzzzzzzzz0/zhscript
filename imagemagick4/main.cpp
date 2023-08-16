@@ -50,6 +50,10 @@ dlle___ img___* clone__(char* buf, long siz, img___* i) {
 		return NULL;
 	}
 }
+dlle___ void rust_get_w_h__(rust_add___ add, void* env, img___* i) {
+	add(to_string(i->columns()).c_str(), 0, env);
+	add(to_string(i->rows()).c_str(), 1, env);
+}
 dlle___ bool bgc__(char* buf, long siz, img___* ii1, const char* bgc) {
 	try {
 		ii1->bgc__(bgc);
