@@ -154,33 +154,9 @@ dlle___ bool is_noname__(const char*s) {
 	return true;
 }
 
-static void strmid__(string& buf2,char* s,int argc,va_list& argv){
+static void strmid__(string& buf2,char* s, long i1, long i2, char *s2 = 0, char *s3 = 0, char *s4 = 0){
 	if(!s)
 		return;
-
-	long i1=0;
-	long i2=0;
-	char *s2=0, *s3 = 0, *s4 = 0;
-	for (int i = 0; i < argc; ++i){
-		char*s = va_arg(argv, char*);
-		switch(i){
-		case 4:
-			s4=s;
-			break;
-		case 3:
-			s3=s;
-			break;
-		case 2:
-			s2=s;
-			break;
-		case 1:
-			i2=s2l__(s);
-			break;
-		case 0:
-			i1=s2l__(s);
-			break;
-		}
-	}
 
 	string buf = s;
 	long siz = buf.size();
@@ -253,6 +229,32 @@ static void strmid__(string& buf2,char* s,int argc,va_list& argv){
 	}
 	buf2 = buf;
 }
+static void strmid__(string& buf2,char* s,int argc,va_list& argv){
+	long i1=0;
+	long i2=0;
+	char *s2=0, *s3 = 0, *s4 = 0;
+	for (int i = 0; i < argc; ++i){
+		char*s = va_arg(argv, char*);
+		switch(i){
+		case 4:
+			s4=s;
+			break;
+		case 3:
+			s3=s;
+			break;
+		case 2:
+			s2=s;
+			break;
+		case 1:
+			i2=s2l__(s);
+			break;
+		case 0:
+			i1=s2l__(s);
+			break;
+		}
+	}
+	strmid__(buf2, s, i1, i2, s2, s3, s4);
+}
 dlle___ void strmid__(char**addr_ret,char* s,int argc,...){
 	va_list argv;
 	va_start(argv, argc);
@@ -268,6 +270,29 @@ dlle___ void rust_strmid__(rust_add___ add, void* env,char* s,int argc,...){
 	strmid__(buf, s, argc, argv);
 	va_end(argv);
 	add(buf.c_str(), 0, env);
+}
+dlle___ void rust_strmmid__(rust_add___ add, void* env,char* s1, long i1, long i2, int argc,...){
+	string buf;
+	strmid__(buf, s1, i1, i2);
+	add(buf.c_str(), 0, env);
+
+	va_list argv;
+	va_start(argv, argc);
+	for (int i = 0; i < argc; ++i){
+		char*s = va_arg(argv, char*);
+		switch(i % 2) {
+		case 0:
+			i1=s2l__(s);
+			break;
+		case 1:
+			i2=s2l__(s);
+			buf.clear();
+			strmid__(buf, s1, i1, i2);
+			add(buf.c_str(), 1, env);
+			break;
+		}
+	}
+	va_end(argv);
 }
 
 long strpos__(char* src,char* ss, size_t from, const char* skip, char ctl, bool utf8, bool r) {
