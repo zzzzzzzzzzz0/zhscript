@@ -39,7 +39,7 @@ public:
 
 	bool hulasi__(char* buf, long siz, size_t x1, size_t y1, size_t w, size_t h, double pian, int xx, char fang);
 	
-	void composite(img___* ii2, size_t x2, size_t y2, int o);
+	void composite(img___* ii2, long x2, long y2, int o);
 	void alphaChannel() {
 		i_.alphaChannel(/*AlphaChannelType::*/DeactivateAlphaChannel /*BackgroundAlphaChannel TransparentAlphaChannel ActivateAlphaChannel DeactivateAlphaChannel*/);
 	}
@@ -57,7 +57,7 @@ public:
 	ColorRGB getPixel(size_t x, size_t y, bool fanzhuan) {return getPixel(x__(x, columns(), fanzhuan), y);}
 };
 
-void img___::composite(img___* ii2, size_t x2, size_t y2, int o) {
+void img___::composite(img___* ii2, long x2, long y2, int o) {
 	// /usr/include/ImageMagick-6/magick/composite.h:25:
 	CompositeOperator co = CopyCompositeOp;
 	switch(o) {

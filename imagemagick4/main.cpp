@@ -126,7 +126,7 @@ dlle___ bool flip__(char* buf, long siz, img___* ii1) {
 		return false;
 	}
 }
-dlle___ bool composite__(char* buf, long siz, img___* ii1, img___* ii2, size_t x2, size_t y2, int o) {
+dlle___ bool composite__(char* buf, long siz, img___* ii1, img___* ii2, long x2, long y2, int o) {
 	try {
 		ii1->composite(ii2, x2, y2, o);
 		return true;
