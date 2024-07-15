@@ -77,7 +77,6 @@ void extractfilename__(string& buf2,const string& name,int flag){
 			}
 		}
 	}
-	//printf("{%d,%d,%d,%d,%d}",xie3,pan2,tou2,dian3,mo4);
 	if(mo4<tou2)
 		mo4=tou2;
 
@@ -114,6 +113,20 @@ void extractfilename__(string& buf2,const string& name,int flag){
 				from++;
 				break;
 			}
+		break;
+		case 12:
+		from=tou2 + 1;
+		to=mo4;
+		if(from>=to) {
+			from=mo4;
+			to=dian3;
+		}
+		for(i=from; i < to; i++) {
+			if(name[i]=='/' || name[i]=='\\') {
+				to = i;
+				break;
+			}
+		}
 		break;
 		case 3://�̷�
 		if(pan2>=0){
