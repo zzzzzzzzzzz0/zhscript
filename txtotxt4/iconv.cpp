@@ -6,9 +6,10 @@
  */
 
 #include"txtotxt.h"
+#include"for_arg_.h"
+#include "../gjke4/rust.h"
 #ifndef ver_no_iconv_
 #include <iconv.h>
-#include"for_arg_.h"
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
@@ -32,14 +33,15 @@ static void add__(char* buf, size_t n, char mode, string &ret) {
 	}
 }
 
-dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
+static void iconv__(char**addr_ret,rust_add___ rust_add, void* rust_env,char *src,bool src_is_file,int argc,va_list& argv){
 #ifndef ver_no_iconv_
 	if(!src)
 		return;
 	const char *from="gb18030";
 	const char *to="utf8";
 	char mode = 0;
-	_for_args( argc )
+	for (int i = 0; i < argc; ++i){
+		char*s = va_arg(argv, char*);
 		if(!s) continue;
 		switch(i){
 		case 0:
@@ -54,7 +56,7 @@ dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
 			mode = s[0];
 			break;
 		}
-	_next_args
+	}
 
 	iconv_t cd;
 	if((iconv_t)-1 == (cd = iconv_open(to, from)))
@@ -134,6 +136,23 @@ dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
 	if(src_is_file){
 		delete inbuf0;
 	}
-	*addr_ret=dup__(ret.c_str());
+	if(addr_ret)
+		*addr_ret=dup__(ret.c_str());
+	if(rust_add)
+		rust_add(ret.c_str(), 0, rust_env);
 #endif
+}
+
+dlle___ void iconv__(char**addr_ret,char *src,bool src_is_file,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	iconv__(addr_ret,NULL, NULL, src, src_is_file, argc, argv);
+	va_end(argv);
+}
+
+dlle___ void rust_iconv__(rust_add___ add, void* env,char *src,bool src_is_file,int argc,...){
+	va_list argv;
+	va_start(argv, argc);
+	iconv__(NULL, add, env, src, src_is_file, argc, argv);
+	va_end(argv);
 }
