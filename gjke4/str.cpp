@@ -47,7 +47,7 @@ dlle___ void rust_trim__(rust_add___ add, void* env, const char*src, int ctl) {
 	rust_trim2__(add, env, src, NULL, ctl);
 }
 
-dlle___ void dlln___(addslashes__)(char**addr_ret,const char*src,const char*ctl){
+static void addslashes__(char**addr_ret,rust_add___ add, void* env, const char*src,const char*ctl){
 	if(!src){
 		return;
 	}
@@ -107,7 +107,16 @@ dlle___ void dlln___(addslashes__)(char**addr_ret,const char*src,const char*ctl)
 			buf+='\\';
 		buf+=c;
 	}
-	*addr_ret=dup__(buf.c_str());
+	if(addr_ret)
+		*addr_ret=dup__(buf.c_str());
+	if(add)
+		add(buf.c_str(), false, env);
+}
+dlle___ void dlln___(addslashes__)(char**addr_ret,const char*src,const char*ctl){
+	addslashes__(addr_ret,NULL,NULL, src,ctl);
+}
+dlle___ void rust_addslashes__(rust_add___ add, void* env, const char*src,const char*ctl){
+	addslashes__(NULL,add, env, src,ctl);
 }
 
 dlle___ bool is_noname__(const char*s) {
