@@ -371,16 +371,16 @@ dlle___ bool strstr__(const char* s1, int c, int argc, ...) {
 			if(s) {
 				switch(c) {
 				case 1:
-					if(s11.find(s) == 0)
+					if(s[0] && s11.find(s) == 0)
 						return true;
 					break;
 				case 2:
-				{
-					size_t pos = s11.rfind(s);
-					if(pos != string::npos && pos == s11.length() - string(s).length())
-						return true;
+					if(s[0]) {
+						size_t pos = s11.rfind(s);
+						if(pos != string::npos && pos == s11.length() - string(s).length())
+							return true;
+					}
 					break;
-				}
 				case 3:
 					if(s11 == s)
 						return true;
